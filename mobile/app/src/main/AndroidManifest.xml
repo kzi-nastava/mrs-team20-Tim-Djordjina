@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Team20TimDjordjina">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
