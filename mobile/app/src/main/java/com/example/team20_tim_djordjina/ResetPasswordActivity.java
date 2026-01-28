@@ -1,7 +1,7 @@
 package com.example.team20_tim_djordjina;
 
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,9 +21,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button btnResetPassword = findViewById(R.id.btnResetPassword);
+        btnResetPassword.setOnClickListener(v -> {
+            // TODO send email for password reset to user
+        });
     }
 
-    public void onResetPasswordClick(View view) {
-        // TODO: send reset email later
-    }
 }

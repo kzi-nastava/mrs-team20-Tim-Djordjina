@@ -1,6 +1,8 @@
 package com.example.team20_tim_djordjina;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +22,18 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button btnLogin = findViewById(R.id.btnMainLogin);
+        btnLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+
+// odkomentarisati kada se spoji sa RegisterActivity
+//        Button btnSignup = findViewById(R.id.btnMainSignup);
+//        btnSignup.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+//            startActivity(intent);
+//        });
     }
 }

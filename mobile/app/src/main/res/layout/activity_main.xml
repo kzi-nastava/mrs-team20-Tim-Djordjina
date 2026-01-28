@@ -13,13 +13,13 @@
         android:gravity="end">
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnMainLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login" />
 
         <Button
-            android:id="@+id/btnSignup"
+            android:id="@+id/btnMainSignup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sign_up"
