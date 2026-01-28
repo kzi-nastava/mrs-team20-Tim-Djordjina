@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Team20-Tim-Djordjina</string>
     <string name="email">Email</string>
@@ -9,4 +10,17 @@
     <string name="reset_password">Reset password</string>
     <string name="reset">Reset</string>
     <string name="email_and_password_cannot_be_empty">Email and password cannot be empty</string>
+    <string name="app_logo">App Logo</string>
+    <string name="country_flag">Country Flag</string>
+
+    <string-array name="country_codes">
+        <item>+381</item>
+        <item>+1</item>
+        <item>+44</item>
+        <item>+91</item>
+        <item>+86</item>
+        <item>+49</item>
+        <item>+33</item>
+        <!-- Add more country codes as needed -->
+    </string-array>
 </resources>
