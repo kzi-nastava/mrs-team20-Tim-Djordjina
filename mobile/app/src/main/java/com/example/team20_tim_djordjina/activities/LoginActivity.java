@@ -18,7 +18,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin;
-    private TextView tvForgotPassword, tvError;
+    private TextView tvForgotPassword, tvError,tvSignupRedirect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +31,7 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        tvError = findViewById(R.id.tvError);
-        btnLogin = findViewById(R.id.btnLogin);
-        tvForgotPassword = findViewById(R.id.tvForgotPassword);
+        initViews();
 
         btnLogin.setOnClickListener(view -> {
             String email = etEmail.getText().toString().trim();
@@ -53,5 +49,19 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
             startActivity(intent);
         });
+
+        tvSignupRedirect.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void initViews() {
+        etEmail = findViewById(R.id.etLoginEmail);
+        etPassword = findViewById(R.id.etLoginPassword);
+        tvError = findViewById(R.id.tvLoginError);
+        btnLogin = findViewById(R.id.btnLogin);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
+        tvSignupRedirect = findViewById(R.id.tvSignupRedirect);
     }
 }

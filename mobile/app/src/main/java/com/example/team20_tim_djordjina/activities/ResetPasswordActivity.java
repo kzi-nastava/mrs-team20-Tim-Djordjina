@@ -1,17 +1,24 @@
 package com.example.team20_tim_djordjina.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.example.team20_tim_djordjina.R;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class ResetPasswordActivity extends AppCompatActivity {
+
+    TextInputEditText etEmail;
+    TextView tvError, tvLogIn;
+    Button btnSend;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +31,24 @@ public class ResetPasswordActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button btnResetPassword = findViewById(R.id.btnResetPassword);
-        btnResetPassword.setOnClickListener(v -> {
+        initViews();
+
+
+        tvLogIn.setOnClickListener(v -> {
+            Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+
+        btnSend.setOnClickListener(v -> {
             // TODO send email for password reset to user
         });
     }
 
-}
+    private void initViews() {
+        etEmail = findViewById(R.id.etForgottenPasswordEmail);
+        tvError = findViewById(R.id.tvEmailError);
+        tvLogIn = findViewById(R.id.tvBackToLogIn);
+        btnSend = findViewById(R.id.btnSend);
+    }
+
+    }

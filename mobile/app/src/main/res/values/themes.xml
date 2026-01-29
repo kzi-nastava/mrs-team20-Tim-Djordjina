@@ -1,9 +1,114 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Team20TimDjordjina" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.Team20TimDjordjina" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Global colors -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/primary</item>
+
+        <!-- Global text inputs -->
+        <item name="textInputStyle">@style/TextInputLayoutStyle</item>
+        <item name="editTextStyle">@style/FormInputEditText</item>
+
+        <!-- Buttons -->
+        <item name="materialButtonStyle">@style/FormPrimaryButton</item>
     </style>
 
-    <style name="Theme.Team20TimDjordjina" parent="Base.Theme.Team20TimDjordjina" />
+    <style name="TextInputLayoutStyle"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <item name="boxStrokeColor">@color/box_stroke</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="hintTextColor">@color/text_hint</item>
+        <item name="boxBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="FormInputEditText">
+        <item name="android:textColor">@color/input_text</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="FormOutlinedInput"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <item name="boxStrokeColor">@color/box_stroke</item>
+        <item name="hintTextColor">@color/text_hint</item>
+        <item name="boxBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="FormPasswordInput" parent="FormOutlinedInput">
+        <item name="passwordToggleEnabled">true</item>
+        <item name="passwordToggleDrawable">@drawable/ic_eye</item>
+        <item name="passwordToggleTint">@color/password_tint</item>
+    </style>
+
+    <style name="FormTitleText">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_width">@dimen/title_width</item>
+        <item name="android:layout_height">@dimen/title_height</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="FormSubtitleText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_width">@dimen/subtitle_width</item>
+        <item name="android:layout_height">@dimen/subtitle_height</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginBottom">32dp</item>
+    </style>
+
+    <style name="FormPrimaryButton">
+        <item name="android:layout_height">@dimen/btn_height</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
+
+        <item name="android:background">@drawable/button_background_lite</item>
+
+        <item name="android:paddingTop">@dimen/btn_top_padding</item>
+        <item name="android:layout_marginBottom">@dimen/space_md</item>
+    </style>
+
+    <style name="FormLinkText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:gravity">end</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_marginBottom">@dimen/space_xl</item>
+    </style>
+
+    <style name="AuthLogoImage">
+        <item name="android:layout_width">@dimen/logo_size</item>
+        <item name="android:layout_height">@dimen/logo_size</item>
+        <item name="android:contentDescription">@string/app_logo</item>
+    </style>
+
+    <style name="FormErrorText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/error</item>
+
+        <item name="android:layout_marginTop">@dimen/space_xs</item>
+        <item name="android:layout_marginBottom">@dimen/space_sm</item>
+
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>

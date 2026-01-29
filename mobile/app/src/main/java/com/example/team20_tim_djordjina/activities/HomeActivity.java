@@ -25,13 +25,13 @@ public class HomeActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button btnLogin = findViewById(R.id.btnMainLogin);
+        Button btnLogin = findViewById(R.id.btnHomeLogin);
         btnLogin.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
         });
 
-        Button btnSignup = findViewById(R.id.btnMainSignup);
+        Button btnSignup = findViewById(R.id.btnHomeSignup);
         btnSignup.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, RegisterActivity.class);
             startActivity(intent);

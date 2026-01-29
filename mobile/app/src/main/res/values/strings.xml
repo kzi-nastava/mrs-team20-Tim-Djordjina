@@ -12,6 +12,13 @@
     <string name="email_and_password_cannot_be_empty">Email and password cannot be empty</string>
     <string name="app_logo">App Logo</string>
     <string name="country_flag">Country Flag</string>
+    <string name="welcome">Welcome</string>
+    <string name="login_to_continue">Login to continue</string>
+    <string name="no_account">Don’t have an account? Sign up</string>
+    <string name="forgot_password_title">Forgot password</string>
+    <string name="enter_email_address">enter email address</string>
+    <string name="back_to_log_in">Back to log in</string>
+    <string name="send">Send</string>
 
     <string-array name="country_codes">
         <item>+381</item>
