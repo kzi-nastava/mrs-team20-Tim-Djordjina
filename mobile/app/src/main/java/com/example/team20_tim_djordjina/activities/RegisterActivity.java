@@ -11,11 +11,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import android.net.Uri;
+import android.widget.ImageView;
+import android.content.Intent;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.team20_tim_djordjina.R;
 import com.example.team20_tim_djordjina.databinding.ActivityRegisterBinding;
@@ -28,6 +30,24 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etPhoneNumber;
     private Spinner spinnerCountryCode;
     private Button btnSignUp;
+    private ImageView ivProfileImage, ivEditPhoto;
+    private Uri selectedImageUri = null;
+
+    private final ActivityResultLauncher<Intent> imagePicker =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                            Uri uri = result.getData().getData();
+                            if (uri != null) {
+                                selectedImageUri = uri;
+                                ivProfileImage.setImageURI(uri);
+                            }
+                        }
+                    }
+            );
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +66,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Initialize views
         initViews();
+
+        View.OnClickListener openImagePicker = v -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            imagePicker.launch(intent);
+        };
+        ivProfileImage.setOnClickListener(openImagePicker);
+        ivEditPhoto.setOnClickListener(openImagePicker);
 
         // Setup country code spinner
         setupCountryCodeSpinner();
@@ -75,6 +104,13 @@ public class RegisterActivity extends AppCompatActivity {
         if(!validateInputs(firstName, lastName, email, address, phoneNumber, password, confirmPassword)){
             return;
         }
+
+        if (selectedImageUri != null) {
+            Log.i("Register", "User selected image: " + selectedImageUri);
+        } else {
+            Log.i("Register", "Using default avatar");
+        }
+
 
         // Check if passwords match
         if(!password.equals(confirmPassword)){
@@ -160,5 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
         etPhoneNumber = binding.etPhoneNumber;
         spinnerCountryCode = binding.spinnerCountryCode;
         btnSignUp = binding.btnSignUp;
+        ivProfileImage = binding.ivProfileImage;
+        ivEditPhoto = binding.ivEditPhoto;
     }
 }
