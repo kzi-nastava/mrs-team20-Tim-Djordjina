@@ -89,4 +89,9 @@ public class User {
         this.isActivated = false;
         this.isBlocked = false;
     }
+
+    // Check if user can login (activated and not blocked)
+    public boolean canLogin(){
+        return isActivated && !isBlocked;
+    }
 }
