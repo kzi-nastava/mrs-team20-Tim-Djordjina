@@ -19,6 +19,8 @@
     <string name="enter_email_address">enter email address</string>
     <string name="back_to_log_in">Back to log in</string>
     <string name="send">Send</string>
+    <string name="profile_picture">profile picture</string>
+    <string name="edit_profile_picture">edit profile picture</string>
 
     <string-array name="country_codes">
         <item>+381</item>
