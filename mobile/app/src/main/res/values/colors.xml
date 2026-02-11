@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary">#FF000000</color>
+    <color name="text_hint">#999999</color>
+    <color name="box_stroke">#CCCCCC</color>
+    <color name="input_text">#000000</color>
+    <color name="password_tint">#666666</color>
+    <color name="title">#FFFFFF</color>
+    <color name="subtitle">#999999</color>
+    <color name="secondary">#999999</color>
+    <color name="error">#FF4D4D</color>
+    <color name="brand_orange">#FF6F00</color>
+
 </resources>
