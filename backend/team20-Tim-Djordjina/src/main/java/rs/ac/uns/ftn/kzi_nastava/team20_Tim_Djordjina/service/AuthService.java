@@ -13,6 +13,9 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 /*
 * Authentication service handling user registration
 * */
@@ -59,6 +62,11 @@ public class AuthService {
         if (user.getProfilePicture() == null || user.getProfilePicture().isEmpty()){
             user.setProfilePicture("/images/default-avatar.png");
         }
+
+        // Generate activation token valid for 24h
+        String activationToken = UUID.randomUUID().toString();
+        user.setActivationToken(activationToken);
+        user.setTokenExpirationDate(LocalDateTime.now().plusHours(24));
 
         // Save user to database
         User savedUser = userRepository.save(user);
