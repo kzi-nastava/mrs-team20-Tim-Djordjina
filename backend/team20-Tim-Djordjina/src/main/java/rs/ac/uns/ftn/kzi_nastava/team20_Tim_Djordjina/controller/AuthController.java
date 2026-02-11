@@ -10,10 +10,9 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
 
-/*
-* Authentication controller handling registration
-* */
-
+/**
+ * Authentication controller handling registration
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

@@ -35,7 +35,7 @@ public class Vehicle {
 
     // License plate number
     @Column(nullable = false, unique = true, length = 20)
-    private String licencePlate;
+    private String licensePlate;
 
     // Number of passenger seats
     @Column(nullable = false)
@@ -65,11 +65,11 @@ public class Vehicle {
     private LocalDateTime updatedAt;
 
     // Custom constructor with parameters
-    public Vehicle(String model, VehicleType vehicleType, String licencePlate,
+    public Vehicle(String model, VehicleType vehicleType, String licensePlate,
                    Integer seats, boolean babyTransport, boolean petTransport){
         this.model = model;
         this.vehicleType = vehicleType;
-        this.licencePlate = licencePlate;
+        this.licensePlate = licensePlate;
         this.seats = seats;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
