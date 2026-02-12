@@ -85,4 +85,15 @@ public class AuthService {
     public void activateAccount(String token){
 
     }
+
+    /**
+     * Resend activation email
+     * - Generate new 24 hour token
+     * - Sends new activation email
+     *
+     */
+    @Transactional
+    public void resendActivationEmail(String email){
+
+    }
 }

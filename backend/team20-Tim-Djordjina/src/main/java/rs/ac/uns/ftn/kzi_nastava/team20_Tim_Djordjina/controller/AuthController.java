@@ -50,4 +50,17 @@ public class AuthController {
 
         return ResponseEntity.ok(ApiResponse.success("Account activated successfully! You can now login."));
     }
+
+    /**
+     * Resend activation email
+     * POST /api/auth/resend-activation?email=xxx
+     *
+     * Generates new 24 hour token and resends activation email
+     */
+
+    public ResponseEntity<ApiResponse> resendActivationEmail(@RequestParam String email) {
+        authService.resendActivationEmail(email);
+
+        return ResponseEntity.ok(ApiResponse.success("Activation email has been resent. Please check your inbox. The link will expire in 24 hours."));
+    }
 }
