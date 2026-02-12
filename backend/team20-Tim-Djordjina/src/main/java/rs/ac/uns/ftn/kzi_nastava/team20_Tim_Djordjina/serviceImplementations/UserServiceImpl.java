@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.serviceImplementations;
 
 import jakarta.mail.MessagingException;
@@ -74,4 +75,4 @@ public class UserServiceImpl implements UserService {
         //TODO add storage and entity for images
         return "uploads/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
     }
-}
+}*/

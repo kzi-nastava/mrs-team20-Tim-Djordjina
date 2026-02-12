@@ -57,7 +57,7 @@ public class AuthController {
      *
      * Generates new 24 hour token and resends activation email
      */
-
+    @PostMapping("/resend-activation")
     public ResponseEntity<ApiResponse> resendActivationEmail(@RequestParam String email) {
         authService.resendActivationEmail(email);
 

@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
     Optional<User> findByEmail(String email);
 
-}
+}*/

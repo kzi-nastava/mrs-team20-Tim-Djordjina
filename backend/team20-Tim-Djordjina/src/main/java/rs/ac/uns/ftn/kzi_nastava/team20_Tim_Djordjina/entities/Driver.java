@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.entities;
 
 import jakarta.persistence.Table;
@@ -23,4 +24,4 @@ public class Driver extends User{
     Integer canceledRidesCount;
 
     Vehicle vehicle;
-}
+}*/

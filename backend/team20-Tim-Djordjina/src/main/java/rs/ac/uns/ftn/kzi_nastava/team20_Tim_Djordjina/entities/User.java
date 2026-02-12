@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -45,4 +46,4 @@ public class User {
     private LocalDateTime lastLoginAt;
 
     private Long supportChatId;
-}
+}*/

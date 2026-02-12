@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.entities;
 
 import jakarta.persistence.*;
@@ -32,4 +33,4 @@ public class Vehicle {
 
     private Boolean babyTransport;
     private Boolean petTransport;
-}
+}*/

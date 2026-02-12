@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.enums;
 
 public enum VehicleModel {
@@ -11,4 +12,4 @@ public enum VehicleModel {
     VOLKSWAGEN_PASSAT,
     NISSAN_LEAF,
     CHEVROLET_BOLT
-}
+}*/
