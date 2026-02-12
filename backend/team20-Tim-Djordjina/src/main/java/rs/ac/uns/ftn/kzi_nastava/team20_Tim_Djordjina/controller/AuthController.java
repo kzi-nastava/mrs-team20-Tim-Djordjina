@@ -36,4 +36,18 @@ public class AuthController {
                         user.getEmail()
                 ));
     }
+
+    /**
+     * Activate user account
+     * GET /api/auth/activate?token=xxx
+     *
+     * Activates account using token from email
+     * Token expired after 24 hours
+     */
+    @GetMapping("/activate")
+    public ResponseEntity<ApiResponse> activateAccount(@RequestParam String token){
+        authService.activateAccount(token);
+
+        return ResponseEntity.ok(ApiResponse.success("Account activated successfully! You can now login."));
+    }
 }

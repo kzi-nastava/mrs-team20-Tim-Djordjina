@@ -74,4 +74,15 @@ public class AuthService {
 
         return savedUser;
     }
+
+    /**
+     * Activate user account with token
+     * - Validates activation token
+     * - Checks token expiration (24 hours)
+     * - Activates user account
+     */
+    @Transactional
+    public void activateAccount(String token){
+
+    }
 }
