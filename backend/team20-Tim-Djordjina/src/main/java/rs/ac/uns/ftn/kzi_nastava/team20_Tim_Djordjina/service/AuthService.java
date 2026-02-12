@@ -83,7 +83,28 @@ public class AuthService {
      */
     @Transactional
     public void activateAccount(String token){
+        log.info("Attempting to activate with token: {}", token);
 
+        User user = userRepository.findByActivationToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Some message"));
+
+        // Check if already activated
+        if (user.isActivated()){
+            throw new IllegalStateException("Account is already activated.");
+        }
+
+        // Check token expiration (24 hours)
+        if (user.isActivationTokenExpired()){
+            throw new IllegalStateException("Activation token has expired. Please request a new activation email.");
+        }
+
+        // Activate the account
+        user.setActivated(true);
+        user.setActivationToken(null);
+        user.setTokenExpirationDate(null);
+
+        userRepository.save(user);
+        log.info("Account activated successfully for user: {}", user.getEmail());
     }
 
     /**

@@ -94,4 +94,12 @@ public class User {
     public boolean canLogin(){
         return isActivated && !isBlocked;
     }
+
+    // Check if activation token is expired
+    public boolean isActivationTokenExpired(){
+        if(tokenExpirationDate == null){
+            return true;
+        }
+        return LocalDateTime.now().isAfter(tokenExpirationDate);
+    }
 }
