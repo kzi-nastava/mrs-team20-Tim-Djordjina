@@ -102,4 +102,12 @@ public class User {
         }
         return LocalDateTime.now().isAfter(tokenExpirationDate);
     }
+
+    // Check if reset password token is expired
+    public boolean isResetPasswordTokenExpired(){
+        if(resetPasswordTokenExpirationDate == null){
+            return true;
+        }
+        return LocalDateTime.now().isAfter(resetPasswordTokenExpirationDate);
+    }
 }

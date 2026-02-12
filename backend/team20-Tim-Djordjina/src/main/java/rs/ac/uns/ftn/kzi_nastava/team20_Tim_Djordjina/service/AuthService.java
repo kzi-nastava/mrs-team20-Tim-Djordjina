@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.EmailAlreadyExistsException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatchException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
@@ -149,5 +150,27 @@ public class AuthService {
         );
 
         log.info("Activation email resent successfully to: {}", email);
+    }
+
+    /**
+     * Check if user can login
+     * User cannot login if:
+     * - Account is not activated
+     * - Account is blocked by admin
+     */
+    public void validateUserCanLogin(User user){
+        if(!user.isActivated()){
+            throw new UserNotActivatedException(
+                    "Your account is not activated. Please check your email for the activation link."
+            );
+        }
+
+        if (user.isBlocked()){
+            String message = "Your account has been blocked.";
+            if (user.getBlockNote() != null && !user.getBlockNote().isEmpty()){
+                message += " Reason: " + user.getBlockNote();
+            }
+            throw new UserNotActivatedException(message);
+        }
     }
 }
