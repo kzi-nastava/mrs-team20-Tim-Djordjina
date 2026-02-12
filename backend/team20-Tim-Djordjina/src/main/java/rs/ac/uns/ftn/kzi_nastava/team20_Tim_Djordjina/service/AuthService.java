@@ -72,6 +72,9 @@ public class AuthService {
         User savedUser = userRepository.save(user);
         log.info("User registered successfully with ID: {}", savedUser.getId());
 
+        // Send activation email asynchronously
+        // TODO
+
         return savedUser;
     }
 
@@ -115,6 +118,26 @@ public class AuthService {
      */
     @Transactional
     public void resendActivationEmail(String email){
+        log.info("Attempting to resend activation email to: {}", email);
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
+
+        // Check if already activated
+        if (user.isActivated()){
+            throw new IllegalStateException("Account is already activated.");
+        }
+
+        // Generate activation token valid for 24h
+        String activationToken = UUID.randomUUID().toString();
+        user.setActivationToken(activationToken);
+        user.setTokenExpirationDate(LocalDateTime.now().plusHours(24));
+
+        userRepository.save(user);
+
+        // Send new activation email
+        // TODO
+
+        log.info("Activation email resent successfully to: {}", email);
     }
 }
