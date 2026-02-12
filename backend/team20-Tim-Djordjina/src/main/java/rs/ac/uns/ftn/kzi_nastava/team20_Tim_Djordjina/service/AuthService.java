@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatch
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     /**
      * Register a new user
@@ -73,7 +75,11 @@ public class AuthService {
         log.info("User registered successfully with ID: {}", savedUser.getId());
 
         // Send activation email asynchronously
-        // TODO
+        emailService.sendActivationEmail(
+                savedUser.getEmail(),
+                savedUser.getFirstName(),
+                activationToken
+        );
 
         return savedUser;
     }
@@ -136,7 +142,11 @@ public class AuthService {
         userRepository.save(user);
 
         // Send new activation email
-        // TODO
+        emailService.sendActivationEmail(
+                user.getEmail(),
+                user.getFirstName(),
+                activationToken
+        );
 
         log.info("Activation email resent successfully to: {}", email);
     }
