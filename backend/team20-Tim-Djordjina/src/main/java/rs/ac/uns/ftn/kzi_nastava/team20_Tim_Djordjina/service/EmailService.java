@@ -42,10 +42,10 @@ public class EmailService {
 
             Email from = new Email(fromEmail, fromName);
             Email to = new Email(toEmail);
-            String subjcet = "Activate Your Account - RideOn App";
+            String subject = "Activate Your Account - RideOn App";
             Content content = new Content("text/plain", buildActivationEmailContent(firstName, activationLink));
 
-            Mail mail = new Mail(from, subjcet, to, content);
+            Mail mail = new Mail(from, subject, to, content);
 
             SendGrid sg = new SendGrid(sendGridApiKey);
             Request request = new Request();
@@ -80,13 +80,13 @@ public class EmailService {
 
             Email from = new Email(fromEmail, fromName);
             Email to = new Email(toEmail);
-            String subjcet = "Activate Your Account - RideOn App";
+            String subject = "Activate Your Account - RideOn App";
 
             // HTML content for better formating
             String htmlContent = buildActivationEmailHtml(firstName, activationLink);
             Content content = new Content("text/html", htmlContent);
 
-            Mail mail = new Mail(from, subjcet, to, content);
+            Mail mail = new Mail(from, subject, to, content);
 
             SendGrid sg = new SendGrid(sendGridApiKey);
             Request request = new Request();
