@@ -38,7 +38,8 @@ public class User {
     @Column(nullable = false, length = 255)
     private String address;
 
-    @Column(nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role = Role.USER;
 
     // Profile picture URL or path (default picture if not set)
