@@ -180,5 +180,19 @@ public class AuthServiceTest {
         });
     }
 
+    @Test
+    void activateAccount_WhenAlreadyActivated_ShouldThrowException(){
+        // Arrange
+        String token = "valid-token";
+        User user = new User();
+        user.setActivated(true);
+        user.setActivationToken(token);
 
+        when(userRepository.findByActivationToken(token)).thenReturn(Optional.of(user));
+
+        // Act and Assert
+        assertThrows(IllegalStateException.class, () -> {
+            authService.activateAccount(token);
+        });
+    }
 }
