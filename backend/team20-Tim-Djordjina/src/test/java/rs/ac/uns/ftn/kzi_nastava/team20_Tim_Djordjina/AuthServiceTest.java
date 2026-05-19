@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.EmailAlreadyExistsException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatchException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
@@ -90,6 +91,20 @@ public class AuthServiceTest {
             authService.registerUser(validRegistrationDTO);
         });
 
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void registerUser_WithExistingEmail_ShouldThrowException(){
+        // Arrange
+        when(userRepository.existsByEmail(anyString())).thenReturn(true);
+
+        // Act and Assert
+        assertThrows(EmailAlreadyExistsException.class, () -> {
+            authService.registerUser(validRegistrationDTO);
+        });
+
+        verify(userRepository).existsByEmail("john.doe@example.com");
         verify(userRepository, never()).save(any(User.class));
     }
 
