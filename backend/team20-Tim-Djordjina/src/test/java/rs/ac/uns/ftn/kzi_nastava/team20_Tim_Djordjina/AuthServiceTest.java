@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -143,4 +144,31 @@ public class AuthServiceTest {
         assertTrue(result.getTokenExpirationDate().isAfter(beforeRegistration));
         assertTrue(result.getTokenExpirationDate().isBefore(afterRegistration));
     }
+
+    @Test
+    void activateAccount_WithValidToken_ShouldActivateUser(){
+        // Arrange
+        String token = "valid-token";
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+        user.setActivated(false);
+        user.setActivationToken(token);
+        user.setTokenExpirationDate(LocalDateTime.now().plusHours(1));
+
+        when(userRepository.findByActivationToken(token)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        authService.activateAccount(token);
+
+        // Assert
+        assertTrue(user.isActivated());
+        assertNull(user.getActivationToken());
+        assertNull(user.getTokenExpirationDate());
+        verify(userRepository).save(user);
+    }
+
+
+
 }
