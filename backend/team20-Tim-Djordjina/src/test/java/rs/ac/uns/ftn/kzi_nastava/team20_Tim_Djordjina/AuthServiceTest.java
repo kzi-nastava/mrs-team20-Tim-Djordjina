@@ -169,6 +169,16 @@ public class AuthServiceTest {
         verify(userRepository).save(user);
     }
 
+    @Test
+    void activateAccount_WithInvalidToken_ShouldThrowException(){
+        // Arrange
+        when(userRepository.findByActivationToken(anyString())).thenReturn(Optional.empty());
+
+        // Act and Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            authService.activateAccount("invalid-token");
+        });
+    }
 
 
 }
