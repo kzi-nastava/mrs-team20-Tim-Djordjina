@@ -195,4 +195,23 @@ public class AuthServiceTest {
             authService.activateAccount(token);
         });
     }
+
+    @Test
+    void activateAccount_WithExpiredToken_ShouldThrowException(){
+        // Arrange
+        String token = "expired-token";
+        User user = new User();
+        user.setActivated(false);
+        user.setActivationToken(token);
+        user.setTokenExpirationDate(LocalDateTime.now().minusHours(1));
+
+        when(userRepository.findByActivationToken(token)).thenReturn(Optional.of(user));
+
+        // Act and Assert
+        assertThrows(IllegalStateException.class, () -> {
+            authService.activateAccount(token);
+        });
+    }
+
+    // TODO: Add test methods for resend activation email
 }
