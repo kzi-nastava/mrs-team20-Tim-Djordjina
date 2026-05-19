@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +27,9 @@ public class AuthServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     private AuthService authService;
@@ -55,6 +59,7 @@ public class AuthServiceTest {
             user.setId(1L);
             return user;
         });
+        doNothing().when(emailService).sendActivationEmail(anyString(), anyString(), anyString());
 
         // Act
         User result = authService.registerUser(validRegistrationDTO);
@@ -65,9 +70,14 @@ public class AuthServiceTest {
         assertEquals("john.doe@example.com", result.getEmail());
         assertEquals(Role.USER, result.getRole());
         assertFalse(result.isActivated());
+        assertNotNull(result.getActivationToken());
+        assertNotNull(result.getTokenExpirationDate());
 
         verify(userRepository).existsByEmail("john.doe@example.com");
         verify(passwordEncoder).encode("password123");
         verify(userRepository).save(any(User.class));
+        verify(emailService).sendActivationEmail(anyString(), eq("John"), anyString());
     }
+
+
 }
