@@ -16,6 +16,8 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -123,4 +125,22 @@ public class AuthServiceTest {
         verify(passwordEncoder).encode("password123");
     }
 
+    @Test
+    void registerUser_ShouldGenerateActivationTokenWith24HourExpiration(){
+        // Arrange
+        when(userRepository.existsByEmail(anyString())).thenReturn(false);
+        when(passwordEncoder.encode("password123")).thenReturn("hashedPassword");
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        LocalDateTime beforeRegistration = LocalDateTime.now().plusHours(24).minusMinutes(1);
+        LocalDateTime afterRegistration = LocalDateTime.now().plusHours(24).plusMinutes(1);
+
+        // Act
+        User result = authService.registerUser(validRegistrationDTO);
+
+        // Assert
+        assertNotNull(result.getActivationToken());
+        assertTrue(result.getTokenExpirationDate().isAfter(beforeRegistration));
+        assertTrue(result.getTokenExpirationDate().isBefore(afterRegistration));
+    }
 }
