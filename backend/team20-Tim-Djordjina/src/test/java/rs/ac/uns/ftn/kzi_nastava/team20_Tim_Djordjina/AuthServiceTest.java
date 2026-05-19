@@ -108,4 +108,19 @@ public class AuthServiceTest {
         verify(userRepository, never()).save(any(User.class));
     }
 
+    @Test
+    void registerUser_ShouldHashPassword() {
+        // Arrange
+        when(userRepository.existsByEmail(anyString())).thenReturn(false);
+        when(passwordEncoder.encode("password123")).thenReturn("hashedPassword");
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        User result = authService.registerUser(validRegistrationDTO);
+
+        // Assert
+        assertEquals("hashedPassword", result.getPasswordHash());
+        verify(passwordEncoder).encode("password123");
+    }
+
 }
