@@ -214,4 +214,28 @@ public class AuthServiceTest {
     }
 
     // TODO: Add test methods for resend activation email
+    @Test
+    void resendActivationEmail_WithValidEmail_ShouldGenerateNewToken(){
+        // Arrange
+        String email = "test@example.com";
+        User user = new User();
+        user.setEmail(email);
+        user.setFirstName("John");
+        user.setActivated(false);
+        user.setActivationToken("old-token");
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        doNothing().when(emailService).sendActivationEmail(anyString(), anyString(), anyString());
+
+        String oldToken = user.getActivationToken();
+
+        // Act
+        authService.resendActivationEmail(email);
+
+        // Assert
+        assertNotEquals(oldToken, user.getActivationToken());
+        assertNotNull(user.getTokenExpirationDate());
+        verify(emailService).sendActivationEmail(eq(email), eq("John"), anyString());
+    }
 }
