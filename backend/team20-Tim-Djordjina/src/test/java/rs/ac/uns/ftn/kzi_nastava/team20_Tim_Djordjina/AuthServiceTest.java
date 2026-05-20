@@ -238,4 +238,21 @@ public class AuthServiceTest {
         assertNotNull(user.getTokenExpirationDate());
         verify(emailService).sendActivationEmail(eq(email), eq("John"), anyString());
     }
+
+    @Test
+    void resendActivationEmail_ForAlreadyActivatedAccount_ShouldThrowException(){
+        // Arrange
+        String email = "test@example.com";
+        User user = new User();
+        user.setEmail(email);
+        user.setActivated(true);
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        // Act and Assert
+        assertThrows(IllegalStateException.class, () -> {
+            authService.resendActivationEmail(email);
+        });
+    }
+
 }
