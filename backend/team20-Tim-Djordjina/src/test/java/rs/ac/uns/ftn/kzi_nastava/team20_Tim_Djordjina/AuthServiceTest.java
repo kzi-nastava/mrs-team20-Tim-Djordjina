@@ -213,7 +213,6 @@ public class AuthServiceTest {
         });
     }
 
-    // TODO: Add test methods for resend activation email
     @Test
     void resendActivationEmail_WithValidEmail_ShouldGenerateNewToken(){
         // Arrange
@@ -255,4 +254,14 @@ public class AuthServiceTest {
         });
     }
 
+    @Test
+    void resendActivationEmail_WithNonExistentEmail_ShouldThrowException(){
+        // Arrange
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        // Act and Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            authService.resendActivationEmail("nonexistent@example.com");
+        });
+    }
 }
