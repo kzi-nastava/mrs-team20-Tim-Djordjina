@@ -9,9 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.EmailAlreadyExistsException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatchException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /*
 * Authentication service handling user registration
@@ -23,6 +28,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     /**
      * Register a new user
@@ -60,10 +66,111 @@ public class AuthService {
             user.setProfilePicture("/images/default-avatar.png");
         }
 
+        // Generate activation token valid for 24h
+        String activationToken = UUID.randomUUID().toString();
+        user.setActivationToken(activationToken);
+        user.setTokenExpirationDate(LocalDateTime.now().plusHours(24));
+
         // Save user to database
         User savedUser = userRepository.save(user);
         log.info("User registered successfully with ID: {}", savedUser.getId());
 
+        // Send activation email asynchronously
+        emailService.sendActivationEmail(
+                savedUser.getEmail(),
+                savedUser.getFirstName(),
+                activationToken
+        );
+
         return savedUser;
+    }
+
+    /**
+     * Activate user account with token
+     * - Validates activation token
+     * - Checks token expiration (24 hours)
+     * - Activates user account
+     */
+    @Transactional
+    public void activateAccount(String token){
+        log.info("Attempting to activate with token: {}", token);
+
+        User user = userRepository.findByActivationToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Some message"));
+
+        // Check if already activated
+        if (user.isActivated()){
+            throw new IllegalStateException("Account is already activated.");
+        }
+
+        // Check token expiration (24 hours)
+        if (user.isActivationTokenExpired()){
+            throw new IllegalStateException("Activation token has expired. Please request a new activation email.");
+        }
+
+        // Activate the account
+        user.setActivated(true);
+        user.setActivationToken(null);
+        user.setTokenExpirationDate(null);
+
+        userRepository.save(user);
+        log.info("Account activated successfully for user: {}", user.getEmail());
+    }
+
+    /**
+     * Resend activation email
+     * - Generate new 24 hour token
+     * - Sends new activation email
+     *
+     */
+    @Transactional
+    public void resendActivationEmail(String email){
+        log.info("Attempting to resend activation email to: {}", email);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
+
+        // Check if already activated
+        if (user.isActivated()){
+            throw new IllegalStateException("Account is already activated.");
+        }
+
+        // Generate activation token valid for 24h
+        String activationToken = UUID.randomUUID().toString();
+        user.setActivationToken(activationToken);
+        user.setTokenExpirationDate(LocalDateTime.now().plusHours(24));
+
+        userRepository.save(user);
+
+        // Send new activation email
+        emailService.sendActivationEmail(
+                user.getEmail(),
+                user.getFirstName(),
+                activationToken
+        );
+
+        log.info("Activation email resent successfully to: {}", email);
+    }
+
+    /**
+     * Check if user can login
+     * User cannot login if:
+     * - Account is not activated
+     * - Account is blocked by admin
+     */
+    public void validateUserCanLogin(User user){
+        if(!user.isActivated()){
+            throw new UserNotActivatedException(
+                    "Your account is not activated. Please check your email for the activation link."
+            );
+        }
+
+        if (user.isBlocked()){
+            String message = "Your account has been blocked.";
+            if (user.getBlockNote() != null && !user.getBlockNote().isEmpty()){
+                message += " Reason: " + user.getBlockNote();
+            }
+            throw new UserNotActivatedException(message);
+        }
     }
 }

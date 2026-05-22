@@ -4,7 +4,7 @@
     android:id="@+id/home_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A1A1A"
+    android:background="#FFFFFF"
     android:fillViewport="true">
 
     <LinearLayout
@@ -43,11 +43,11 @@
                     android:layout_height="40dp"
                     android:text="@string/login"
                     android:textStyle="bold"
-                    android:textColor="@color/input_text"
+                    android:textColor="@color/white"
                     android:textAlignment="center"
                     android:paddingTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:backgroundTint="@color/white"
+                    android:background="@drawable/button_background"
                     />
 
                 <Button
@@ -56,10 +56,10 @@
                     android:layout_height="40dp"
                     android:text="@string/sign_up"
                     android:textStyle="bold"
-                    android:textColor="@color/input_text"
+                    android:textColor="@color/white"
                     android:textAlignment="center"
                     android:paddingTop="8dp"
-                    android:backgroundTint="@color/white" />
+                    android:background="@drawable/button_background" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

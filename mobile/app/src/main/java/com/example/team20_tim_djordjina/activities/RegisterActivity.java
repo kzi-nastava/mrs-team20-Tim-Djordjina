@@ -20,8 +20,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.team20_tim_djordjina.R;
+import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityRegisterBinding;
+import com.example.team20_tim_djordjina.model.ApiResponse;
+import com.example.team20_tim_djordjina.model.RegistrationRequest;
 import com.google.android.material.textfield.TextInputEditText;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -121,8 +128,66 @@ public class RegisterActivity extends AppCompatActivity {
         // Create full phone number
         String fullPhoneNumber = countryCode + phoneNumber;
 
+        // Create registration request
+        RegistrationRequest request = new RegistrationRequest(
+                firstName,
+                lastName,
+                email,
+                password,
+                confirmPassword,
+                fullPhoneNumber,
+                address
+        );
+
+        // Call API
+        registerUser(request);
+
         // Sign Up logic implementation
         Toast.makeText(this, "Sign Up Succesfull!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void registerUser(RegistrationRequest request){
+        btnSignUp.setEnabled(false);
+
+        RetrofitClient.getApiService().register(request).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                btnSignUp.setEnabled(true);
+
+                if (response.isSuccessful() && response.body() != null){
+                    ApiResponse apiResponse = response.body();
+                    if(apiResponse.isSuccess()){
+                        // Registration successfull
+                        Toast.makeText(RegisterActivity.this,
+                                apiResponse.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else{
+                        // Registration failed
+                        Toast.makeText(RegisterActivity.this,
+                                apiResponse.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Handle error response
+                    String errorMessage = "Registration failed. Please try again.";
+                    if (response.code() == 409){
+                        errorMessage = "Email already exists.";
+                    } else if (response.code() == 400) {
+                        errorMessage = "Invalid input data.";
+                    }
+                    Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                btnSignUp.setEnabled(true);
+
+                // Network error
+                Toast.makeText(RegisterActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private boolean validateInputs(String firstName, String lastName, String email, String address, String phoneNumber, String password, String confirmPassword) {
@@ -150,12 +215,12 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
             return false;
         }
-
+/*
         if(TextUtils.isEmpty(phoneNumber)){
             Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
             return false;
         }
-
+*/
         if(TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return false;

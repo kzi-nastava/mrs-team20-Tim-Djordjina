@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.controllers;
 
 import jakarta.mail.MessagingException;
@@ -54,4 +55,4 @@ public class AuthController {
         return ResponseEntity.ok("Account activated");
     }
 
-}
+}*/

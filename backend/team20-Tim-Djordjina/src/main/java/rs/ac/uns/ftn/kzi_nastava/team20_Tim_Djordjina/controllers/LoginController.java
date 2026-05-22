@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,4 +25,4 @@ public class LoginController {
         );
         return new ResponseEntity<>("email sent", HttpStatus.OK);
     }
-}
+}*/

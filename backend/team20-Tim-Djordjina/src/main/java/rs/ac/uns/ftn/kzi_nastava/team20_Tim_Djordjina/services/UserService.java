@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.services;
 
 import jakarta.mail.MessagingException;
@@ -8,4 +9,4 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.entities.User;
 public interface UserService {
         void register(RegistrationRequestDTO request, MultipartFile profileImage) throws MessagingException;
         void activateAccount(User user);
-}
+}*/

@@ -1,3 +1,4 @@
+/*
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.entities;
 
 import jakarta.persistence.Table;
@@ -16,4 +17,4 @@ public class Passenger {
 
     Integer canceledRidesCount;
     Double totalSpent;
-}
+}*/

@@ -38,7 +38,8 @@ public class User {
     @Column(nullable = false, length = 255)
     private String address;
 
-    @Column(nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role = Role.USER;
 
     // Profile picture URL or path (default picture if not set)
@@ -93,5 +94,21 @@ public class User {
     // Check if user can login (activated and not blocked)
     public boolean canLogin(){
         return isActivated && !isBlocked;
+    }
+
+    // Check if activation token is expired
+    public boolean isActivationTokenExpired(){
+        if(tokenExpirationDate == null){
+            return true;
+        }
+        return LocalDateTime.now().isAfter(tokenExpirationDate);
+    }
+
+    // Check if reset password token is expired
+    public boolean isResetPasswordTokenExpired(){
+        if(resetPasswordTokenExpirationDate == null){
+            return true;
+        }
+        return LocalDateTime.now().isAfter(resetPasswordTokenExpirationDate);
     }
 }

@@ -4,7 +4,7 @@
     android:id="@+id/login_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A1A1A"
+    android:background="#FFFFFF"
     android:fillViewport="true">
 
     <LinearLayout
@@ -24,12 +24,14 @@
         <TextView
             android:id="@+id/tvLoginTitle"
             style="@style/FormTitleText"
-            android:text="@string/welcome" />
+            android:text="@string/welcome"
+            android:textColor="#000000"/>
 
         <TextView
             android:id="@+id/tvLoginSubtitle"
             style="@style/FormSubtitleText"
-            android:text="@string/login_to_continue"/>
+            android:text="@string/login_to_continue"
+            android:textColor="#000000"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilLoginEmail"
@@ -73,7 +75,9 @@
             android:id="@+id/btnLogin"
             style="@style/FormPrimaryButton"
             android:layout_width="match_parent"
-            android:text="@string/login" />
+            android:text="@string/login"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"/>
 
         <TextView
             android:id="@+id/tvSignupRedirect"

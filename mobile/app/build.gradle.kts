@@ -1,7 +1,13 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
-
+fun getIpAddress(): String {
+    val properties = Properties()
+    properties.load(rootProject.file("local.properties").inputStream())
+    return properties.getProperty("ip_addr")
+}
 android {
     namespace = "com.example.team20_tim_djordjina"
     compileSdk {
@@ -14,7 +20,7 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "IP_ADDR", "\""+getIpAddress()+"\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,6 +39,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -42,6 +49,11 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     // For Material Design Components (TextInputLayout, etc.)
     implementation("com.google.android.material:material:1.11.0")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:3.12.1")
 
     implementation(libs.appcompat)
     implementation(libs.material)
