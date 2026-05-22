@@ -1,7 +1,13 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
-
+fun getIpAddress(): String {
+    val properties = Properties()
+    properties.load(rootProject.file("local.properties").inputStream())
+    return properties.getProperty("ip_addr")
+}
 android {
     namespace = "com.example.team20_tim_djordjina"
     compileSdk {
@@ -14,7 +20,7 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "IP_ADDR", "\""+getIpAddress()+"\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,6 +39,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
