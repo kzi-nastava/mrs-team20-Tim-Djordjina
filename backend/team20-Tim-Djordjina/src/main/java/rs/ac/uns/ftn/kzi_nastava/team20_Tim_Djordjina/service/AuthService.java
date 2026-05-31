@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.EmailAlreadyExis
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatchException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserBlockedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Driver;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.DriverRepository;
@@ -33,6 +34,7 @@ import java.util.UUID;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final DriverRepository driverRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -88,6 +90,11 @@ public class AuthService {
         // Generate JWT token
         String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole().toString());
 
+        // If user is a diver, handle driver specific login logic
+        if (user.getRole() == Role.DRIVER){
+            handleDriverLogin(user.getId());
+        }
+
         log.info("User logged in successfully: {}", loginDTO.getEmail());
 
         // Build and return login response
@@ -100,7 +107,48 @@ public class AuthService {
                 user.getRole().toString()
         );
 
+        // Add driver specific info if applicable
+        if (user.getRole() == Role.DRIVER){
+            Optional<Driver> driverOpt = driverRepository.findByUserId(user.getId());
+            if(driverOpt.isPresent()){
+                Driver driver = driverOpt.get();
+                response.setDriver(true);
+                response.setWorkingHours(driver.getWorkingMinutesLast24Hours());
+            }
+        }
+
         return response;
+    }
+
+    /**
+     *
+     * Handle driver specific login logic (US#2.2.1 - Driver availability on login)
+     * Requirements:
+     * - Driver becomes available on login
+     * - Driver must not have active ride
+     * - Driver must not exceed 8 hours work limit
+     */
+    @Transactional
+    public void handleDriverLogin(Long userId) {
+        log.info("Handling driver login for user ID: {}", userId);
+
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found."));
+
+        // Reset working hours if 24 hours have passed
+        driver.resetWorkingHoursIfNeeded();
+
+        // Mark driver as logged in
+        driver.setLoggedIn(true);
+
+        // Set active and available (unless they have active ride or exceeded hours)
+        if(!driver.isHasActiveRide() && !driver.hasExceededWorkingHours()){
+            driver.setActive(true);
+            driver.setAvailable(true);
+        }
+
+        driverRepository.save(driver);
+        log.info("Driver logged in and set to available: {}", userId);
     }
 
 
