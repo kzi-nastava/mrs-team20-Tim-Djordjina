@@ -16,6 +16,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivated
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security.JwtTokenProvider;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final JwtTokenProvider jwtTokenProvider;
+
 
     // ===============================
     // LOGIN IMPLEMENTATION (US#2.2.1)
@@ -47,6 +50,7 @@ public class AuthService {
      */
     @Transactional(readOnly = true)
     public LoginResponse loginUser(LoginDTO loginDTO){
+        log.info("Login attempt for user: {}", loginDTO.getEmail());
 
         // Find user by email
         User user = userRepository.findByEmail(loginDTO.getEmail())
@@ -78,6 +82,9 @@ public class AuthService {
             }
             throw new UserBlockedException(message);
         }
+
+        // Generate JWT token
+        String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole().toString());
 
         return null;
     }
