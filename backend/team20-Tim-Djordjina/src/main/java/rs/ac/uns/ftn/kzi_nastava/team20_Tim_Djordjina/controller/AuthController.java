@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.ApiResponse;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginDTO;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginResponse;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
@@ -20,6 +22,20 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+
+    /**
+     *
+     * Login user with email and password
+     * POST /api/auth/login
+     *
+     * Returns JWT token if credentials are valid and account is activated
+     */
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginDTO loginDTO){
+        LoginResponse loginResponse = authService.loginUser(loginDTO);
+        return ResponseEntity
+                .ok(ApiResponse.success("Login successfully", loginResponse));
+    }
 
     /*
     * Register a new user
