@@ -15,11 +15,13 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserBlockedExcep
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.DriverRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security.JwtTokenProvider;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /*
@@ -86,7 +88,19 @@ public class AuthService {
         // Generate JWT token
         String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole().toString());
 
-        return null;
+        log.info("User logged in successfully: {}", loginDTO.getEmail());
+
+        // Build and return login response
+        LoginResponse response = new LoginResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getRole().toString()
+        );
+
+        return response;
     }
 
 
