@@ -31,4 +31,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body(ApiResponse.error(ex.getMessage()));
     }
+
+    @ExceptionHandler(UserBlockedException.class)
+    public ResponseEntity<ApiResponse> handleUserBlocked(UserBlockedException ex){
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
 }

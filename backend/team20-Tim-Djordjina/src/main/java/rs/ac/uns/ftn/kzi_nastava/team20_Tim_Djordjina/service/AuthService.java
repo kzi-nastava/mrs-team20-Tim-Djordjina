@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginResponse;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.EmailAlreadyExistsException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatchException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserBlockedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
@@ -32,8 +33,52 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
+    // ===============================
+    // LOGIN IMPLEMENTATION (US#2.2.1)
+    // ===============================
+
+    /**
+     * Login user with email and password
+     * Rules:
+     * - User must exist in database
+     * - Passwords must match
+     * - Account must be activated
+     * - Account must not be blocked
+     */
     @Transactional(readOnly = true)
     public LoginResponse loginUser(LoginDTO loginDTO){
+
+        // Find user by email
+        User user = userRepository.findByEmail(loginDTO.getEmail())
+                .orElseThrow(() -> {
+                    log.warn("Login failed - user not found: {}", loginDTO.getEmail());
+                    return new IllegalArgumentException("Invalid email or password.");
+                });
+
+        // Verify password
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPasswordHash())){
+            log.warn("Login failed - wrong password for user: {}", loginDTO.getEmail());
+            throw new IllegalArgumentException("Invalid email or password.");
+        }
+
+        // Check if account is activated
+        if(!user.isActivated()){
+            log.warn("Login failed - account not activated: {}", loginDTO.getEmail());
+            throw new UserNotActivatedException(
+                    "Your account is not activated. Please check your email for the activation link."
+            );
+        }
+
+        // Check if account is blocked
+        if (user.isBlocked()){
+            log.warn("Login failed - account blocked: {}", loginDTO.getEmail());
+            String message = "Your account has been blocked";
+            if (user.getBlockNote() != null && !user.getBlockNote().isEmpty()){
+                message += " Reason: " + user.getBlockNote();
+            }
+            throw new UserBlockedException(message);
+        }
+
         return null;
     }
 
