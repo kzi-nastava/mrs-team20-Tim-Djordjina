@@ -151,6 +151,35 @@ public class AuthService {
         log.info("Driver logged in and set to available: {}", userId);
     }
 
+    /**
+     * Handle driver logout
+     * US#2.2.1 - Driver becomes unavailable on logout
+     * Requirements:
+     * - Driver cannot logout if they have active ride
+     * - Driver is marked as logged out
+     * - Driver availability is set to false
+     */
+    @Transactional
+    public void handleDriverLogout(Long userId){
+        log.info("Handling driver logout for user ID: {}", userId);
+
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found."));
+
+        // Check if driver has active ride
+        if (driver.isHasActiveRide()){
+            log.warn("Driver cannot logout - has active ride: {}", userId);
+            throw new IllegalStateException("Cannot logout while you have an active ride.");
+        }
+
+        // Mark driver as logged out
+        driver.setLoggedIn(false);
+        driver.setAvailable(false);
+
+        driverRepository.save(driver);
+        log.info("Driver logged out: {}", userId);
+    }
+
 
     /**
      * Register a new user
