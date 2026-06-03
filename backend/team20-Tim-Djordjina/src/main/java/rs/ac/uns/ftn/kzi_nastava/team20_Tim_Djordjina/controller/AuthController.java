@@ -48,6 +48,19 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("Logout successful."));
     }
 
+    /**
+     * Toggle driver availability status
+     * POST /api/auth/driver/toggle-availability
+     *
+     * Allows driver to manually set active/inactive status
+     */
+    @PostMapping("/driver/toggle-availability")
+    public ResponseEntity<ApiResponse> toggleAvailability(@RequestParam Long userId){
+        authService.toggleDriverAvailability(userId);
+
+        return ResponseEntity.ok(ApiResponse.success("Availability status toggled."));
+    }
+
     /*
     * Register a new user
     * POST /api/auth/register
