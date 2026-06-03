@@ -182,6 +182,36 @@ public class AuthService {
 
 
     /**
+     *
+     * Toggle driver availability status manually
+     * US#2.2.1 - Driver can manually change active/inactive status
+     * Rules:
+     * - Driver must be logged in to toggle availability
+     * - If inactive during ride, driver becomes inactive after ride ends
+     */
+    @Transactional
+    public void toggleDriverAvailability(Long userId){
+        log.info("Toggling driver availability for user ID: {}", userId);
+
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found."));
+
+        if (!driver.isLoggedIn()){
+            throw new IllegalStateException("Driver must be logged in to toggle availability.");
+        }
+
+        boolean newStatus = !driver.isActive();
+        driver.setActive(newStatus);
+
+        // Update availability based on other constraints
+        driver.setAvailable(!driver.isHasActiveRide() && !driver.hasExceededWorkingHours() && newStatus);
+
+        driverRepository.save(driver);
+        log.info("Driver availability toggled to: {} for user ID: {}", newStatus, userId);
+
+    }
+
+    /**
      * Register a new user
      */
     @Transactional
