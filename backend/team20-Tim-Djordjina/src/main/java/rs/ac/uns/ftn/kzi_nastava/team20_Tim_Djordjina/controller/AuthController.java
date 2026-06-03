@@ -37,6 +37,17 @@ public class AuthController {
                 .ok(ApiResponse.success("Login successfully", loginResponse));
     }
 
+    /**
+     * Logout driver and set unavailable
+     * POST /api/auth/logout
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse> logout(@RequestParam Long userId){
+        authService.handleDriverLogout(userId);
+
+        return ResponseEntity.ok(ApiResponse.success("Logout successful."));
+    }
+
     /*
     * Register a new user
     * POST /api/auth/register
