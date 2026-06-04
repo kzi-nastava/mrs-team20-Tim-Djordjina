@@ -183,4 +183,22 @@ public class AuthServiceLoginTest {
         assertTrue(exception.getMessage().contains("blocked"));
         verify(jwtTokenProvider, never()).generateToken(anyString(), anyString());
     }
+
+
+    @Test
+    @DisplayName("Should include block reason in exception message for blocked account")
+    void loginUser_WithBlockedAccount_ShouldIncludeBlockReason(){
+        // Arrange
+        testUser.setBlocked(true);
+        testUser.setBlockNote("Suspicious activity detected");
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.matches("password123", "$2a$10$hashedPassword")).thenReturn(true);
+
+        // Act and Assert
+        UserBlockedException exception = assertThrows(
+                UserBlockedException.class, () -> authService.loginUser(validLoginDTO)
+        );
+
+        assertTrue(exception.getMessage().contains("Suspicious activity detected"));
+    }
 }
