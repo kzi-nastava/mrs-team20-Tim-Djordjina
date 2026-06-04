@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginResponse;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserBlockedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
@@ -160,9 +161,26 @@ public class AuthServiceLoginTest {
 
         // Act and Assert
         UserNotActivatedException exception = assertThrows(
-                UserNotActivatedException.class, () -> authService.loginUser(validLoginDTO));
+                UserNotActivatedException.class, () -> authService.loginUser(validLoginDTO)
+        );
 
         assertTrue(exception.getMessage().contains("not activated"));
+        verify(jwtTokenProvider, never()).generateToken(anyString(), anyString());
+    }
+
+    @Test
+    @DisplayName("Should reject login for blocked account")
+    void loginUser_WithBlockedAccount_ShouldThrowUserBlockedException(){
+        testUser.setBlocked(true);
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.matches("password123", "$2a$10$hashedPassword")).thenReturn(true);
+
+        // Act and Assert
+        UserBlockedException exception = assertThrows(
+                UserBlockedException.class, () -> authService.loginUser(validLoginDTO)
+        );
+
+        assertTrue(exception.getMessage().contains("blocked"));
         verify(jwtTokenProvider, never()).generateToken(anyString(), anyString());
     }
 }
