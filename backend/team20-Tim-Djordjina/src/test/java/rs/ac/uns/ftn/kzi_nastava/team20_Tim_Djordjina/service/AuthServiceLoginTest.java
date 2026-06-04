@@ -130,4 +130,23 @@ public class AuthServiceLoginTest {
         verify(passwordEncoder, never()).matches(anyString(), anyString());
     }
 
+    @Test
+    @DisplayName("Should throw exception with wrong password")
+    void loginUser_WithWrongPassword_ShouldThrowException(){
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.matches("wrongPassword", "$2a$10$hashedPassword")).thenReturn(false);
+
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setEmail("john@example.com");
+        loginDTO.setPassword("wrongPassword");
+
+        // Act and Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> authService.loginUser(loginDTO));
+
+        assertEquals("Invalid email or password.", exception.getMessage());
+        verify(passwordEncoder).matches("wrongPassword", "$2a$10$hashedPassword");
+        verify(jwtTokenProvider, never()).generateToken(anyString(), anyString());
+
+    }
+
 }
