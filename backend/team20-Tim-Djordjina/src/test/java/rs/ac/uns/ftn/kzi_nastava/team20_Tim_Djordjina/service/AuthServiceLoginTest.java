@@ -20,8 +20,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security.JwtTokenProvider;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AuthService Login Tests")
@@ -113,5 +112,22 @@ public class AuthServiceLoginTest {
     }
 
 
+    @Test
+    @DisplayName("Should throw exception with non-existent email")
+    void loginUser_WithNonExistentEmail_ShouldThrowException(){
+        // Arrange
+        when(userRepository.findByEmail("nonexistent@example.com")).thenReturn(Optional.empty());
+
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setEmail("nonexistent@example.com");
+        loginDTO.setPassword("password123");
+
+        // Act and Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> authService.loginUser(loginDTO));
+
+        assertEquals("Invalid email or password.", exception.getMessage());
+        verify(userRepository).findByEmail("nonexistent@example.com");
+        verify(passwordEncoder, never()).matches(anyString(), anyString());
+    }
 
 }
