@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginResponse;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserBlockedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Driver;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.DriverRepository;
@@ -200,5 +201,35 @@ public class AuthServiceLoginTest {
         );
 
         assertTrue(exception.getMessage().contains("Suspicious activity detected"));
+    }
+
+
+    @Test
+    @DisplayName("Should handle driver login and set availability")
+    void handleDriverLogin_ShouldMarkDriverAsAvailable(){
+        // Arrange
+        User user = new User();
+        user.setId(1L);
+        user.setActivated(true);
+        user.setBlocked(false);
+
+        Driver driver = new Driver();
+        driver.setUser(user);
+        driver.setLoggedIn(false);
+        driver.setActive(false);
+        driver.setAvailable(false);
+        driver.setWorkingMinutesLast24Hours(0);
+
+        when(driverRepository.findByUserId(1L)).thenReturn(Optional.of(driver));
+        when(driverRepository.save(any(Driver.class))).thenReturn(driver);
+
+        // Act
+        authService.handleDriverLogin(1L);
+
+        // Assert
+        verify(driverRepository).findByUserId(1L);
+        verify(driverRepository).save(argThat(d ->
+            d.isLoggedIn() && d.isActive() && d.isAvailable()
+        ));
     }
 }
