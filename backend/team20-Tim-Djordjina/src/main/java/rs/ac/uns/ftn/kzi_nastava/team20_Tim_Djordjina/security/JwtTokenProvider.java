@@ -99,5 +99,21 @@ public class JwtTokenProvider {
         }
     }
 
-
+    /**
+     * Check if token is expired
+     */
+    public boolean isTokenExpired(String token){
+        try{
+            SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+            Claims claims = Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getExpiration().before(new Date());
+        } catch(Exception ex){
+            log.error("Failed to check token expiration", ex);
+            return true;
+        }
+    }
 }
