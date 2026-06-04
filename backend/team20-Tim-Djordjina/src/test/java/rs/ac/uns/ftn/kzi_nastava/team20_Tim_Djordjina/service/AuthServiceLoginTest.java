@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginResponse;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.DriverRepository;
@@ -149,4 +150,19 @@ public class AuthServiceLoginTest {
 
     }
 
+    @Test
+    @DisplayName("Should reject login for non-activated account")
+    void loginUser_WithNonActivatedAccount_ShouldThrowUserNotActivatedException(){
+        // Arrange
+        testUser.setActivated(false);
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.matches("password123", "$2a$10$hashedPassword")).thenReturn(true);
+
+        // Act and Assert
+        UserNotActivatedException exception = assertThrows(
+                UserNotActivatedException.class, () -> authService.loginUser(validLoginDTO));
+
+        assertTrue(exception.getMessage().contains("not activated"));
+        verify(jwtTokenProvider, never()).generateToken(anyString(), anyString());
+    }
 }
