@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -41,5 +42,23 @@ public class JwtTokenProvider {
 
         log.info("JWT token generated successfully for user: {}", email);
         return token;
+    }
+
+    /**
+     * Extract email from jwt token
+     */
+    public String getEmailFromToken(String token){
+        try{
+            SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+            Claims claims = Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject();
+        } catch(Exception ex){
+            log.error("Failed to get email from JWT token", ex);
+            return null;
+        }
     }
 }
