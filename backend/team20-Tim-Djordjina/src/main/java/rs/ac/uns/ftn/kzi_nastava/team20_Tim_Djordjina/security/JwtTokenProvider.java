@@ -79,4 +79,25 @@ public class JwtTokenProvider {
             return null;
         }
     }
+
+    /**
+     * Validate JWT token
+     */
+    public boolean validateToken(String token){
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+            Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+
+            log.debug("JWT token validated successfully");
+            return true;
+        } catch (Exception ex){
+            log.error("JWT token validation failed", ex);
+            return false;
+        }
+    }
+
+
 }
