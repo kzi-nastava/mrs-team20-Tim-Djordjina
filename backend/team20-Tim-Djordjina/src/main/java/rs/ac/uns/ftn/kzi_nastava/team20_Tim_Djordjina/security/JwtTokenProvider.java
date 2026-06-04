@@ -61,4 +61,22 @@ public class JwtTokenProvider {
             return null;
         }
     }
+
+    /**
+     * Extract role from jwt token
+     */
+    public String getRoleFromToken(String token){
+        try{
+            SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+            Claims claims = Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return (String)claims.get("role");
+        } catch(Exception ex){
+            log.error("Failed to get role from JWT token", ex);
+            return null;
+        }
+    }
 }
