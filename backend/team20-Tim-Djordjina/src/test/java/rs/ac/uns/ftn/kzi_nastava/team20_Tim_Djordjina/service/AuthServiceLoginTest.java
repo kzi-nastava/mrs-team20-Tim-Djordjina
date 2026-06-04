@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service;
 
+import lombok.extern.java.Log;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,5 +92,26 @@ public class AuthServiceLoginTest {
         verify(passwordEncoder).matches("password123", "$2a$10$hashedPassword");
         verify(jwtTokenProvider).generateToken("john@example.com", "USER");
     }
+
+
+    @Test
+    @DisplayName("Should return valid Jwt token")
+    void loginUser_ShouldReturnValidJwtToken(){
+        // Arrange
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.matches("password123", "$2a$10$hashedPassword")).thenReturn(true);
+        when(jwtTokenProvider.generateToken("john@example.com", "USER"))
+                .thenReturn("eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIn0.abc123");
+
+        // Act
+        LoginResponse response = authService.loginUser(validLoginDTO);
+
+        // Assert
+        assertTrue(response.getToken().contains("."));
+        assertEquals(3, response.getToken().split("\\.").length);
+        assertEquals("Bearer", response.getTokenType());
+    }
+
+
 
 }
