@@ -338,4 +338,26 @@ public class AuthServiceLoginTest {
                 !d.isLoggedIn() && !d.isAvailable()
         ));
     }
+
+    @Test
+    @DisplayName("Should prevent logout if driver has active ride")
+    void handleDriverLogout_WithActiveRide_ShouldThrowException() {
+        // Arrange
+        Driver driver = new Driver();
+        driver.setId(1L);
+        driver.setUser(testUser);
+        driver.setHasActiveRide(true);
+        driver.setCurrentRideId(123L); // has active ride
+
+        when(driverRepository.findByUserId(1L)).thenReturn(Optional.of(driver));
+
+        // Act and Assert
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                () -> authService.handleDriverLogout(1L)
+        );
+
+        assertEquals("Cannot logout while you have an active ride.", exception.getMessage());
+        verify(driverRepository, never()).save(any(Driver.class));
+    }
 }
