@@ -360,4 +360,24 @@ public class AuthServiceLoginTest {
         assertEquals("Cannot logout while you have an active ride.", exception.getMessage());
         verify(driverRepository, never()).save(any(Driver.class));
     }
+
+    @Test
+    @DisplayName("Should toggle driver availability status")
+    void toggleDriverAvailability_ShouldToggleActiveStatus() {
+        // Arrange
+        Driver driver = new Driver();
+        driver.setId(1L);
+        driver.setUser(testUser);
+        driver.setLoggedIn(true);
+        driver.setActive(true);
+
+        when(driverRepository.findByUserId(1L)).thenReturn(Optional.of(driver));
+        when(driverRepository.save(any(Driver.class))).thenReturn(driver);
+
+        // Act
+        authService.toggleDriverAvailability(1L);
+
+        // Assert
+        verify(driverRepository).save(argThat(d -> !d.isActive()));
+    }
 }
