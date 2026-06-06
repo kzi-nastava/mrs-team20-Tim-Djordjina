@@ -221,6 +221,8 @@ public class AuthServiceLoginTest {
         when(passwordEncoder.matches("password123", "$2a$10$hashedPassword")).thenReturn(true);
         when(jwtTokenProvider.generateToken("john@example.com", Role.DRIVER.toString())).thenReturn("driver-token");
         when(driverRepository.findByUserId(1L)).thenReturn(Optional.of(driver));    // 1L - user id
+        when(driverRepository.save(any(Driver.class))).thenReturn(driver);
+
 
         // Act
         LoginResponse response = authService.loginUser(validLoginDTO);
