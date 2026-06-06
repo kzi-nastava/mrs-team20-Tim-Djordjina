@@ -421,4 +421,21 @@ public class AuthServiceLoginTest {
         assertNotNull(response);
         assertEquals("john@example.com", response.getEmail());
     }
+
+    @Test
+    @DisplayName("Should not expose detailed error messages for security")
+    void loginUser_ShouldNotExposeDetailedErrors() {
+        // Arrange
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.empty());
+
+        // Act and Assert
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> authService.loginUser(validLoginDTO)
+        );
+
+        assertEquals("Invalid email or password.", exception.getMessage());
+        assertFalse(exception.getMessage().contains("not found"));
+        assertFalse(exception.getMessage().contains("does not exist"));
+    }
 }
