@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service;
 
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -204,6 +203,34 @@ public class AuthServiceLoginTest {
         assertTrue(exception.getMessage().contains("Suspicious activity detected"));
     }
 
+    @Test
+    @DisplayName("Should return LoginResponse with isDriver=true for driver user")
+    void loginUser_WithDriverUser_ShouldReturnIsDriverTrue(){
+        // Arrange
+        testUser.setRole(Role.DRIVER);
+
+        Driver driver = new Driver();
+        driver.setId(1L);
+        driver.setUser(testUser);
+        driver.setLoggedIn(false);
+        driver.setActive(false);
+        driver.setAvailable(false);
+        driver.setWorkingMinutesLast24Hours(0);
+
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.matches("password123", "$2a$10$hashedPassword")).thenReturn(true);
+        when(jwtTokenProvider.generateToken("john@example.com", Role.DRIVER.toString())).thenReturn("driver-token");
+        when(driverRepository.findByUserId(1L)).thenReturn(Optional.of(driver));    // 1L - user id
+
+        // Act
+        LoginResponse response = authService.loginUser(validLoginDTO);
+
+        //Assert
+        assertTrue(response.isDriver());
+        assertEquals(0, response.getWorkingHours());
+        assertEquals("DRIVER", response.getRole());
+
+    }
 
     @Test
     @DisplayName("Should handle driver login and set availability")
@@ -260,6 +287,7 @@ public class AuthServiceLoginTest {
         verify(driverRepository).save(any(Driver.class));
     }
 
+    // TODO
     @Test
     @DisplayName("Should not allow login if driver exceeded working hours")
     void handleDriverLogin_WithExceededHours_ShouldNotSetAvailable(){
@@ -286,5 +314,6 @@ public class AuthServiceLoginTest {
         verify(driverRepository).findByUserId(2L);
         verify(driverRepository).save(any(Driver.class));
     }
+
 
 }
