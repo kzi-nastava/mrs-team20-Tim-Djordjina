@@ -20,6 +20,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.DriverRepositor
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security.JwtTokenProvider;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -232,4 +233,30 @@ public class AuthServiceLoginTest {
             d.isLoggedIn() && d.isActive() && d.isAvailable()
         ));
     }
+
+    @Test
+    @DisplayName("Should reset driver working hours if 24h passed")
+    void handleDriverLogin_ShouldResetDriverWorkingHoursIf24HoursPassed(){
+        // Arrange
+        User user = new User();
+        user.setId(2L);     // driver's ID
+        user.setActivated(true);
+        user.setBlocked(false);
+
+        Driver driver = new Driver();
+        driver.setUser(user);
+        driver.setWorkingMinutesLast24Hours(480); // 8 hours
+        driver.setLastWorkingHoursReset(LocalDateTime.now().minusHours(25));    // 25 hours age
+
+        when(driverRepository.findByUserId(2L)).thenReturn(Optional.of(driver));
+        when(driverRepository.save(any(Driver.class))).thenReturn(driver);
+
+        // Act
+        authService.handleDriverLogin(2L);
+
+        // Assert
+        verify(driverRepository).findByUserId(2L);
+        verify(driverRepository).save(any(Driver.class));
+    }
+
 }
