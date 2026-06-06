@@ -239,14 +239,42 @@ public class AuthServiceLoginTest {
     void handleDriverLogin_ShouldResetDriverWorkingHoursIf24HoursPassed(){
         // Arrange
         User user = new User();
-        user.setId(2L);     // driver's ID
+        user.setId(2L);     // user's ID
         user.setActivated(true);
         user.setBlocked(false);
 
         Driver driver = new Driver();
+        driver.setId(1L);   // driver's ID
         driver.setUser(user);
         driver.setWorkingMinutesLast24Hours(480); // 8 hours
         driver.setLastWorkingHoursReset(LocalDateTime.now().minusHours(25));    // 25 hours age
+
+        when(driverRepository.findByUserId(2L)).thenReturn(Optional.of(driver));
+        when(driverRepository.save(any(Driver.class))).thenReturn(driver);
+
+        // Act
+        authService.handleDriverLogin(2L);
+
+        // Assert
+        verify(driverRepository).findByUserId(2L);
+        verify(driverRepository).save(any(Driver.class));
+    }
+
+    @Test
+    @DisplayName("Should not allow login if driver exceeded working hours")
+    void handleDriverLogin_WithExceededHours_ShouldNotSetAvailable(){
+        // Arrange
+        User user = new User();
+        user.setId(2L);     // user's ID
+
+        Driver driver = new Driver();
+        driver.setId(1L);   // driver's ID
+        driver.setUser(user);
+        driver.setLoggedIn(false);
+        driver.setActive(true);
+        driver.setAvailable(true);
+        driver.setWorkingMinutesLast24Hours(500);   // more than 8 hours (>480)
+        driver.setHasActiveRide(false);
 
         when(driverRepository.findByUserId(2L)).thenReturn(Optional.of(driver));
         when(driverRepository.save(any(Driver.class))).thenReturn(driver);
