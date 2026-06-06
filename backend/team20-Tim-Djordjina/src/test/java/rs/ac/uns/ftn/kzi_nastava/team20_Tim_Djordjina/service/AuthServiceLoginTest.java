@@ -317,5 +317,25 @@ public class AuthServiceLoginTest {
         verify(driverRepository).save(any(Driver.class));
     }
 
+    @Test
+    @DisplayName("Should logout driver successfully")
+    void handleDriverLogout_ShouldMarkDriverAsLoggedOut(){
+        Driver driver = new Driver();
+        driver.setId(1L);
+        driver.setUser(testUser);
+        driver.setLoggedIn(true);
+        driver.setActive(true);
+        driver.setAvailable(true);
 
+        when(driverRepository.findByUserId(1L)).thenReturn(Optional.of(driver));
+        when(driverRepository.save(any(Driver.class))).thenReturn(driver);
+
+        // Act
+        authService.handleDriverLogout(1L);
+
+        // Assert
+        verify(driverRepository).save(argThat(d ->
+                !d.isLoggedIn() && !d.isAvailable()
+        ));
+    }
 }
