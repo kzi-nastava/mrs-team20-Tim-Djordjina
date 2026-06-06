@@ -380,4 +380,24 @@ public class AuthServiceLoginTest {
         // Assert
         verify(driverRepository).save(argThat(d -> !d.isActive()));
     }
+
+    @Test
+    @DisplayName("Should prevent toggle if driver not logged in")
+    void toggleDriverAvailability_NotLoggedIn_ShouldThrowException() {
+        // Arrange
+        Driver driver = new Driver();
+        driver.setId(1L);
+        driver.setUser(testUser);
+        driver.setLoggedIn(false);
+
+        when(driverRepository.findByUserId(1L)).thenReturn(Optional.of(driver));
+
+        // Act and Assert
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                () -> authService.toggleDriverAvailability(1L)
+        );
+
+        assertEquals("Driver must be logged in to toggle availability.", exception.getMessage());
+    }
 }
