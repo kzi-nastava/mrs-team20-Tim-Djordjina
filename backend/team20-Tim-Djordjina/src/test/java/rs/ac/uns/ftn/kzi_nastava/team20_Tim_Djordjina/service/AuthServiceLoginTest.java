@@ -21,6 +21,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security.JwtTokenProvider;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -399,5 +400,25 @@ public class AuthServiceLoginTest {
         );
 
         assertEquals("Driver must be logged in to toggle availability.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should handle case-insensitive email")
+    void loginUser_WithDifferentCaseEmail_ShouldWork(){
+        // Arrange
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.matches("password123", "$2a$10$hashedPassword")).thenReturn(true);
+        when(jwtTokenProvider.generateToken("john@example.com", "USER")).thenReturn("token");
+
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setEmail("john@example.com");
+        loginDTO.setPassword("password123");
+
+        // Act
+        LoginResponse response = authService.loginUser(loginDTO);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("john@example.com", response.getEmail());
     }
 }
