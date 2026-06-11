@@ -32,4 +32,20 @@ public class JwtTokenProviderTest {
         assertFalse(token.isEmpty());
         assertEquals(3, token.split("\\.").length);
     }
+
+    @Test
+    @DisplayName("Should generate token with correct structure")
+    void generateToken_ShouldHaveCorrectStructure() {
+        // Act
+        String token = jwtTokenProvider.generateToken("john@example.com", "DRIVER");
+
+        // Assert
+        String[] parts = token.split("\\.");
+        assertEquals(3, parts.length);
+
+        // Each part needs to be non-empty
+        for (String part : parts){
+            assertFalse(part.isEmpty());
+        }
+    }
 }
