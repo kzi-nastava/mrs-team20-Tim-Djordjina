@@ -199,4 +199,17 @@ public class JwtTokenProviderTest {
         assertFalse(isValid);
     }
 
+    @Test
+    @DisplayName("Should reject token with only one part")
+    void validateToken_WithIncompleteParts_ShouldReturnFalse() {
+        // Arrange
+        String token = "onlyonepart";
+
+        // Act
+        boolean isValid = jwtTokenProvider.validateToken(token);
+
+        // Assert
+        assertFalse(isValid);
+    }
+
 }
