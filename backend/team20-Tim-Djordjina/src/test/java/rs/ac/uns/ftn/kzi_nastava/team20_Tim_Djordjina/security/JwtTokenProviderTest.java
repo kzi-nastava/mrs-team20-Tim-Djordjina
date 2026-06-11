@@ -129,4 +129,26 @@ public class JwtTokenProviderTest {
         // Assert
         assertEquals("USER", extractedRole);
     }
+
+    @Test
+    @DisplayName("Should extract different roles from different tokens")
+    void getEmailFromToken_ShouldExtractDifferentRoles() {
+        // Arrange
+        String userToken = jwtTokenProvider.generateToken("john@example.com", "USER");
+        String driverToken = jwtTokenProvider.generateToken("jane@example.com", "DRIVER");
+        String adminToken = jwtTokenProvider.generateToken("admin@example.com", "ADMIN");
+
+        // Act
+        String userRole = jwtTokenProvider.getRoleFromToken(userToken);
+        String driverRole = jwtTokenProvider.getRoleFromToken(driverToken);
+        String adminRole = jwtTokenProvider.getRoleFromToken(adminToken);
+
+        // Assert
+        assertEquals("USER", userRole);
+        assertEquals("DRIVER", driverRole);
+        assertEquals("ADMIN", adminRole);
+
+    }
+
+
 }
