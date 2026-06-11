@@ -132,7 +132,7 @@ public class JwtTokenProviderTest {
 
     @Test
     @DisplayName("Should extract different roles from different tokens")
-    void getEmailFromToken_ShouldExtractDifferentRoles() {
+    void getRoleFromToken_ShouldExtractDifferentRoles() {
         // Arrange
         String userToken = jwtTokenProvider.generateToken("john@example.com", "USER");
         String driverToken = jwtTokenProvider.generateToken("jane@example.com", "DRIVER");
@@ -150,5 +150,14 @@ public class JwtTokenProviderTest {
 
     }
 
+    @Test
+    @DisplayName("Should handle invalid token for role extraction")
+    void getRoleFromToken_WithInvalidToken_ShouldReturnNull(){
+        // Act
+        String role = jwtTokenProvider.getRoleFromToken("invalid.token.here");
+
+        // Assert
+        assertNull(role);
+    }
 
 }
