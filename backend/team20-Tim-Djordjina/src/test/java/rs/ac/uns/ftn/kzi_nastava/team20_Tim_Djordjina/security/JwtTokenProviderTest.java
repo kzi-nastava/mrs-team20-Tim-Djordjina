@@ -107,4 +107,14 @@ public class JwtTokenProviderTest {
         assertNotEquals(extracted1, extracted2);
     }
 
+    @Test
+    @DisplayName("Should handle invalid token gracefully")
+    void getEmailFromToken_WithInvalidToken_ShouldReturnNull() {
+        // Act
+        String email = jwtTokenProvider.getEmailFromToken("invalid.token.here");
+
+        // Assert
+        assertNull(email);
+    }
+
 }
