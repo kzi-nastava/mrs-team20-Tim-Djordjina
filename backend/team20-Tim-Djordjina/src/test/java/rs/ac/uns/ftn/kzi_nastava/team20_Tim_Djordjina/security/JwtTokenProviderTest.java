@@ -160,4 +160,17 @@ public class JwtTokenProviderTest {
         assertNull(role);
     }
 
+    @Test
+    @DisplayName("Should validate valid token")
+    void validateToken_WithIValidToken_ShouldReturnTrue() {
+        // Arrange
+        String token = jwtTokenProvider.generateToken("john@example.com", "USER");
+
+        // Act
+        boolean isValid = jwtTokenProvider.validateToken(token);
+
+        // Assert
+        assertTrue(isValid);
+    }
+
 }
