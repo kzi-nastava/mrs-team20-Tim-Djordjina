@@ -186,4 +186,17 @@ public class JwtTokenProviderTest {
         assertFalse(isValid);
     }
 
+    @Test
+    @DisplayName("Should reject malformed token")
+    void validateToken_WithMalformedToken_ShouldReturnFalse() {
+        // Arrange
+        String token = "not.a.valid.jwt";
+
+        // Act
+        boolean isValid = jwtTokenProvider.validateToken(token);
+
+        // Assert
+        assertFalse(isValid);
+    }
+
 }
