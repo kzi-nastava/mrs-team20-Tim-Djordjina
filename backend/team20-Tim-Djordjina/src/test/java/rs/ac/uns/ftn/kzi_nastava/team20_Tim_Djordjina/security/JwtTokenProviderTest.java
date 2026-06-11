@@ -1,0 +1,35 @@
+package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@DisplayName("JWT Token Provider Tests")
+public class JwtTokenProviderTest {
+    private JwtTokenProvider jwtTokenProvider;
+    private static final String TEST_SECRET = "test-secret-key-minimum-256-bits-long-for-hs256-algorithm";
+    private static final long TEST_EXPIRATION = 86400000;
+
+    @BeforeEach
+    void setup(){
+        jwtTokenProvider = new JwtTokenProvider();
+
+        ReflectionTestUtils.setField(jwtTokenProvider, "jwtSecret", TEST_SECRET);
+        ReflectionTestUtils.setField(jwtTokenProvider, "jwtExpirationMs", TEST_EXPIRATION);
+    }
+
+    @Test
+    @DisplayName("Should generate valid JWT token")
+    void generateToken_ShouldCreateValidToken() {
+        // Act
+        String token = jwtTokenProvider.generateToken("john@example.com", "USER");
+
+        // Assert
+        assertNotNull(token);
+        assertFalse(token.isEmpty());
+        assertEquals(3, token.split("\\.").length);
+    }
+}
