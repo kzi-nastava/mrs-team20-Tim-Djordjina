@@ -212,4 +212,17 @@ public class JwtTokenProviderTest {
         assertFalse(isValid);
     }
 
+    @Test
+    @DisplayName("Should validate that new token is not expired")
+    void isTokenExpired_WithFreshToken_ShouldReturnFalse() {
+        // Arrange
+        String token = jwtTokenProvider.generateToken("john@example.com", "USER");
+
+        // Act
+        boolean isExpired = jwtTokenProvider.isTokenExpired(token);
+
+        // Assert
+        assertFalse(isExpired);
+    }
+
 }
