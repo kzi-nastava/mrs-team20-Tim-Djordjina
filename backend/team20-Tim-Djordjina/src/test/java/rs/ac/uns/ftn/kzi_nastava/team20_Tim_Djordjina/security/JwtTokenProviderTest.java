@@ -225,4 +225,26 @@ public class JwtTokenProviderTest {
         assertFalse(isExpired);
     }
 
+    @Test
+    @DisplayName("Should detect expired token")
+    void isTokenExpired_WithExpiredToken_ShouldReturnTrue() {
+        // Arrange
+        ReflectionTestUtils.setField(jwtTokenProvider, "jwtExpirationMs", 1L);
+        String token = jwtTokenProvider.generateToken("john@example.com", "USER");
+
+        // Wait a bit to ensure token expires
+        try{
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        // Act
+        boolean isExpired = jwtTokenProvider.isTokenExpired(token);
+
+        // Assert
+        assertTrue(isExpired);
+
+    }
+
 }
