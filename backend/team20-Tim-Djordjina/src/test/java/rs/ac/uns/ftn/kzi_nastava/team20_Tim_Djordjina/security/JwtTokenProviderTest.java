@@ -49,29 +49,43 @@ public class JwtTokenProviderTest {
         }
     }
 
-        @Test
-        @DisplayName("Should generate different tokens for different users")
-        void generateToken_ShouldGenerateDifferentTokensForDifferentUsers() {
-            // Act
-            String token1 = jwtTokenProvider.generateToken("john@example.com", "USER");
-            String token2 = jwtTokenProvider.generateToken("jane@example.com", "USER");
+    @Test
+    @DisplayName("Should generate different tokens for different users")
+    void generateToken_ShouldGenerateDifferentTokensForDifferentUsers() {
+        // Act
+        String token1 = jwtTokenProvider.generateToken("john@example.com", "USER");
+        String token2 = jwtTokenProvider.generateToken("jane@example.com", "USER");
 
-            // Assert
-            assertNotEquals(token1, token2);
-        }
-
-        @Test
-        @DisplayName("Should generate different tokens for different roles")
-        void generateToken_ShouldGenerateDifferentTokensForDifferentRoles() {
-            // Act
-            String userToken = jwtTokenProvider.generateToken("john@example.com", "USER");
-            String driverToken = jwtTokenProvider.generateToken("john@example.com", "DRIVER");
-            String adminToken = jwtTokenProvider.generateToken("john@example.com", "ADMIN");
-
-            // Assert
-            assertNotEquals(userToken, driverToken);
-            assertNotEquals(userToken, adminToken);
-            assertNotEquals(driverToken, adminToken);
-        }
-
+        // Assert
+        assertNotEquals(token1, token2);
     }
+
+    @Test
+    @DisplayName("Should generate different tokens for different roles")
+    void generateToken_ShouldGenerateDifferentTokensForDifferentRoles() {
+        // Act
+        String userToken = jwtTokenProvider.generateToken("john@example.com", "USER");
+        String driverToken = jwtTokenProvider.generateToken("john@example.com", "DRIVER");
+        String adminToken = jwtTokenProvider.generateToken("john@example.com", "ADMIN");
+
+        // Assert
+        assertNotEquals(userToken, driverToken);
+        assertNotEquals(userToken, adminToken);
+        assertNotEquals(driverToken, adminToken);
+    }
+
+    @Test
+    @DisplayName("Should extract email from token")
+    void getEmailFromToken_ShouldExtractCorrectEmail(){
+        // Arrange
+        String email = "john@example.com";
+        String token = jwtTokenProvider.generateToken(email, "USER");
+
+        // Act
+        String extractedEmail = jwtTokenProvider.getEmailFromToken(token);
+
+        // Assert
+        assertEquals(email, extractedEmail);
+    }
+
+}
