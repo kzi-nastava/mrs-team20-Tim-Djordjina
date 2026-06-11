@@ -59,4 +59,19 @@ public class JwtTokenProviderTest {
             // Assert
             assertNotEquals(token1, token2);
         }
+
+        @Test
+        @DisplayName("Should generate different tokens for different roles")
+        void generateToken_ShouldGenerateDifferentTokensForDifferentRoles() {
+            // Act
+            String userToken = jwtTokenProvider.generateToken("john@example.com", "USER");
+            String driverToken = jwtTokenProvider.generateToken("john@example.com", "DRIVER");
+            String adminToken = jwtTokenProvider.generateToken("john@example.com", "ADMIN");
+
+            // Assert
+            assertNotEquals(userToken, driverToken);
+            assertNotEquals(userToken, adminToken);
+            assertNotEquals(driverToken, adminToken);
+        }
+
     }
