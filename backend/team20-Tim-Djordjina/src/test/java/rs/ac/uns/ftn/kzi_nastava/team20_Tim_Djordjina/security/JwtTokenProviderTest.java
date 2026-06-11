@@ -328,4 +328,15 @@ public class JwtTokenProviderTest {
         // Assert
         assertNotEquals(token1, token2);
     }
+
+    @Test
+    @DisplayName("Should not expose secret in token")
+    void generateToken_ShouldNotExposeSecretInToken() {
+        // Arrange
+        String token = jwtTokenProvider.generateToken("john@example.com", "USER");
+
+        // Act and Assert
+        assertFalse(token.contains(TEST_SECRET));
+    }
+
 }
