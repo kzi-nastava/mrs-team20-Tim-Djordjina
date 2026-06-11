@@ -247,4 +247,15 @@ public class JwtTokenProviderTest {
 
     }
 
+    @Test
+    @DisplayName("Should handle invalid token in expiration check")
+    void isTokenExpired_WithInvalidToken_ShouldReturnTrue() {
+        // Act
+        boolean isExpired = jwtTokenProvider.isTokenExpired("invalid.token.here");
+
+        // Assert
+        assertTrue(isExpired);
+
+    }
+
 }
