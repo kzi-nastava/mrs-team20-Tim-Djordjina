@@ -314,4 +314,18 @@ public class JwtTokenProviderTest {
         assertFalse(jwtTokenProvider.isTokenExpired(token));
     }
 
+    @Test
+    @DisplayName("Should not generate same token twice")
+    void generateToken_ShouldGenerateUniqueTokensEachTime() {
+        // Arrange
+        String email = "john@example.com";
+        String role = "USER";
+
+        // Act
+        String token1 = jwtTokenProvider.generateToken(email, role);
+        String token2 = jwtTokenProvider.generateToken(email, role);
+
+        // Assert
+        assertNotEquals(token1, token2);
+    }
 }
