@@ -297,4 +297,21 @@ public class JwtTokenProviderTest {
 
     }
 
+    @Test
+    @DisplayName("Should generate tokens with correct claims")
+    void generateToken_ShouldIncludeAllRequiredClaims() {
+        // Arrange
+        String email = "john@example.com";
+        String role = "ADMIN";
+
+        // Act
+        String token = jwtTokenProvider.generateToken(email, role);
+
+        // Assert
+        assertTrue(jwtTokenProvider.validateToken(token));
+        assertEquals(email, jwtTokenProvider.getEmailFromToken(token));
+        assertEquals(role, jwtTokenProvider.getRoleFromToken(token));
+        assertFalse(jwtTokenProvider.isTokenExpired(token));
+    }
+
 }
