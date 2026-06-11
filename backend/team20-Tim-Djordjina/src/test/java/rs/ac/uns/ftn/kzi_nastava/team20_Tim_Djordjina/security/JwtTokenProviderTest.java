@@ -117,4 +117,16 @@ public class JwtTokenProviderTest {
         assertNull(email);
     }
 
+    @Test
+    @DisplayName("Should extract role from token")
+    void getRoleFromToken_ShouldExtractCorrectRole () {
+        // Arrange
+        String token = jwtTokenProvider.generateToken("john@example.com", "USER");
+
+        // Act
+        String extractedRole = jwtTokenProvider.getRoleFromToken(token);
+
+        // Assert
+        assertEquals("USER", extractedRole);
+    }
 }
