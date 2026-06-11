@@ -162,7 +162,7 @@ public class JwtTokenProviderTest {
 
     @Test
     @DisplayName("Should validate valid token")
-    void validateToken_WithIValidToken_ShouldReturnTrue() {
+    void validateToken_WithValidToken_ShouldReturnTrue() {
         // Arrange
         String token = jwtTokenProvider.generateToken("john@example.com", "USER");
 
@@ -171,6 +171,19 @@ public class JwtTokenProviderTest {
 
         // Assert
         assertTrue(isValid);
+    }
+
+    @Test
+    @DisplayName("Should reject invalidate token signature")
+    void validateToken_WithInvalidSignature_ShouldReturnFalse() {
+        // Arrange
+        String token = "invalid.token.here";
+
+        // Act
+        boolean isValid = jwtTokenProvider.validateToken(token);
+
+        // Assert
+        assertFalse(isValid);
     }
 
 }
