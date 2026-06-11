@@ -88,4 +88,23 @@ public class JwtTokenProviderTest {
         assertEquals(email, extractedEmail);
     }
 
+    @Test
+    @DisplayName("Should extract different emails from different tokens")
+    void getEmailFromToken_ShouldExtractDifferentEmails() {
+        // Arrange
+        String email1 = "john@example.com";
+        String email2 = "jane@example.com";
+        String token1 = jwtTokenProvider.generateToken(email1, "USER");
+        String token2 = jwtTokenProvider.generateToken(email2, "USER");
+
+        // Act
+        String extracted1 = jwtTokenProvider.getEmailFromToken(token1);
+        String extracted2 = jwtTokenProvider.getEmailFromToken(token2);
+
+        // Assert
+        assertEquals(email1, extracted1);
+        assertEquals(email2, extracted2);
+        assertNotEquals(extracted1, extracted2);
+    }
+
 }
