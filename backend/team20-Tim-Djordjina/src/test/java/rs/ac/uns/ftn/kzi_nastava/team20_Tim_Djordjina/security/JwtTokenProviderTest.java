@@ -258,4 +258,43 @@ public class JwtTokenProviderTest {
 
     }
 
+    @Test
+    @DisplayName("Should handle complete token lifecycle")
+    void tokenLifecycle_ShouldHandleGenerationValidationAndExtraction() {
+        // Arrange
+        String email = "john@example.com";
+        String role = "DRIVER";
+
+        // Act - Generate
+        String token = jwtTokenProvider.generateToken(email, role);
+
+        // Assert - Token generated
+        assertNotNull(token);
+
+        // Act - Validate
+        boolean isValid = jwtTokenProvider.validateToken(token);
+
+        // Assert - Token is valid
+        assertTrue(isValid);
+
+        // Act - Extract email
+        String extractedEmail = jwtTokenProvider.getEmailFromToken(token);
+
+        // Assert - Email matches
+        assertEquals(email, extractedEmail);
+
+        // Act - Extract role
+        String extractedRole = jwtTokenProvider.getRoleFromToken(token);
+
+        // Assert - Role matches
+        assertEquals(role, extractedRole);
+
+        // Act - Check expiration
+        boolean isExpired = jwtTokenProvider.isTokenExpired(token);
+
+        // Assert - Not expired
+        assertFalse(isExpired);
+
+    }
+
 }
