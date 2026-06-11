@@ -48,4 +48,15 @@ public class JwtTokenProviderTest {
             assertFalse(part.isEmpty());
         }
     }
-}
+
+        @Test
+        @DisplayName("Should generate different tokens for different users")
+        void generateToken_ShouldGenerateDifferentTokensForDifferentUsers() {
+            // Act
+            String token1 = jwtTokenProvider.generateToken("john@example.com", "USER");
+            String token2 = jwtTokenProvider.generateToken("jane@example.com", "USER");
+
+            // Assert
+            assertNotEquals(token1, token2);
+        }
+    }
