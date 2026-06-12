@@ -13,9 +13,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.team20_tim_djordjina.R;
+import com.example.team20_tim_djordjina.api.ApiService;
+import com.example.team20_tim_djordjina.api.RetrofitClient;
+import com.example.team20_tim_djordjina.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private ActivityLoginBinding binding;
+    private ApiService apiService;
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private TextView tvForgotPassword, tvError,tvSignupRedirect;
@@ -31,6 +36,11 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        // View binding
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        /*
         initViews();
 
         btnLogin.setOnClickListener(view -> {
@@ -54,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
+        */
     }
 
     private void initViews() {
