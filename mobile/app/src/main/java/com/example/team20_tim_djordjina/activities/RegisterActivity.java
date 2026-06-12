@@ -149,7 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void registerUser(RegistrationRequest request){
         btnSignUp.setEnabled(false);
 
-        RetrofitClient.getApiService().register(request).enqueue(new Callback<ApiResponse>() {
+        RetrofitClient.getInstance(this).getApiService().register(request).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 btnSignUp.setEnabled(true);
