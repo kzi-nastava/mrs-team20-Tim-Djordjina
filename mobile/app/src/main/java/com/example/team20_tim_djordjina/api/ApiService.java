@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     @POST("api/auth/login")
-    Call<ApiResponse> login(@Body LoginRequest request);
+    Call<LoginResponse> login(@Body LoginRequest request);
     @POST("api/auth/logout")
     Call<ApiResponse> logout(@Query("userId") Long userId);
 

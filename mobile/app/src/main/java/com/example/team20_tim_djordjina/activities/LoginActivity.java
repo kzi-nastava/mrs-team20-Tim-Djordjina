@@ -20,7 +20,14 @@ import com.example.team20_tim_djordjina.R;
 import com.example.team20_tim_djordjina.api.ApiService;
 import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityLoginBinding;
+import com.example.team20_tim_djordjina.model.LoginRequest;
+import com.example.team20_tim_djordjina.model.LoginResponse;
 import com.example.team20_tim_djordjina.util.TokenManager;
+import com.google.gson.Gson;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -88,6 +95,59 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setLoading(true);
+
+        LoginRequest request = new LoginRequest(email, password);
+        apiService.login(request).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                setLoading(false);
+                if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()
+                    && response.body().getData() != null){
+
+                    LoginResponse.LoginData data = response.body().getData();
+
+                    // Save JWT plus user info
+                    tokenManager.saveSession(
+                            data.getToken(),
+                            data.getUserId(),
+                            data.getEmail(),
+                            data.getRole()
+                    );
+
+                    Toast.makeText(LoginActivity.this,
+                            "Welcome, " + data.getFirstName() + "!",
+                            Toast.LENGTH_SHORT).show();
+                    //navigateAfterLogin(data.getRole());
+                } else {
+                    // TODO error response
+                    showError(parseErrorMessage(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                setLoading(false);
+                showError("Network error. Please check your connection and try again.");
+            }
+        });
+    }
+
+    private String parseErrorMessage(Response<LoginResponse> response){
+        try {
+            if (response.errorBody() != null){
+                String json = response.errorBody().string();
+                LoginResponse error = new Gson().fromJson(json, LoginResponse.class);
+                if (error != null && error.getMessage() != null && !error.getMessage().isEmpty()){
+                    return error.getMessage();
+                }
+            }
+        } catch (Exception ignored){
+
+        }
+        return "Login failed. Please try again.";
+
     }
 
     // UI helpers
