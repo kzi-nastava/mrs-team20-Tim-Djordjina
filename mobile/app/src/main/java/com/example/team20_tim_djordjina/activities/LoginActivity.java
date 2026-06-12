@@ -119,9 +119,10 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,
                             "Welcome, " + data.getFirstName() + "!",
                             Toast.LENGTH_SHORT).show();
-                    //navigateAfterLogin(data.getRole());
+
+                    navigateAfterLogin(data.getRole());
                 } else {
-                    // TODO error response
+                    // Error response
                     showError(parseErrorMessage(response));
                 }
             }
@@ -148,6 +149,18 @@ public class LoginActivity extends AppCompatActivity {
         }
         return "Login failed. Please try again.";
 
+    }
+
+    /**
+     * Send the user to their home screen after a successful login.
+     * Clears the back stack so pressing "back" won't return to the login screen
+     */
+    private void navigateAfterLogin(String role){
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("USER", role);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     // UI helpers
