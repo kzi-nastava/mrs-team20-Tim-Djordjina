@@ -2,6 +2,9 @@ package com.example.team20_tim_djordjina.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -59,43 +62,52 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, RegisterActivity.class));
         });
 
-        /*
-        initViews();
 
-        btnLogin.setOnClickListener(view -> {
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
-
-            if (email.isEmpty() || password.isEmpty()) {
-                tvError.setText(R.string.email_and_password_cannot_be_empty);
-            }
-//            else {
-//                // log user in
-//            }
-        });
-
-        tvForgotPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-            startActivity(intent);
-        });
-
-        tvSignupRedirect.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
-        });
-        */
     }
 
     private void attemptLogin(){
+        hideError();
 
+        String email = binding.etLoginEmail.getText() != null
+                ? binding.etLoginEmail.getText().toString().trim() : "";
+        String password = binding.etLoginPassword.getText() != null
+                ? binding.etLoginPassword.getText().toString().trim() : "";
+
+        // Client side validation
+        if (TextUtils.isEmpty(email)){
+            showError("Please enter your email");
+            return;
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            showError("Please enter a valid email address");
+            return;
+        }
+        if (TextUtils.isEmpty(password)){
+            showError("Please enter your password");
+            return;
+        }
+
+        setLoading(true);
     }
 
-    private void initViews() {
-        etEmail = findViewById(R.id.etLoginEmail);
-        etPassword = findViewById(R.id.etLoginPassword);
-        tvError = findViewById(R.id.tvLoginError);
-        btnLogin = findViewById(R.id.btnLogin);
-        tvForgotPassword = findViewById(R.id.tvForgotPassword);
-        tvSignupRedirect = findViewById(R.id.tvSignupRedirect);
+    // UI helpers
+    private void setLoading(boolean loading){
+        binding.btnLogin.setEnabled(!loading);
+        binding.btnLogin.setText(loading ? "Logging in..." : getString(R.string.login));
     }
+    private void showError(String message){
+        binding.tvLoginError.setText(message);
+        binding.tvLoginError.setVisibility(View.VISIBLE);
+    }
+    private void hideError(){
+        binding.tvLoginError.setText("");
+        binding.tvLoginError.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        binding = null;
+    }
+
 }
