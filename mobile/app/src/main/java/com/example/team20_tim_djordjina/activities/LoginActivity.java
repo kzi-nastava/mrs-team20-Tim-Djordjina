@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +17,13 @@ import com.example.team20_tim_djordjina.R;
 import com.example.team20_tim_djordjina.api.ApiService;
 import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityLoginBinding;
+import com.example.team20_tim_djordjina.util.TokenManager;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private ApiService apiService;
+    private TokenManager tokenManager;
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private TextView tvForgotPassword, tvError,tvSignupRedirect;
@@ -39,6 +42,22 @@ public class LoginActivity extends AppCompatActivity {
         // View binding
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Dependencies
+        apiService = RetrofitClient.getInstance(this).getApiService();
+        tokenManager = new TokenManager(this);
+
+        // Click listeners
+        binding.btnLogin.setOnClickListener(v -> attemptLogin());
+
+        binding.tvForgotPassword.setOnClickListener(v -> {
+            // TODO: navigate to ForgotPasswordActivity when exist
+            Toast.makeText(this, "Forgot password screen", Toast.LENGTH_SHORT).show();
+        });
+
+        binding.tvSignupRedirect.setOnClickListener(v -> {
+            startActivity(new Intent(this, RegisterActivity.class));
+        });
 
         /*
         initViews();
@@ -65,6 +84,10 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
         */
+    }
+
+    private void attemptLogin(){
+
     }
 
     private void initViews() {
