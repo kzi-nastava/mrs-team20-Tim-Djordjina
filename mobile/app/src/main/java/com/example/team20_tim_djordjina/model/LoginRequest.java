@@ -2,6 +2,7 @@ package com.example.team20_tim_djordjina.model;
 
 /**
  * Request body sent to POST /api/auth/login
+ * Matches backend LoginDTO (email, password)
  */
 public class LoginRequest {
     private String email;
