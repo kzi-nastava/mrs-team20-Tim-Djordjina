@@ -1,4 +1,4 @@
-package com.example.team20_tim_djordjina.api;
+package com.example.team20_tim_djordjina.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
