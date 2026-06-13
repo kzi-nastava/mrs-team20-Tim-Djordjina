@@ -61,8 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLogin.setOnClickListener(v -> attemptLogin());
 
         binding.tvForgotPassword.setOnClickListener(v -> {
-            // TODO: navigate to ForgotPasswordActivity when exist
-            Toast.makeText(this, "Forgot password screen", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, ResetPasswordActivity.class));
         });
 
         binding.tvSignupRedirect.setOnClickListener(v -> {
