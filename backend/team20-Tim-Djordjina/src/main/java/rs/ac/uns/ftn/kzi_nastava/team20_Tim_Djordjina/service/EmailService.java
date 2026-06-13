@@ -55,6 +55,9 @@ public class EmailService {
             request.setBody(mail.build());
 
             Response response = sg.api(request);
+            log.info("SendGrid status code: {}", response.getStatusCode());
+            log.info("SendGrid body: {}", response.getBody());
+            log.info("SendGrid headers: {}", response.getHeaders());
 
             if (response.getStatusCode() >= 200 && response.getStatusCode() < 300){
                 log.info("Activation email sent successfully to: {} (Status: {})", toEmail, response.getStatusCode());
