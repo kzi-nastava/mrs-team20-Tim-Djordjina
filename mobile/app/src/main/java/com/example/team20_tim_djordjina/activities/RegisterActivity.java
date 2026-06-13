@@ -1,5 +1,6 @@
 package com.example.team20_tim_djordjina.activities;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -140,13 +141,13 @@ public class RegisterActivity extends AppCompatActivity {
         );
 
         // Call API
-        registerUser(request);
+        registerUser(request, email);
 
         // Sign Up logic implementation
-        Toast.makeText(this, "Sign Up Succesfull!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Sign Up Succesfull!", Toast.LENGTH_SHORT).show();
     }
 
-    private void registerUser(RegistrationRequest request){
+    private void registerUser(RegistrationRequest request, String email){
         btnSignUp.setEnabled(false);
 
         RetrofitClient.getInstance(this).getApiService().register(request).enqueue(new Callback<ApiResponse>() {
@@ -157,11 +158,18 @@ public class RegisterActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null){
                     ApiResponse apiResponse = response.body();
                     if(apiResponse.isSuccess()){
-                        // Registration successfull
-                        Toast.makeText(RegisterActivity.this,
-                                apiResponse.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                        finish();
+                        // Registration successfull -> tell user to activate via email, then go to login
+                        new AlertDialog.Builder(RegisterActivity.this)
+                                .setTitle("Check your email")
+                                .setMessage("Registration successful! We have sent an activation link to "
+                                        + email + ". Please activate your account within 24 hours, " +
+                                        "then log in.")
+                                .setCancelable(false)
+                                .setPositiveButton("Go to login", (dialog, which) -> {
+                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                    finish();
+                                })
+                                .show();
                     } else{
                         // Registration failed
                         Toast.makeText(RegisterActivity.this,
