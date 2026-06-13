@@ -257,7 +257,7 @@ public class AuthService {
         log.info("User registered successfully with ID: {}", savedUser.getId());
 
         // Send activation email asynchronously
-        emailService.sendActivationEmail(
+        emailService.sendActivationEmailHtml(
                 savedUser.getEmail(),
                 savedUser.getFirstName(),
                 activationToken

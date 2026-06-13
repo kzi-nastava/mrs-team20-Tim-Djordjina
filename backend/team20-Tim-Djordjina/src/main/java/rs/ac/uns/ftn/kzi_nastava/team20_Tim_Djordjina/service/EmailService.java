@@ -7,10 +7,15 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.engine.spi.Resolution;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +25,9 @@ import java.io.IOException;
 @Slf4j
 public class EmailService {
 
-    @Value("${sendgrid.api.key}")
-    private String sendGridApiKey;
+    private final JavaMailSender mailSender;
 
-    @Value("${sendgrid.from.email}")
+    @Value("${spring.mail.username}")
     private String fromEmail;
 
     @Value("${sendgrid.from.name}")
@@ -32,84 +36,59 @@ public class EmailService {
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
 
+    public EmailService(JavaMailSender mailSender){
+        this.mailSender = mailSender;
+    }
+
     /**
-     * Send activation email asynchronously using Sendgrid
+     * Send activation email asynchronously using Gmail SMTP
      */
     @Async
     public void sendActivationEmail(String toEmail, String firstName, String token){
         try{
             String activationLink = baseUrl + "/api/auth/activate?token=" + token;
 
-            Email from = new Email(fromEmail, fromName);
-            Email to = new Email(toEmail);
-            String subject = "Activate Your Account - RideOn App";
-            Content content = new Content("text/plain", buildActivationEmailContent(firstName, activationLink));
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(toEmail);
+            message.setSubject("Activate Your Account: - RideOn App");
+            message.setText(buildActivationEmailContent(firstName, activationLink));
 
-            Mail mail = new Mail(from, subject, to, content);
+            mailSender.send(message);
 
-            SendGrid sg = new SendGrid(sendGridApiKey);
-            Request request = new Request();
-
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-
-            Response response = sg.api(request);
-            log.info("SendGrid status code: {}", response.getStatusCode());
-            log.info("SendGrid body: {}", response.getBody());
-            log.info("SendGrid headers: {}", response.getHeaders());
-
-            if (response.getStatusCode() >= 200 && response.getStatusCode() < 300){
-                log.info("Activation email sent successfully to: {} (Status: {})", toEmail, response.getStatusCode());
-            }
-            else{
-                log.error("Failed to send activation email to: {}. Status: {}, Body: {}",
-                        toEmail, response.getStatusCode(), response.getBody());
-            }
+            log.info("Activation email (plain text) sent successfully to: {}", toEmail);
         }
-        catch (IOException e){
+        catch (Exception e){
             log.error("Failed to send activation email to: {}", toEmail, e);
         }
 
     }
 
     /**
-     * Send HTML email using Sendgrid
+     * Send HTML email using Gmail SMTP
      */
     @Async
     public void sendActivationEmailHtml(String toEmail, String firstName, String token){
         try{
             String activationLink = baseUrl + "/api/auth/activate?token=" + token;
 
-            Email from = new Email(fromEmail, fromName);
-            Email to = new Email(toEmail);
-            String subject = "Activate Your Account - RideOn App";
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            // HTML content for better formating
-            String htmlContent = buildActivationEmailHtml(firstName, activationLink);
-            Content content = new Content("text/html", htmlContent);
+            helper.setFrom(fromEmail, fromName);
+            helper.setTo(toEmail);
+            helper.setSubject("Activate Your Account: - RideOn App");
+            helper.setText(buildActivationEmailHtml(firstName, activationLink), true);
 
-            Mail mail = new Mail(from, subject, to, content);
+            mailSender.send(mimeMessage);
 
-            SendGrid sg = new SendGrid(sendGridApiKey);
-            Request request = new Request();
-
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-
-            Response response = sg.api(request);
-
-            if (response.getStatusCode() >= 200 && response.getStatusCode() < 300){
-                log.info("Activation email sent successfully to: {} (Status: {})", toEmail, response.getStatusCode());
-            }
-            else{
-                log.error("Failed to send activation email to: {}. Status: {}, Body: {}",
-                        toEmail, response.getStatusCode(), response.getBody());
-            }
+            log.info("Activation email sent successfully to: {}", toEmail);
         }
-        catch (IOException e){
-            log.error("Failed to send activation email to: {}", toEmail, e);
+        catch (MessagingException e){
+            log.error("Failed to build/send HTML activation email to: {}", toEmail, e);
+        }
+        catch (Exception e){
+            log.error("Unexpected error sending HTML activation email to: {}", toEmail, e);
         }
 
     }
