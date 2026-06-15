@@ -1,6 +1,7 @@
 package com.example.team20_tim_djordjina.activities;
 
 import android.app.AlertDialog;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -200,47 +201,56 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean validateInputs(String firstName, String lastName, String email, String address, String phoneNumber, String password, String confirmPassword) {
         if(TextUtils.isEmpty(firstName)){
-            Toast.makeText(this, "Please enter first name", Toast.LENGTH_SHORT).show();
+            showError("Please enter first name");
+            //Toast.makeText(this, "Please enter first name", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(TextUtils.isEmpty(lastName)){
-            Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
+            showError("Please enter last name");
+            //Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(TextUtils.isEmpty(email)){
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            showError("Please enter email");
+            //Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            Toast.makeText(this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
+            showError("Please enter a valid email");
+            //Toast.makeText(this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(TextUtils.isEmpty(address)){
-            Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
+            showError("Please enter address");
+            //Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(TextUtils.isEmpty(phoneNumber)){
-            Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
+            showError("Please enter phone number");
+            //Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(TextUtils.isEmpty(password)){
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            showError("Please enter password");
+            //Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(password.length() < 8){
-            Toast.makeText(this, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
+            showError("Password must be at least 8 characters");
+            //Toast.makeText(this, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(TextUtils.isEmpty(confirmPassword)){
-            Toast.makeText(this, "Please confirm password", Toast.LENGTH_SHORT).show();
+            showError("Please confirm password");
+            //Toast.makeText(this, "Please confirm password", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -248,6 +258,10 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
+    private void showError(String message){
+        binding.tvRegisterError.setText(message);
+        binding.tvRegisterError.setVisibility(View.VISIBLE);
+    }
     private void setupCountryCodeSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
