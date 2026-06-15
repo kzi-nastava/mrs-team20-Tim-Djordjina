@@ -223,12 +223,12 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
             return false;
         }
-/*
+
         if(TextUtils.isEmpty(phoneNumber)){
             Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
             return false;
         }
-*/
+
         if(TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return false;
