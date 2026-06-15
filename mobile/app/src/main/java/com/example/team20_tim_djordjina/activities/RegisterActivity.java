@@ -34,6 +34,13 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    public static final int EMAIL_LENGTH = 100;
+    public static final int ADDRESS_LENGTH = 255;
+    public static final int FIRST_NAME_MIN_LENGTH = 2;
+    public static final int FIRST_NAME_MAX_LENGTH = 50;
+    public static final int LAST_NAME_MIN_LENGTH = 2;
+    public static final int LAST_NAME_MAX_LENGTH = 50;
+    public static final String PHONE_REGEX = "\\d{6,15}";
     private ActivityRegisterBinding binding;
     private TextInputEditText etEmail, etPassword, etConfirmPassword, etFirstName, etLastName, etAddress;
     private EditText etPhoneNumber;
@@ -206,7 +213,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        if(firstName.length() < 2 || firstName.length() > 50) {
+        if(firstName.length() < FIRST_NAME_MIN_LENGTH || firstName.length() > FIRST_NAME_MAX_LENGTH) {
             showError("First name must be between 2 and 50 characters");
             return false;
         }
@@ -217,7 +224,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        if(lastName.length() < 2 || lastName.length() > 50) {
+        if(lastName.length() < LAST_NAME_MIN_LENGTH || lastName.length() > LAST_NAME_MAX_LENGTH) {
             showError("Last name must be between 2 and 50 characters");
             return false;
         }
@@ -234,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        if(email.length() > 100){
+        if(email.length() > EMAIL_LENGTH){
             showError("Email must not exceed 100 characters");
             return false;
         }
@@ -245,7 +252,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        if(address.length() > 255){
+        if(address.length() > ADDRESS_LENGTH){
             showError("Address must not exceed 255 characters");
             return false;
         }
@@ -256,7 +263,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        if(!phoneNumber.matches("\\d{6,15}")){
+        if(!phoneNumber.matches(PHONE_REGEX)){
             showError("Please enter a valid phone number (6-15 digits)");
             return false;
         }
