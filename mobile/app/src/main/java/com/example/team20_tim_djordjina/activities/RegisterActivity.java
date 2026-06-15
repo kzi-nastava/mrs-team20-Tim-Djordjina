@@ -206,9 +206,19 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
+        if(firstName.length() < 2 || firstName.length() > 50) {
+            showError("First name must be between 2 and 50 characters");
+            return false;
+        }
+
         if(TextUtils.isEmpty(lastName)){
             showError("Please enter last name");
             //Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(lastName.length() < 2 || lastName.length() > 50) {
+            showError("Last name must be between 2 and 50 characters");
             return false;
         }
 
@@ -224,15 +234,30 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
+        if(email.length() > 100){
+            showError("Email must not exceed 100 characters");
+            return false;
+        }
+
         if(TextUtils.isEmpty(address)){
             showError("Please enter address");
             //Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
             return false;
         }
 
+        if(address.length() > 255){
+            showError("Address must not exceed 255 characters");
+            return false;
+        }
+
         if(TextUtils.isEmpty(phoneNumber)){
             showError("Please enter phone number");
             //Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(!phoneNumber.matches("\\d{6,15}")){
+            showError("Please enter a valid phone number (6-15 digits)");
             return false;
         }
 
