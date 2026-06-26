@@ -1,5 +1,7 @@
 package com.example.team20_tim_djordjina.activities;
 
+import android.app.AlertDialog;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,6 +34,13 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    public static final int EMAIL_LENGTH = 100;
+    public static final int ADDRESS_LENGTH = 255;
+    public static final int FIRST_NAME_MIN_LENGTH = 2;
+    public static final int FIRST_NAME_MAX_LENGTH = 50;
+    public static final int LAST_NAME_MIN_LENGTH = 2;
+    public static final int LAST_NAME_MAX_LENGTH = 50;
+    public static final String PHONE_REGEX = "\\d{6,15}";
     private ActivityRegisterBinding binding;
     private TextInputEditText etEmail, etPassword, etConfirmPassword, etFirstName, etLastName, etAddress;
     private EditText etPhoneNumber;
@@ -140,16 +149,16 @@ public class RegisterActivity extends AppCompatActivity {
         );
 
         // Call API
-        registerUser(request);
+        registerUser(request, email);
 
         // Sign Up logic implementation
-        Toast.makeText(this, "Sign Up Succesfull!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Sign Up Succesfull!", Toast.LENGTH_SHORT).show();
     }
 
-    private void registerUser(RegistrationRequest request){
+    private void registerUser(RegistrationRequest request, String email){
         btnSignUp.setEnabled(false);
 
-        RetrofitClient.getApiService().register(request).enqueue(new Callback<ApiResponse>() {
+        RetrofitClient.getInstance(this).getApiService().register(request).enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 btnSignUp.setEnabled(true);
@@ -157,11 +166,18 @@ public class RegisterActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null){
                     ApiResponse apiResponse = response.body();
                     if(apiResponse.isSuccess()){
-                        // Registration successfull
-                        Toast.makeText(RegisterActivity.this,
-                                apiResponse.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                        finish();
+                        // Registration successfull -> tell user to activate via email, then go to login
+                        new AlertDialog.Builder(RegisterActivity.this)
+                                .setTitle("Check your email")
+                                .setMessage("Registration successful! We have sent an activation link to "
+                                        + email + ". Please activate your account within 24 hours, " +
+                                        "then log in.")
+                                .setCancelable(false)
+                                .setPositiveButton("Go to login", (dialog, which) -> {
+                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                    finish();
+                                })
+                                .show();
                     } else{
                         // Registration failed
                         Toast.makeText(RegisterActivity.this,
@@ -192,47 +208,81 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean validateInputs(String firstName, String lastName, String email, String address, String phoneNumber, String password, String confirmPassword) {
         if(TextUtils.isEmpty(firstName)){
-            Toast.makeText(this, "Please enter first name", Toast.LENGTH_SHORT).show();
+            showError("Please enter first name");
+            //Toast.makeText(this, "Please enter first name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(firstName.length() < FIRST_NAME_MIN_LENGTH || firstName.length() > FIRST_NAME_MAX_LENGTH) {
+            showError("First name must be between 2 and 50 characters");
             return false;
         }
 
         if(TextUtils.isEmpty(lastName)){
-            Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
+            showError("Please enter last name");
+            //Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(lastName.length() < LAST_NAME_MIN_LENGTH || lastName.length() > LAST_NAME_MAX_LENGTH) {
+            showError("Last name must be between 2 and 50 characters");
             return false;
         }
 
         if(TextUtils.isEmpty(email)){
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            showError("Please enter email");
+            //Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            Toast.makeText(this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
+            showError("Please enter a valid email");
+            //Toast.makeText(this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(email.length() > EMAIL_LENGTH){
+            showError("Email must not exceed 100 characters");
             return false;
         }
 
         if(TextUtils.isEmpty(address)){
-            Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
+            showError("Please enter address");
+            //Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
             return false;
         }
-/*
+
+        if(address.length() > ADDRESS_LENGTH){
+            showError("Address must not exceed 255 characters");
+            return false;
+        }
+
         if(TextUtils.isEmpty(phoneNumber)){
-            Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
+            showError("Please enter phone number");
+            //Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
             return false;
         }
-*/
+
+        if(!phoneNumber.matches(PHONE_REGEX)){
+            showError("Please enter a valid phone number (6-15 digits)");
+            return false;
+        }
+
         if(TextUtils.isEmpty(password)){
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            showError("Please enter password");
+            //Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(password.length() < 8){
-            Toast.makeText(this, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
+            showError("Password must be at least 8 characters");
+            //Toast.makeText(this, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(TextUtils.isEmpty(confirmPassword)){
-            Toast.makeText(this, "Please confirm password", Toast.LENGTH_SHORT).show();
+            showError("Please confirm password");
+            //Toast.makeText(this, "Please confirm password", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -240,6 +290,10 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
+    private void showError(String message){
+        binding.tvRegisterError.setText(message);
+        binding.tvRegisterError.setVisibility(View.VISIBLE);
+    }
     private void setupCountryCodeSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,

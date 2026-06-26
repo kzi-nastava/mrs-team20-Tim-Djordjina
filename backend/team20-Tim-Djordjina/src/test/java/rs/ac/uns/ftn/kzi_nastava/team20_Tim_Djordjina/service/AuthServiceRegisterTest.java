@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina;
+package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +13,6 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatch
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,7 +23,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTest {
+public class AuthServiceRegisterTest {
 
     @Mock
     private UserRepository userRepository;

@@ -314,6 +314,12 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
+        <!-- Error Label -->
+        <TextView
+            android:id="@+id/tvRegisterError"
+            android:layout_marginBottom="16dp"
+            style="@style/FormErrorText" />
+
         <!-- Sign Up Button -->
         <Button
             android:id="@+id/btnSignUp"

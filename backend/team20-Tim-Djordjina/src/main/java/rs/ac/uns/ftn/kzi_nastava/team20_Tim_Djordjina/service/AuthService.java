@@ -6,16 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginDTO;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginResponse;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.EmailAlreadyExistsException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatchException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserBlockedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Driver;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.DriverRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security.JwtTokenProvider;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /*
@@ -27,8 +34,182 @@ import java.util.UUID;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final DriverRepository driverRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final JwtTokenProvider jwtTokenProvider;
+
+
+    // ===============================
+    // LOGIN IMPLEMENTATION (US#2.2.1)
+    // ===============================
+
+    /**
+     * Login user with email and password
+     * Rules:
+     * - User must exist in database
+     * - Passwords must match
+     * - Account must be activated
+     * - Account must not be blocked
+     */
+    @Transactional(readOnly = true)
+    public LoginResponse loginUser(LoginDTO loginDTO){
+        log.info("Login attempt for user: {}", loginDTO.getEmail());
+
+        // Find user by email
+        User user = userRepository.findByEmail(loginDTO.getEmail())
+                .orElseThrow(() -> {
+                    log.warn("Login failed - user not found: {}", loginDTO.getEmail());
+                    return new IllegalArgumentException("Invalid email or password.");
+                });
+
+        // Verify password
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPasswordHash())){
+            log.warn("Login failed - wrong password for user: {}", loginDTO.getEmail());
+            throw new IllegalArgumentException("Invalid email or password.");
+        }
+
+        // Check if account is activated
+        if(!user.isActivated()){
+            log.warn("Login failed - account not activated: {}", loginDTO.getEmail());
+            throw new UserNotActivatedException(
+                    "Your account is not activated. Please check your email for the activation link."
+            );
+        }
+
+        // Check if account is blocked
+        if (user.isBlocked()){
+            log.warn("Login failed - account blocked: {}", loginDTO.getEmail());
+            String message = "Your account has been blocked";
+            if (user.getBlockNote() != null && !user.getBlockNote().isEmpty()){
+                message += " Reason: " + user.getBlockNote();
+            }
+            throw new UserBlockedException(message);
+        }
+
+        // Generate JWT token
+        String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole().toString());
+
+        // If user is a diver, handle driver specific login logic
+        if (user.getRole() == Role.DRIVER){
+            handleDriverLogin(user.getId());
+        }
+
+        log.info("User logged in successfully: {}", loginDTO.getEmail());
+
+        // Build and return login response
+        LoginResponse response = new LoginResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getRole().toString()
+        );
+
+        // Add driver specific info if applicable
+        if (user.getRole() == Role.DRIVER){
+            Optional<Driver> driverOpt = driverRepository.findByUserId(user.getId());
+            if(driverOpt.isPresent()){
+                Driver driver = driverOpt.get();
+                response.setDriver(true);
+                response.setWorkingHours(driver.getWorkingMinutesLast24Hours());
+            }
+        }
+
+        return response;
+    }
+
+    /**
+     *
+     * Handle driver specific login logic (US#2.2.1 - Driver availability on login)
+     * Requirements:
+     * - Driver becomes available on login
+     * - Driver must not have active ride
+     * - Driver must not exceed 8 hours work limit
+     */
+    @Transactional
+    public void handleDriverLogin(Long userId) {
+        log.info("Handling driver login for user ID: {}", userId);
+
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found."));
+
+        // Reset working hours if 24 hours have passed
+        driver.resetWorkingHoursIfNeeded();
+
+        // Mark driver as logged in
+        driver.setLoggedIn(true);
+
+        // Set active and available (unless they have active ride or exceeded hours)
+        if(!driver.isHasActiveRide() && !driver.hasExceededWorkingHours()){
+            driver.setActive(true);
+            driver.setAvailable(true);
+        }
+
+        driverRepository.save(driver);
+        log.info("Driver logged in and set to available: {}", userId);
+    }
+
+    /**
+     * Handle driver logout
+     * US#2.2.1 - Driver becomes unavailable on logout
+     * Requirements:
+     * - Driver cannot logout if they have active ride
+     * - Driver is marked as logged out
+     * - Driver availability is set to false
+     */
+    @Transactional
+    public void handleDriverLogout(Long userId){
+        log.info("Handling driver logout for user ID: {}", userId);
+
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found."));
+
+        // Check if driver has active ride
+        if (driver.isHasActiveRide()){
+            log.warn("Driver cannot logout - has active ride: {}", userId);
+            throw new IllegalStateException("Cannot logout while you have an active ride.");
+        }
+
+        // Mark driver as logged out
+        driver.setLoggedIn(false);
+        driver.setAvailable(false);
+
+        driverRepository.save(driver);
+        log.info("Driver logged out: {}", userId);
+    }
+
+
+    /**
+     *
+     * Toggle driver availability status manually
+     * US#2.2.1 - Driver can manually change active/inactive status
+     * Rules:
+     * - Driver must be logged in to toggle availability
+     * - If inactive during ride, driver becomes inactive after ride ends
+     */
+    @Transactional
+    public void toggleDriverAvailability(Long userId){
+        log.info("Toggling driver availability for user ID: {}", userId);
+
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found."));
+
+        if (!driver.isLoggedIn()){
+            throw new IllegalStateException("Driver must be logged in to toggle availability.");
+        }
+
+        boolean newStatus = !driver.isActive();
+        driver.setActive(newStatus);
+
+        // Update availability based on other constraints
+        driver.setAvailable(!driver.isHasActiveRide() && !driver.hasExceededWorkingHours() && newStatus);
+
+        driverRepository.save(driver);
+        log.info("Driver availability toggled to: {} for user ID: {}", newStatus, userId);
+
+    }
 
     /**
      * Register a new user
@@ -76,7 +257,7 @@ public class AuthService {
         log.info("User registered successfully with ID: {}", savedUser.getId());
 
         // Send activation email asynchronously
-        emailService.sendActivationEmail(
+        emailService.sendActivationEmailHtml(
                 savedUser.getEmail(),
                 savedUser.getFirstName(),
                 activationToken

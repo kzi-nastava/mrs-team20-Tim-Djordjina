@@ -89,5 +89,21 @@ public class Driver {
 
     }
 
+    /**
+     * Check if driver has exceeded working hours
+     */
+    public boolean hasExceededWorkingHours() {
+        return workingMinutesLast24Hours >= 480;
+    }
 
+    /**
+     * Reset working hours if 24 hours have passed
+     */
+    public void resetWorkingHoursIfNeeded(){
+        if (lastWorkingHoursReset == null ||
+            LocalDateTime.now().isAfter(lastWorkingHoursReset.plusHours(24))){
+            this.workingMinutesLast24Hours = 0;
+            this.lastWorkingHoursReset = LocalDateTime.now();
+        }
+    }
 }
