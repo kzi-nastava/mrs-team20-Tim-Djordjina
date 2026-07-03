@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,9 @@ import java.net.UnknownServiceException;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -27,6 +31,7 @@ public class JwtSecurityIntegrationTest {
 
     private static final String USER_EMAIL = "user@test.com";
     private static final String ADMIN_EMAIL = "admin@test.com";
+    private static final String PROTECTED_URL = "/api/users/me";
 
     @Autowired
     private MockMvc mockMvc;
@@ -57,5 +62,28 @@ public class JwtSecurityIntegrationTest {
         user.setLastName("User");
         user.setRole(Role.USER);
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+    }
+
+    // ---------- Protected endpoint ----------------------
+
+    @Test
+    @DisplayName("Protected endpoint without a token returns 401")
+    void protectedEndpoint_noToken_returns401() throws Exception {
+        mockMvc.perform(get(PROTECTED_URL)).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("Protected endpoint with an invalid token returns 401")
+    void protectedEndpoint_invalidToken_returns401() throws Exception {
+        mockMvc.perform(get(PROTECTED_URL).header("Authorization", "Bearer thisis.notavalid.token"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("Protected endpoint with a valid token returns 200 and the user data")
+    void protectedEndpoint_validToken_returns200() throws Exception {
+        mockMvc.perform(get(PROTECTED_URL).header("Authorization", "Bearer " + userToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value(USER_EMAIL));
     }
 }
