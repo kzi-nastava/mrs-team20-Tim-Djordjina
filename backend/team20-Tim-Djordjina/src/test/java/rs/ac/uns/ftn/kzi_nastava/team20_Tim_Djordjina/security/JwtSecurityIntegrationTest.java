@@ -32,6 +32,7 @@ public class JwtSecurityIntegrationTest {
     private static final String USER_EMAIL = "user@test.com";
     private static final String ADMIN_EMAIL = "admin@test.com";
     private static final String PROTECTED_URL = "/api/users/me";
+    private static final String ADMIN_URL = "/api/admin/security-test-ping";
 
     @Autowired
     private MockMvc mockMvc;
@@ -86,4 +87,31 @@ public class JwtSecurityIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value(USER_EMAIL));
     }
+
+    // ---------- Role-restricted endpoint (ADMIN)  ----------------------
+
+    @Test
+    @DisplayName("Admin endpoint with a USER token returns 403")
+    void adminEndpoint_userToken_returns403() throws Exception {
+        mockMvc.perform(get(ADMIN_URL).header("Authorization", "Bearer " + userToken))
+                .andExpect(status().isForbidden());
+    }
+
+    // TODO: Uncomment when ADMIN_URL exist
+    /*
+    @Test
+    @DisplayName("Admin endpoint with a ADMIN token returns 200")
+    void adminEndpoint_adminToken_returns200() throws Exception {
+        mockMvc.perform(get(ADMIN_URL).header("Authorization", "Bearer " + adminToken))
+                .andExpect(status().isOk());
+    }
+    */
+
+    @Test
+    @DisplayName("Admin endpoint without a token returns 401")
+    void adminEndpoint_noToken_returns401() throws Exception {
+        mockMvc.perform(get(ADMIN_URL))
+                .andExpect(status().isUnauthorized());
+    }
+
 }
