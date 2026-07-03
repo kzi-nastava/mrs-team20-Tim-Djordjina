@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Import(JwtSecurityIntegrationTest.SecurityTestController.class)
 @DisplayName("JWT Endpoint Security - Integration Tests")
 public class JwtSecurityIntegrationTest {
 
@@ -101,15 +104,13 @@ public class JwtSecurityIntegrationTest {
                 .andExpect(status().isForbidden());
     }
 
-    // TODO: Uncomment when ADMIN_URL exist
-    /*
+
     @Test
     @DisplayName("Admin endpoint with a ADMIN token returns 200")
     void adminEndpoint_adminToken_returns200() throws Exception {
         mockMvc.perform(get(ADMIN_URL).header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk());
     }
-    */
 
     @Test
     @DisplayName("Admin endpoint without a token returns 401")
@@ -134,5 +135,16 @@ public class JwtSecurityIntegrationTest {
                 });
     }
 
+    // ---------- Test only controller providing an ADMIN-restricted path  ----------------------
+    /**
+    * Minimal controller exposed only during this test, so we can verify the ADMIN-allow path.
+    **/
+    @RestController
+    static class SecurityTestController {
+        @GetMapping("/api/admin/security-test-ping")
+        public String adminPing(){
+            return "admin-ok";
+        }
+    }
 
 }
