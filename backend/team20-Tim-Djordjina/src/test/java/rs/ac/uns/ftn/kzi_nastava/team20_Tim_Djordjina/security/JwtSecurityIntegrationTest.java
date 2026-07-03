@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,8 +19,10 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.EmailService;
 import java.net.UnknownServiceException;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +36,7 @@ public class JwtSecurityIntegrationTest {
     private static final String ADMIN_EMAIL = "admin@test.com";
     private static final String PROTECTED_URL = "/api/users/me";
     private static final String ADMIN_URL = "/api/admin/security-test-ping";
+    private static final String LOGIN_URL = "/api/auth/login";
 
     @Autowired
     private MockMvc mockMvc;
@@ -113,5 +117,22 @@ public class JwtSecurityIntegrationTest {
         mockMvc.perform(get(ADMIN_URL))
                 .andExpect(status().isUnauthorized());
     }
+
+
+    // ---------- Public auth endpoints  ----------------------
+
+    @Test
+    @DisplayName("Public auth endpoint is reachable without a token (not 401/403)")
+    void publicAuthEndpoint_reachableWithoutToken() throws Exception {
+        mockMvc.perform(post(LOGIN_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(result -> {
+                    int statusCode = result.getResponse().getStatus();
+                    assertNotEquals(401, statusCode, "Public endpoint must not be blocked with 401");
+                    assertNotEquals(403, statusCode, "Public endpoint must not be blocked with 403");
+                });
+    }
+
 
 }
