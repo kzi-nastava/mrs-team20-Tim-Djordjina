@@ -13,8 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private static final String BASE_URL = "http://" + BuildConfig.IP_ADDR + ":8080/";
-
-    private static Retrofit retrofit = null;
     private static RetrofitClient instance;
     private final ApiService apiService;
 
@@ -22,7 +20,10 @@ public class RetrofitClient {
         TokenManager tokenManager = new TokenManager(context.getApplicationContext());
 
         OkHttpClient client = new OkHttpClient.Builder()
+                // Adds "Authorization: Bearer <token>" to outgoing requests
                 .addInterceptor(new AuthInterceptor(tokenManager))
+                // Detects 401 on protected endpoints -> clears session plus routes to login
+                .addInterceptor(new SessionExpiredInterceptor(context, tokenManager))
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -40,22 +41,9 @@ public class RetrofitClient {
         }
         return instance;
     }
-    public static Retrofit getClient(){
-        if (retrofit == null){
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit;
-    }
 
     public ApiService getApiService(){
         return apiService;
     }
 
-    /*
-    public static ApiService getApiService(){
-        return getClient().create(ApiService.class);
-    }*/
 }
