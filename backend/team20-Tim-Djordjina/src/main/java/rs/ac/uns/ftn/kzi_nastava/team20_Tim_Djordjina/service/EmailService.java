@@ -33,6 +33,9 @@ public class EmailService {
     @Value("${sendgrid.from.name}")
     private String fromName;
 
+    @Value("${app.reset-password-deeplink:rideon://reset-password}")
+    private String resetPasswordDeepLink;
+
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
 
@@ -93,7 +96,59 @@ public class EmailService {
 
     }
 
+    @Async
+    public void sendPasswordResetEmail(String toEmail, String firstName, String token){
+        try {
+            String resetLink = resetPasswordDeepLink + "?token=" + token;
 
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setFrom(fromEmail, fromName);
+            helper.setTo(toEmail);
+            helper.setSubject("Reset Your Password - RideOn App");
+            helper.setText(buildPasswordResetHtml(firstName, resetLink), true);
+
+            mailSender.send(mimeMessage);
+            log.info("Password reset email sent to: {}", toEmail);
+        } catch (MessagingException e) {
+            log.error("Failed to build/send password reset email to: {}", toEmail, e);
+        } catch (Exception e){
+            log.error("Unexpected error sending password reset email to: {}", toEmail, e);
+        }
+    }
+
+    private String buildPasswordResetHtml(String firstName, String resetLink) {
+        return String.format("""
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <style>
+                            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                            .header { background-color: #0A1233; color: white; padding: 20px; text-align: center; }
+                            .content { padding: 20px; background-color: #f9f9f9; }
+                            .button { display: inline-block; padding: 12px 24px; background-color: #0A1233; color: white; text-decoration: none; border-radius: 4px; margin: 20px 0; }
+                            .footer { padding: 20px; text-align: center; font-size: 12px; color: #666; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header"><h1>Password Reset</h1></div>
+                            <div class="content">
+                                <p>Hi %s,</p>
+                                <p>We received a request to reset your RideOn password. Open this on your phone to continue:</p>
+                                <p style="text-align: center;">
+                                    <a href="%s" class="button">Reset Password</a>
+                                </p>
+                                <p><strong>Note:</strong> this link expires in 1 hour and can be used once.</p>
+                                <p>If you didn't request this, you can safely ignore this email.</p>
+                            </div>
+                            <div class="footer"><p>The RideOn App Team</p></div>
+                        </div>
+                    </body>
+                </html>""", firstName, resetLink);
+    }
 
     private String buildActivationEmailContent(String firstName, String activationLink) {
         return String.format("""
