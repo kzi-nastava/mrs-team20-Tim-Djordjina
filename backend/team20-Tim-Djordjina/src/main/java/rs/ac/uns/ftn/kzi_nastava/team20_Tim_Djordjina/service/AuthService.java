@@ -8,11 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginResponse;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.PasswordResetDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.EmailAlreadyExistsException;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.PasswordMismatchException;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserBlockedException;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserNotActivatedException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.*;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Driver;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Role;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
@@ -331,6 +329,49 @@ public class AuthService {
         );
 
         log.info("Activation email resent successfully to: {}", email);
+    }
+
+    @Transactional
+    public void requestPasswordReset(String email){
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null){
+            log.info("Password reset request for unknown email: {}", email);
+            return;
+        }
+
+        String token = UUID.randomUUID().toString();
+        user.setResetPasswordToken(token);
+        user.setResetPasswordTokenExpirationDate(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+
+        emailService.sendPasswordResetEmail(user.getEmail(), user.getFirstName(), token);
+        log.info("Password reset email queued for: {}", email);
+    }
+
+    @Transactional
+    public void resetPassword(PasswordResetDTO dto){
+        if(!dto.getNewPassword().equals(dto.getConfirmPassword())){
+            throw new PasswordMismatchException("Passwords do not match");
+        }
+
+        User user = userRepository.findByResetPasswordToken(dto.getToken())
+                .orElseThrow(() -> new InvalidPasswordResetTokenException("Invalid or expired reset token"));
+
+        if (user.isResetPasswordTokenExpired()){
+            user.setResetPasswordToken(null);
+            user.setResetPasswordTokenExpirationDate(null);
+            userRepository.save(user);
+            throw new InvalidPasswordResetTokenException("Invalid or expired reset token");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(dto.getNewPassword()));
+        // Clear token so it can't be reused
+        user.setResetPasswordToken(null);
+        user.setResetPasswordTokenExpirationDate(null);
+        userRepository.save(user);
+
+        log.info("Password reset successfully for: {}", user.getEmail());
     }
 
     /**
