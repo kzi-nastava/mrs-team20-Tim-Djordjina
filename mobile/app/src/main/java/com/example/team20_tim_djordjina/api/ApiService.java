@@ -3,6 +3,8 @@ package com.example.team20_tim_djordjina.api;
 import com.example.team20_tim_djordjina.model.ApiResponse;
 import com.example.team20_tim_djordjina.model.LoginRequest;
 import com.example.team20_tim_djordjina.model.LoginResponse;
+import com.example.team20_tim_djordjina.model.PasswordResetRequest;
+import com.example.team20_tim_djordjina.model.PasswordResetSubmit;
 import com.example.team20_tim_djordjina.model.RegistrationRequest;
 
 import retrofit2.Call;
@@ -26,4 +28,10 @@ public interface ApiService {
 
     @POST("api/auth/resend-activation")
     Call<ApiResponse> resendActivation(@Query("email") String email);
+
+    @POST("api/auth/forgot-password")
+    Call<ApiResponse> forgotPassword(@Body PasswordResetRequest request);
+
+    @POST("api/auth/reset-password")
+    Call<ApiResponse> resetPassword(@Body PasswordResetSubmit request);
 }
