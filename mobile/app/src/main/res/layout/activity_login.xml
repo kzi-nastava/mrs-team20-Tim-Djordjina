@@ -67,7 +67,7 @@
 
         <TextView android:id="@+id/tvForgotPassword"
             style="@style/FormLinkText"
-            android:text="@string/forgot_password"
+            android:text="@string/forgot_password_question"
             android:layout_marginBottom="54dp"
            />
 
