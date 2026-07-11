@@ -22,10 +22,10 @@ import java.net.URI;
 @CrossOrigin(origins = "*")
 public class AuthController {
 
-    private final AuthService authService;
-
     @Value("${app.reset-password-deeplink:rideon://reset-password}")
     private String resetPasswordDeepLink;
+
+    private final AuthService authService;
 
     /**
      *
