@@ -33,9 +33,6 @@ public class EmailService {
     @Value("${sendgrid.from.name}")
     private String fromName;
 
-    @Value("${app.reset-password-deeplink:rideon://reset-password}")
-    private String resetPasswordDeepLink;
-
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
 
@@ -99,7 +96,7 @@ public class EmailService {
     @Async
     public void sendPasswordResetEmail(String toEmail, String firstName, String token){
         try {
-            String resetLink = resetPasswordDeepLink + "?token=" + token;
+            String resetLink = baseUrl + "/api/auth/reset-redirect?token=" + token;
 
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
