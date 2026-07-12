@@ -2,15 +2,16 @@ package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.protocol.HTTP;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.ApiResponse;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginDTO;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.LoginResponse;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RegistrationDTO;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.*;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.User;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
+
+import java.net.URI;
 
 /**
  * Authentication controller handling registration
@@ -20,6 +21,9 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.AuthService;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class AuthController {
+
+    @Value("${app.reset-password-deeplink:rideon://reset-password}")
+    private String resetPasswordDeepLink;
 
     private final AuthService authService;
 
@@ -102,5 +106,34 @@ public class AuthController {
         authService.resendActivationEmail(email);
 
         return ResponseEntity.ok(ApiResponse.success("Activation email has been resent. Please check your inbox. The link will expire in 24 hours."));
+    }
+
+
+    /**
+     * POST /api/auth/forgot-password
+     */
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse> forgotPassword(@Valid @RequestBody PasswordResetRequestDTO request){
+        authService.requestPasswordReset(request.getEmail());
+
+        return ResponseEntity.ok(ApiResponse.success("If an account with that email exists, a password reset link has been sent."));
+    }
+
+    /**
+     * POST /api/auth/reset-password
+     */
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody PasswordResetDTO request){
+        authService.resetPassword(request);
+
+        return ResponseEntity.ok(ApiResponse.success("Password reset successfully. Please log in with your new password."));
+    }
+
+    @GetMapping("/reset-redirect")
+    public ResponseEntity<Void> resetRedirect(@RequestParam String token) {
+        String deepLink = resetPasswordDeepLink + "?token=" + token;
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(deepLink))
+                .build();
     }
 }

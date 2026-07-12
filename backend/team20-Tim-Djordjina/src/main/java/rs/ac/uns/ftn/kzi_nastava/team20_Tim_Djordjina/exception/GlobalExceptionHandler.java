@@ -46,6 +46,13 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error("Invalid email or password"));
     }
 
+    @ExceptionHandler(InvalidPasswordResetTokenException.class)
+    public ResponseEntity<ApiResponse> handleInvalidResetToken(InvalidPasswordResetTokenException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
+
     @ExceptionHandler(UserNotActivatedException.class)
     public ResponseEntity<ApiResponse> handleUserNotActivated(UserNotActivatedException ex){
         return ResponseEntity

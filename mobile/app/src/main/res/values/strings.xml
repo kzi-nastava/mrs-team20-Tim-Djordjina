@@ -4,10 +4,12 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="forgot_password">Forgot password?</string>
+    <string name="forgot_password_question">Forgot password?</string>
     <string name="sign_up">Sign Up</string>
     <string name="map_placeholder">Map placeholder</string>
     <string name="reset_password">Reset password</string>
+    <string name="reset_password_title">Reset Password</string>
+    <string name="reset_password_subtitle">Enter your new password</string>
     <string name="reset">Reset</string>
     <string name="email_and_password_cannot_be_empty">Email and password cannot be empty</string>
     <string name="app_logo">App Logo</string>
@@ -15,10 +17,17 @@
     <string name="welcome">Welcome</string>
     <string name="login_to_continue">Login to continue</string>
     <string name="no_account">Don’t have an account? Sign up</string>
-    <string name="forgot_password_title">Forgot password</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="forgot_password_subtitle">Enter your email and we\'ll send you a reset link</string>
     <string name="enter_email_address">enter email address</string>
+    <string name="back_to_login">Back to login</string>
     <string name="back_to_log_in">Back to log in</string>
+    <string name="new_password">New password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="reset_password_button">Reset password</string>
     <string name="send">Send</string>
+    <string name="send_reset_link">Send reset link</string>
     <string name="profile_picture">profile picture</string>
     <string name="edit_profile_picture">edit profile picture</string>
 
