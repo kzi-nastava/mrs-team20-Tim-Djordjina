@@ -115,6 +115,65 @@ public class EmailService {
         }
     }
 
+    @Async
+    public void sendDriverWelcomeEmail(String toEmail, String firstName, String token){
+        try{
+            String setPasswordLink = baseUrl + "/api/auth/reset-redirect?token=" + token;
+
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setFrom(fromEmail, fromName);
+            helper.setTo(toEmail);
+            helper.setSubject("Welcome to RideOn - Set Your Driver Password");
+            helper.setText(buildDriverWelcomeHtml(firstName, setPasswordLink), true);
+
+            mailSender.send(mimeMessage);
+
+            log.info("Driver welcome email sent to: {}", toEmail);
+        }
+        catch (MessagingException e){
+            log.error("Failed to build/send driver welcome email to: {}", toEmail, e);
+        }
+        catch (Exception e){
+            log.error("Unexpected error sending driver welcome email to: {}", toEmail, e);
+        }
+
+    }
+
+    private String buildDriverWelcomeHtml(String firstName, String setPasswordLink) {
+        return String.format("""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .header { background-color: #0A1233; color: white; padding: 20px; text-align: center; }
+                        .content { padding: 20px; background-color: #f9f9f9; }
+                        .button { display: inline-block; padding: 12px 24px; background-color: #0A1233; color: white; text-decoration: none; border-radius: 4px; margin: 20px 0; }
+                        .footer { padding: 20px; text-align: center; font-size: 12px; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header"><h1>Welcome to RideOn</h1></div>
+                        <div class="content">
+                            <p>Hi %s,</p>
+                            <p>An administrator has created a driver account for you on RideOn.
+                               Open this on your phone to set your password and get started:</p>
+                            <p style="text-align: center;">
+                                <a href="%s" class="button">Set Your Password</a>
+                            </p>
+                            <p><strong>Note:</strong> this link expires in 72 hours.</p>
+                        </div>
+                        <div class="footer"><p>The RideOn App Team</p></div>
+                    </div>
+                </body>
+                </html>
+                """, firstName, setPasswordLink);
+    }
+
     private String buildPasswordResetHtml(String firstName, String resetLink) {
         return String.format("""
                 <!DOCTYPE html>
