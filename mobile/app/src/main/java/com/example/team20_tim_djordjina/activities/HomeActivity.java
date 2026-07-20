@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         if ("ADMIN".equals(tokenManager.getRole())){
             binding.btnAdminRegisterDriver.setVisibility(View.VISIBLE);
             binding.btnAdminRegisterDriver.setOnClickListener(v ->
-                    startActivity(new Intent(this, AdminDriverRegistrationActivity.class)));
+                    startActivity(new Intent(HomeActivity.this, AdminDriverRegistrationActivity.class)));
         }
 
         binding.btnHomeLogin.setOnClickListener(v ->
