@@ -4,7 +4,6 @@
     android:id="@+id/admin_driver_reg_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:fillViewport="true">
     
     <LinearLayout
@@ -200,7 +199,10 @@
             android:textColor="@color/black"
             android:textOff=""
             android:textOn=""
-            app:showText="false" />
+            app:showText="false"
+            app:thumbTint="@color/switch_thumb_tint"
+            app:trackDecorationTint="@color/grey"
+            app:trackTint="@color/switch_track_tint"/>
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switchPetTransport"
@@ -211,7 +213,10 @@
             android:textColor="@color/black"
             android:textOff=""
             android:textOn=""
-            app:showText="false"/>
+            app:showText="false"
+            app:thumbTint="@color/switch_thumb_tint"
+            app:trackDecorationTint="@color/grey"
+            app:trackTint="@color/switch_track_tint"/>
         
         <TextView
             android:id="@+id/tvDriverRegError"
