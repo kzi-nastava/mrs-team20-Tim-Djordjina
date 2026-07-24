@@ -50,6 +50,24 @@
     <string name="unblock">Unblock</string>
     <string name="status_active">ACTIVE</string>
     <string name="block">Block</string>
+    <string name="manage_users_title">Manage users</string>
+    <string name="filter_all">All</string>
+    <string name="filter_passengers">Passengers</string>
+    <string name="filter_drivers">Drivers</string>
+    <string name="no_users_found">No users found</string>
+    <string name="not_allowed">Not allowed</string>
+    <string name="only_admins_manage_users">Only administrators can manage users.</string>
+    <string name="could_not_load_users">Could not load users</string>
+    <string name="network_error">Network error. Please try again.</string>
+    <string name="block_note_hint">Reason for blocking</string>
+    <string name="block_user_title">Block %1$s</string>
+    <string name="block_note_required">A note is required to block a user</string>
+    <string name="user_blocked">User blocked</string>
+    <string name="could_not_block_user">Could not block user</string>
+    <string name="unblock_user_title">Unblock %1$s</string>
+    <string name="unblock_confirm">This user will be able to use the app again.</string>
+    <string name="user_unblocked">User unblocked</string>
+    <string name="could_not_unblock_user">Could not unblock user</string>
 
     <string-array name="country_codes">
         <item>+381</item>
