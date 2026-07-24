@@ -46,6 +46,10 @@
     <string name="pet_transport">Allows pet transport</string>
     <string name="register_driver">Register driver</string>
     <string name="registering">Registering...</string>
+    <string name="status_blocked">BLOCKED</string>
+    <string name="unblock">Unblock</string>
+    <string name="status_active">ACTIVE</string>
+    <string name="block">Block</string>
 
     <string-array name="country_codes">
         <item>+381</item>
