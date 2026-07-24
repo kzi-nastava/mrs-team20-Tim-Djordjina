@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Team20TimDjordjina">
         <activity
+            android:name=".activities.AdminDriverRegistrationActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="false" />
         <activity

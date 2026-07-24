@@ -12,5 +12,8 @@
     <color name="secondary">#999999</color>
     <color name="error">#FF4D4D</color>
     <color name="brand_orange">#FF6F00</color>
+    <color name="grey">#757575</color>
+    <color name="light_grey">#E0E0E0</color>
+    <color name="brand_navy">#0A1233</color>
 
 </resources>

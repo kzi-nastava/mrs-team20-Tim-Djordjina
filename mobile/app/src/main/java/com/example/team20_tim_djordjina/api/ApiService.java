@@ -1,6 +1,7 @@
 package com.example.team20_tim_djordjina.api;
 
 import com.example.team20_tim_djordjina.model.ApiResponse;
+import com.example.team20_tim_djordjina.model.DriverRegistrationRequest;
 import com.example.team20_tim_djordjina.model.LoginRequest;
 import com.example.team20_tim_djordjina.model.LoginResponse;
 import com.example.team20_tim_djordjina.model.PasswordResetRequest;
@@ -34,4 +35,7 @@ public interface ApiService {
 
     @POST("api/auth/reset-password")
     Call<ApiResponse> resetPassword(@Body PasswordResetSubmit request);
+
+    @POST("api/admin/drivers")
+    Call<ApiResponse> registerDriver(@Body DriverRegistrationRequest request);
 }

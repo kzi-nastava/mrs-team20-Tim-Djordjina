@@ -82,5 +82,15 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <Button
+            android:id="@+id/btnAdminRegisterDriver"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_background"
+            android:text="@string/register_driver"
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>

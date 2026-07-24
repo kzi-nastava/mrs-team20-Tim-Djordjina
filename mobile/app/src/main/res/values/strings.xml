@@ -30,6 +30,22 @@
     <string name="send_reset_link">Send reset link</string>
     <string name="profile_picture">profile picture</string>
     <string name="edit_profile_picture">edit profile picture</string>
+    <string name="register_driver_title">Register Driver</string>
+    <string name="register_driver_subtitle">Create a driver account with vehicle details</string>
+    <string name="section_driver_details">Driver details</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="address">Address</string>
+    <string name="section_vehicle_details">Vehicle details</string>
+    <string name="vehicle_model">Vehicle model</string>
+    <string name="vehicle_type">Vehicle type</string>
+    <string name="license_plate">License plate</string>
+    <string name="number_of_seats">Number of seats</string>
+    <string name="baby_transport">Allows baby transport</string>
+    <string name="pet_transport">Allows pet transport</string>
+    <string name="register_driver">Register driver</string>
+    <string name="registering">Registering...</string>
 
     <string-array name="country_codes">
         <item>+381</item>
@@ -40,5 +56,11 @@
         <item>+49</item>
         <item>+33</item>
         <!-- Add more country codes as needed -->
+    </string-array>
+
+    <string-array name="vehicle_types">
+        <item>STANDARD</item>
+        <item>LUXURY</item>
+        <item>VAN</item>
     </string-array>
 </resources>
