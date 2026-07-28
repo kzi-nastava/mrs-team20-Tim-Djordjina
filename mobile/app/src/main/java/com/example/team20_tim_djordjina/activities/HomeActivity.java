@@ -40,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
             binding.btnAdminRegisterDriver.setVisibility(View.VISIBLE);
             binding.btnAdminRegisterDriver.setOnClickListener(v ->
                     startActivity(new Intent(HomeActivity.this, AdminDriverRegistrationActivity.class)));
+            binding.btnAdminManageUsers.setVisibility(View.VISIBLE);
+            binding.btnAdminManageUsers.setOnClickListener(v ->
+                    startActivity(new Intent(HomeActivity.this, AdminUserListActivity.class)));
         }
 
         binding.btnHomeLogin.setOnClickListener(v ->
