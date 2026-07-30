@@ -85,6 +85,10 @@
     <string name="profile_saved">Profile saved</string>
     <string name="something_went_wrong">Something went wrong. Please try again.</string>
     <string name="save">Save</string>
+    <string name="pending_profile_changes">Pending profile changes</string>
+    <string name="no_pending_changes">No pending changes</string>
+    <string name="approve">Approve</string>
+    <string name="reject">Reject</string>
 
     <string-array name="country_codes">
         <item>+381</item>
