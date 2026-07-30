@@ -68,6 +68,12 @@
     <string name="unblock_confirm">This user will be able to use the app again.</string>
     <string name="user_unblocked">User unblocked</string>
     <string name="could_not_unblock_user">Could not unblock user</string>
+    <string name="my_profile">My Profile</string>
+    <string name="changes_pending_approval">Your changes are awaiting administrator approval.</string>
+    <string name="driver_info">Driver information</string>
+    <string name="save_profile">Save changes</string>
+    <string name="change_password">Change password</string>
+    <string name="logout">Log out</string>
 
     <string-array name="country_codes">
         <item>+381</item>

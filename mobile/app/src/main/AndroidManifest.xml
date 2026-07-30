@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Team20TimDjordjina">
         <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AdminUserListActivity"
             android:exported="false" />
         <activity
