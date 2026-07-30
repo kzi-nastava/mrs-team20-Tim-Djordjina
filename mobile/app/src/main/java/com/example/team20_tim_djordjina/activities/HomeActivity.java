@@ -43,11 +43,17 @@ public class HomeActivity extends AppCompatActivity {
             binding.btnAdminManageUsers.setVisibility(View.VISIBLE);
             binding.btnAdminManageUsers.setOnClickListener(v ->
                     startActivity(new Intent(HomeActivity.this, AdminUserListActivity.class)));
+            binding.btnAdminProfileChanges.setVisibility(View.VISIBLE);
+            binding.btnAdminProfileChanges.setOnClickListener(v ->
+                    startActivity(new Intent(HomeActivity.this, AdminProfileChangesActivity.class)));
+
         }
 
         binding.btnHomeLogin.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
         binding.btnHomeSignup.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, RegisterActivity.class)));
+        binding.btnProfile.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
     }
 }

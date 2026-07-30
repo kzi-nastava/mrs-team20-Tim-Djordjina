@@ -97,6 +97,8 @@
     <string name="password_min">At least 8 characters</string>
     <string name="passwords_no_match">Passwords do not match</string>
     <string name="password_changed">Password changed</string>
+    <string name="profile_changes">Profile changes</string>
+    <string name="profile">Profile</string>
 
     <string-array name="country_codes">
         <item>+381</item>

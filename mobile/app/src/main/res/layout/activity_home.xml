@@ -103,5 +103,27 @@
             android:text="@string/manage_users_title"
             android:textColor="@color/white"
             android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnProfile"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background"
+            android:text="@string/profile"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnAdminProfileChanges"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background"
+            android:text="@string/profile_changes"
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>
