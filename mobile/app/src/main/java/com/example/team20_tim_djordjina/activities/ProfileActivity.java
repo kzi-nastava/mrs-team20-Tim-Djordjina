@@ -18,7 +18,9 @@ import com.example.team20_tim_djordjina.R;
 import com.example.team20_tim_djordjina.api.ApiService;
 import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityProfileBinding;
+import com.example.team20_tim_djordjina.databinding.DialogChangePasswordBinding;
 import com.example.team20_tim_djordjina.model.ApiResponse;
+import com.example.team20_tim_djordjina.model.ChangePasswordRequest;
 import com.example.team20_tim_djordjina.model.ProfileResponse;
 import com.example.team20_tim_djordjina.model.UpdateProfileRequest;
 import com.example.team20_tim_djordjina.util.TokenManager;
@@ -54,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         tokenManager = new TokenManager(this);
 
         binding.btnSaveProfile.setOnClickListener(v -> saveProfile());
-        //binding.btnChangePassword.setOnClickListener(v -> showChangePasswordDialog);
+        binding.btnChangePassword.setOnClickListener(v -> showChangePasswordDialog());
         binding.btnLogout.setOnClickListener(v -> logout());
 
         loadProfile();
@@ -171,7 +173,61 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showChangePasswordDialog() {
-        // TODO add functionality
+        DialogChangePasswordBinding dialogBinding =
+                DialogChangePasswordBinding.inflate(LayoutInflater.from(this));
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.change_password)
+                .setView(dialogBinding.getRoot())
+                .setPositiveButton(R.string.save, null)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String current = text(dialogBinding.etCurrentPassword.getText());
+            String newPass = text(dialogBinding.etNewPassword.getText());
+            String confirm = text(dialogBinding.etConfirmNewPassword.getText());
+
+            if (TextUtils.isEmpty(current)) {
+                dialogBinding.etCurrentPassword.setError(getString(R.string.required));
+                return;
+            }
+            if (newPass.length() < 8) {
+                dialogBinding.etNewPassword.setError(getString(R.string.password_min));
+                return;
+            }
+            if (!newPass.equals(confirm)) {
+                dialogBinding.etConfirmNewPassword.setError(getString(R.string.passwords_no_match));
+                return;
+            }
+
+            submitChangePassword(current, newPass, confirm, dialog);
+        }));
+
+        dialog.show();
+    }
+
+    private void submitChangePassword(String current, String newPass, String confirm, AlertDialog dialog) {
+        apiService.changePassword(new ChangePasswordRequest(current, newPass, confirm))
+                .enqueue(new Callback<ApiResponse>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(ProfileActivity.this,
+                                    R.string.password_changed, Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(ProfileActivity.this,
+                                    parseError(response), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                        Toast.makeText(ProfileActivity.this,
+                                R.string.network_error, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void logout() {

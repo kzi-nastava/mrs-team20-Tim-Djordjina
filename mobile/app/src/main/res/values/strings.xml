@@ -92,6 +92,11 @@
     <string name="could_not_load_changes">Could not load change requests</string>
     <string name="change_approved">Change approved</string>
     <string name="change_rejected">Change rejected</string>
+    <string name="current_password">Current password</string>
+    <string name="required">Required</string>
+    <string name="password_min">At least 8 characters</string>
+    <string name="passwords_no_match">Passwords do not match</string>
+    <string name="password_changed">Password changed</string>
 
     <string-array name="country_codes">
         <item>+381</item>
