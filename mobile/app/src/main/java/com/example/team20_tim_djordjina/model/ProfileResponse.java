@@ -61,6 +61,10 @@ public class ProfileResponse {
         return vehicle;
     }
 
+    public boolean isDriver() {
+        return "DRIVER".equals(role);
+    }
+
     public static class VehicleInfo {
         private String model;
         private String vehicleType;

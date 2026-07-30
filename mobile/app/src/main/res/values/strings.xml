@@ -74,6 +74,17 @@
     <string name="save_profile">Save changes</string>
     <string name="change_password">Change password</string>
     <string name="logout">Log out</string>
+    <string name="could_not_load_profile">Could not load your profile</string>
+    <string name="working_hours_value">Active in last 24h: %1$dh %2$dmin</string>
+    <string name="no_vehicle">No vehicle assigned</string>
+    <string name="vehicle_info_value">%1$s · %2$s · %3$s · %4$d seats</string>
+    <string name="first_name_length">First name must be 2-50 characters</string>
+    <string name="last_name_length">Last name must be 2-50 characters</string>
+    <string name="phone_required">Please enter a phone number</string>
+    <string name="address_invalid">Please enter a valid address (max 255 chars)</string>
+    <string name="profile_saved">Profile saved</string>
+    <string name="something_went_wrong">Something went wrong. Please try again.</string>
+    <string name="save">Save</string>
 
     <string-array name="country_codes">
         <item>+381</item>
