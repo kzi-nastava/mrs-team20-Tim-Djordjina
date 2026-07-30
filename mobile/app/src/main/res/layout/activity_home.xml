@@ -90,7 +90,9 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/button_background"
             android:text="@string/register_driver"
+            android:textAlignment="center"
             android:textColor="@color/white"
+            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -101,7 +103,9 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/button_background"
             android:text="@string/manage_users_title"
+            android:textAlignment="center"
             android:textColor="@color/white"
+            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -109,21 +113,23 @@
             style="@style/FormPrimaryButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/button_background"
             android:text="@string/profile"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            android:visibility="gone" />
+            android:paddingBottom="10dp"
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/btnAdminProfileChanges"
             style="@style/FormPrimaryButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/button_background"
             android:text="@string/profile_changes"
+            android:textAlignment="center"
             android:textColor="@color/white"
+            android:paddingBottom="10dp"
             android:visibility="gone" />
     </LinearLayout>
 </ScrollView>
