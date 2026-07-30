@@ -89,6 +89,9 @@
     <string name="no_pending_changes">No pending changes</string>
     <string name="approve">Approve</string>
     <string name="reject">Reject</string>
+    <string name="could_not_load_changes">Could not load change requests</string>
+    <string name="change_approved">Change approved</string>
+    <string name="change_rejected">Change rejected</string>
 
     <string-array name="country_codes">
         <item>+381</item>
