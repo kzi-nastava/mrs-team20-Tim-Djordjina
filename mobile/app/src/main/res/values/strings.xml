@@ -68,6 +68,37 @@
     <string name="unblock_confirm">This user will be able to use the app again.</string>
     <string name="user_unblocked">User unblocked</string>
     <string name="could_not_unblock_user">Could not unblock user</string>
+    <string name="my_profile">My Profile</string>
+    <string name="changes_pending_approval">Your changes are awaiting administrator approval.</string>
+    <string name="driver_info">Driver information</string>
+    <string name="save_profile">Save changes</string>
+    <string name="change_password">Change password</string>
+    <string name="logout">Log out</string>
+    <string name="could_not_load_profile">Could not load your profile</string>
+    <string name="working_hours_value">Active in last 24h: %1$dh %2$dmin</string>
+    <string name="no_vehicle">No vehicle assigned</string>
+    <string name="vehicle_info_value">%1$s · %2$s · %3$s · %4$d seats</string>
+    <string name="first_name_length">First name must be 2-50 characters</string>
+    <string name="last_name_length">Last name must be 2-50 characters</string>
+    <string name="phone_required">Please enter a phone number</string>
+    <string name="address_invalid">Please enter a valid address (max 255 chars)</string>
+    <string name="profile_saved">Profile saved</string>
+    <string name="something_went_wrong">Something went wrong. Please try again.</string>
+    <string name="save">Save</string>
+    <string name="pending_profile_changes">Pending profile changes</string>
+    <string name="no_pending_changes">No pending changes</string>
+    <string name="approve">Approve</string>
+    <string name="reject">Reject</string>
+    <string name="could_not_load_changes">Could not load change requests</string>
+    <string name="change_approved">Change approved</string>
+    <string name="change_rejected">Change rejected</string>
+    <string name="current_password">Current password</string>
+    <string name="required">Required</string>
+    <string name="password_min">At least 8 characters</string>
+    <string name="passwords_no_match">Passwords do not match</string>
+    <string name="password_changed">Password changed</string>
+    <string name="profile_changes">Profile changes</string>
+    <string name="profile">Profile</string>
 
     <string-array name="country_codes">
         <item>+381</item>
