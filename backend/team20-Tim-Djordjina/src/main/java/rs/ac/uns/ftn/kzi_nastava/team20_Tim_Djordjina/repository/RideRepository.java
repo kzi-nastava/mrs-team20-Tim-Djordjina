@@ -1,0 +1,19 @@
+package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Ride;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.RideStatus;
+
+import java.util.List;
+
+public interface RideRepository extends JpaRepository<Ride, Long> {
+
+    List<Ride> findByRiderIdOrderByCreatedAtDesc(Long riderId);
+
+    List<Ride> findByDriverIdOrderByCreatedAtDesc(Long driverId);
+
+    List<Ride> findByStatus(RideStatus status);
+
+    // Does this rider currently have a ride that isn't finished/canceled/rejected?
+    boolean existsByRiderIdAndStatusIn(Long riderId, List<RideStatus> statuses);
+}
