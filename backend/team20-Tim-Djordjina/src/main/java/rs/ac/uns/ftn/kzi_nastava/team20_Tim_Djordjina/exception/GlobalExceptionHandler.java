@@ -66,4 +66,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body(ApiResponse.error(ex.getMessage()));
     }
+
+    @ExceptionHandler(NoAvailableDriverException.class)
+    public ResponseEntity<ApiResponse> handleNoDriver(NoAvailableDriverException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
 }
