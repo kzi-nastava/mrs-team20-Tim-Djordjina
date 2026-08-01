@@ -12,10 +12,10 @@ public class RideStopDTO {
     private String address;
 
     @NotNull(message = "Stop latitude is required")
-    private String latitude;
+    private Double latitude;
 
     @NotNull(message = "Stop longitude is required")
-    private String longitude;
+    private Double longitude;
 
     // Position between pickup and destination; order matters
     private int stopOrder;
