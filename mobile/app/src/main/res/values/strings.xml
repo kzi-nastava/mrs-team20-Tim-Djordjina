@@ -99,6 +99,12 @@
     <string name="password_changed">Password changed</string>
     <string name="profile_changes">Profile changes</string>
     <string name="profile">Profile</string>
+    <string name="pickup">Pickup</string>
+    <string name="destination">Destination</string>
+    <string name="add_stop">Add stop</string>
+    <string name="pickup_address">Pickup address</string>
+    <string name="destination_address">Destination address</string>
+    <string name="request_ride">Request a ride</string>
 
     <string-array name="country_codes">
         <item>+381</item>
