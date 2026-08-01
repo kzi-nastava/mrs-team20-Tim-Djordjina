@@ -6,12 +6,12 @@ import java.util.List;
 public class RideRequest {
 
     private String pickupAddress;
-    private String pickupLatitude;
-    private String pickupLongitude;
+    private double pickupLatitude;
+    private double pickupLongitude;
 
     private String destinationAddress;
-    private String destinationLatitude;
-    private String destinationLongitude;
+    private double destinationLatitude;
+    private double destinationLongitude;
 
     private List<RideStopRequest> stops;
 
@@ -19,9 +19,9 @@ public class RideRequest {
     private boolean babyTransport;
     private boolean petTransport;
 
-    public RideRequest(String pickupAddress, String pickupLatitude, String pickupLongitude,
-                       String destinationAddress, String destinationLatitude,
-                       String destinationLongitude, List<RideStopRequest> stops,
+    public RideRequest(String pickupAddress, double pickupLatitude, double pickupLongitude,
+                       String destinationAddress, double destinationLatitude,
+                       double destinationLongitude, List<RideStopRequest> stops,
                        String vehicleType, boolean babyTransport, boolean petTransport) {
         this.pickupAddress = pickupAddress;
         this.pickupLatitude = pickupLatitude;
