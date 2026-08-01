@@ -80,6 +80,15 @@ public class RideService {
         ride.setFare(fare);
         ride.setStatus(RideStatus.ASSIGNED);
 
+        for (RideStopDTO s : sortedStops(dto.getStops())) {
+            RideStop stop = new RideStop();
+            stop.setAddress(s.getAddress());
+            stop.setLatitude(s.getLatitude());
+            stop.setLongitude(s.getLongitude());
+            stop.setStopOrder(s.getStopOrder());
+            ride.addStop(stop);
+        }
+
         Ride saved = rideRepository.save(ride);
 
         // Mark the driver busy
@@ -99,14 +108,14 @@ public class RideService {
     private List<double[]> buildRoute(RideRequestDTO dto) {
         List<double[]> points = new ArrayList<>();
         points.add(new double[] {dto.getPickupLatitude(), dto.getPickupLongitude()});
-        for (RideStopDTO s : sortStops(dto.getStops())){
+        for (RideStopDTO s : sortedStops(dto.getStops())){
             points.add(new double[] {s.getLatitude(), s.getLongitude()});
         }
-        points.add(new double[] {dto.getDestinationLatitude(), dto.getDestinationLatitude()});
+        points.add(new double[] {dto.getDestinationLatitude(), dto.getDestinationLongitude()});
         return points;
     }
 
-    private List<RideStopDTO> sortStops(List<RideStopDTO> stops) {
+    private List<RideStopDTO> sortedStops(List<RideStopDTO> stops) {
         if (stops == null) return List.of();
         List<RideStopDTO> copy = new ArrayList<>(stops);
         copy.sort(Comparator.comparingInt(RideStopDTO::getStopOrder));
