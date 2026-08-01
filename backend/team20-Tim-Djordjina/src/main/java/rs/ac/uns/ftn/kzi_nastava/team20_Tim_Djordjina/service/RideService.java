@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/** Creates a ride request
+ * reject blocked riders (with note), compute distance over the ordered route,
+ * compute the fare, match a driver, mark them busy, and persist */
 @Service
 @RequiredArgsConstructor
 @Slf4j
