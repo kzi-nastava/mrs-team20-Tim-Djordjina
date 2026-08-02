@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
+            android:paddingBottom="16dp"
             android:text="@string/pickup" />
 
         <Button
@@ -42,6 +43,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
+            android:paddingBottom="16dp"
             android:text="@string/destination" />
 
         <Button
@@ -50,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_weight="1"
+            android:paddingBottom="16dp"
             android:text="@string/add_stop" />
 
     </LinearLayout>
