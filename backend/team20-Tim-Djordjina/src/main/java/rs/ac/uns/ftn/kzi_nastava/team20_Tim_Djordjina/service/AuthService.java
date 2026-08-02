@@ -50,7 +50,7 @@ public class AuthService {
      * - Account must be activated
      * - Account must not be blocked
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public LoginResponse loginUser(LoginDTO loginDTO){
         log.info("Login attempt for user: {}", loginDTO.getEmail());
 
@@ -144,6 +144,9 @@ public class AuthService {
             driver.setActive(true);
             driver.setAvailable(true);
         }
+
+        log.info("before save: loggedIn={}, active={}, available={}",
+                driver.isLoggedIn(), driver.isActive(), driver.isAvailable());
 
         driverRepository.save(driver);
         log.info("Driver logged in and set to available: {}", userId);
