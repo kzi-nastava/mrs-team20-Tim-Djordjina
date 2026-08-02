@@ -72,7 +72,7 @@ public class RideRequestActivity extends AppCompatActivity {
         Configuration.getInstance().load(
                 getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
-        Configuration.getInstance().setUserAgentValue(getPackageName());
+        Configuration.getInstance().setUserAgentValue("RideOn-team20-kzi");
 
         binding = ActivityRideRequestBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -91,7 +91,7 @@ public class RideRequestActivity extends AppCompatActivity {
     }
 
     private void setupMap() {
-        binding.map.setTileSource(TileSourceFactory.MAPNIK);
+        binding.map.setTileSource(TileSourceFactory.OpenTopo);
         binding.map.setMultiTouchControls(true);
         binding.map.getController().setZoom(14.0);
         binding.map.getController().setCenter(new GeoPoint(45.2671, 19.8335));  // Novi Sad
