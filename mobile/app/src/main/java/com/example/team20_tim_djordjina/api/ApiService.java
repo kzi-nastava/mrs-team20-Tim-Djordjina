@@ -11,6 +11,8 @@ import com.example.team20_tim_djordjina.model.PasswordResetSubmit;
 import com.example.team20_tim_djordjina.model.ProfileChangeRequestItem;
 import com.example.team20_tim_djordjina.model.ProfileResponse;
 import com.example.team20_tim_djordjina.model.RegistrationRequest;
+import com.example.team20_tim_djordjina.model.RideRequest;
+import com.example.team20_tim_djordjina.model.RideResponse;
 import com.example.team20_tim_djordjina.model.UpdateProfileRequest;
 import com.example.team20_tim_djordjina.model.UserListItem;
 
@@ -75,4 +77,7 @@ public interface ApiService {
 
     @POST("api/admin/profile-changes/{id}/reject")
     Call<ApiResponse> rejectProfileChange(@Path("id") Long id);
+
+    @POST("api/rides")
+    Call<RideResponse> requestRide(@Body RideRequest request);
 }

@@ -99,6 +99,26 @@
     <string name="password_changed">Password changed</string>
     <string name="profile_changes">Profile changes</string>
     <string name="profile">Profile</string>
+    <string name="pickup">Pickup</string>
+    <string name="destination">Destination</string>
+    <string name="add_stop">Add stop</string>
+    <string name="pickup_address">Pickup address</string>
+    <string name="destination_address">Destination address</string>
+    <string name="request_ride">Request a ride</string>
+    <string name="stop">Stop</string>
+    <string name="stops_added">Stops added: %1$d</string>
+    <string name="tap_to_set_destination">Tap the map to set the destination</string>
+    <string name="tap_to_set_pickup">Tap the map to set the pickup point</string>
+    <string name="tap_to_add_stop">Tap the map to add a stop</string>
+    <string name="set_pickup_first">Please set a pickup point on the map</string>
+    <string name="set_destination_first">Please set a destination on the map</string>
+    <string name="fare_label">Fare: %1$.2f RSD</string>
+    <string name="distance_label">Distance: %1$.2f km</string>
+    <string name="driver_label">Driver: %1$s</string>
+    <string name="vehicle_label">Vehicle: %1$s (%2$s)</string>
+    <string name="ride_assigned">Ride assigned</string>
+    <string name="no_drivers_available">No active drivers are available right now.</string>
+    <string name="cannot_order_ride">You cannot order a ride.</string>
 
     <string-array name="country_codes">
         <item>+381</item>

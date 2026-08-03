@@ -1,9 +1,7 @@
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -22,6 +20,8 @@ public class Vehicle {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id", nullable = false, unique = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Driver driver;
 
     // Vehicle model (example: "Toyota Camry 2020")

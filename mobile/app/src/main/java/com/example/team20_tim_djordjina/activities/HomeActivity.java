@@ -48,6 +48,9 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(new Intent(HomeActivity.this, AdminProfileChangesActivity.class)));
 
         }
+        if ("DRIVER".equals(tokenManager.getRole())) {
+            binding.btnRequestRide.setVisibility(View.GONE);
+        }
 
         binding.btnHomeLogin.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
@@ -55,5 +58,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, RegisterActivity.class)));
         binding.btnProfile.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
+        binding.btnRequestRide.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, RideRequestActivity.class)));
     }
 }
