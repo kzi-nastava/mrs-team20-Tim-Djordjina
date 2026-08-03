@@ -34,6 +34,7 @@ public class RideService {
     private final DistanceCalculator distanceCalculator;
     private final FareCalculationService fareCalculationService;
     private final DriverMatchingService driverMatchingService;
+    private final NotificationService notificationService;
 
     @Transactional
     public RideResponseDTO requestRide(String riderEmail, RideRequestDTO dto) {
@@ -60,8 +61,15 @@ public class RideService {
                 dto.isPetTransport(),
                 dto.getPickupLatitude(),
                 dto.getPickupLongitude()
-        ).orElseThrow(() -> new NoAvailableDriverException(
-                "No active drivers are available right now. Please try again later."));
+        ).orElseThrow(() -> {
+            notificationService.createInNewTransaction(
+                    rider,
+                    NotificationType.RIDE_FAILED,
+                    "No active drivers are available right now. Please try again later.",
+                    null);
+            return new NoAvailableDriverException(
+                    "No active drivers are available right now. Please try again later.");
+        });
 
         // Build and persist the ride
         Ride ride = new Ride();
@@ -96,6 +104,16 @@ public class RideService {
         driver.setCurrentRideId(saved.getId());
         driver.setAvailable(false);
         driverRepository.save(driver);
+
+        notificationService.create(driver.getUser(), NotificationType.NEW_RIDE,
+                "You have a new ride from " + saved.getPickupAddress()
+                        + " to " + saved.getDestinationAddress() + ".",
+                saved.getId());
+
+        notificationService.create(rider, NotificationType.RIDE_ACCEPTED,
+                "Your ride has been accepted. Driver: "
+                        + driver.getUser().getFirstName() + " " + driver.getUser().getLastName() + ".",
+                saved.getId());
 
         log.info("Ride {} created for rider {} assigned to driver {}",
                 saved.getId(), riderEmail, driver.getId());
