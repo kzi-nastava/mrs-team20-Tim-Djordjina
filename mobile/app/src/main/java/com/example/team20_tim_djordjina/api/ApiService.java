@@ -6,6 +6,7 @@ import com.example.team20_tim_djordjina.model.ChangePasswordRequest;
 import com.example.team20_tim_djordjina.model.DriverRegistrationRequest;
 import com.example.team20_tim_djordjina.model.LoginRequest;
 import com.example.team20_tim_djordjina.model.LoginResponse;
+import com.example.team20_tim_djordjina.model.NotificationItem;
 import com.example.team20_tim_djordjina.model.PasswordResetRequest;
 import com.example.team20_tim_djordjina.model.PasswordResetSubmit;
 import com.example.team20_tim_djordjina.model.ProfileChangeRequestItem;
@@ -80,4 +81,13 @@ public interface ApiService {
 
     @POST("api/rides")
     Call<RideResponse> requestRide(@Body RideRequest request);
+
+    @GET("api/notifications")
+    Call<List<NotificationItem>> getNotifications();
+
+    @GET("api/notifications/unread-count")
+    Call<Long> getUnreadCount();
+
+    @POST("api/notifications/{id}/read")
+    Call<ApiResponse> markNotificationRead(@Path("id") Long id);
 }

@@ -119,6 +119,9 @@
     <string name="ride_assigned">Ride assigned</string>
     <string name="no_drivers_available">No active drivers are available right now.</string>
     <string name="cannot_order_ride">You cannot order a ride.</string>
+    <string name="notifications">Notifications</string>
+    <string name="no_notifications">No notifications yet</string>
+    <string name="could_not_load_notifications">Could not load notifications</string>
 
     <string-array name="country_codes">
         <item>+381</item>
