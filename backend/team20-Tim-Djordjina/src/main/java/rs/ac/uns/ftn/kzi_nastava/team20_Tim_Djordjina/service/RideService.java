@@ -8,6 +8,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RideRequestDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RideResponseDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RideStopDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.NoAvailableDriverException;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.RideStateException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.exception.UserBlockedException;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.*;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.DriverRepository;
@@ -47,6 +48,12 @@ public class RideService {
                     ? rider.getBlockNote()
                     : "Your account is blocked and cannot order rides.";
             throw new UserBlockedException(note);
+        }
+
+        if (rideRepository.existsByRiderIdAndStatusIn(
+                rider.getId(), List.of(RideStatus.ASSIGNED, RideStatus.IN_PROGRESS))) {
+            throw new RideStateException(
+                    "You already have an active ride. Finish it before ordering another.");
         }
 
         // Distance over pickup -> ordered stops -> destination
