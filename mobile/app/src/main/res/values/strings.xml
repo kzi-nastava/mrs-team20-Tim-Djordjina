@@ -122,6 +122,12 @@
     <string name="notifications">Notifications</string>
     <string name="no_notifications">No notifications yet</string>
     <string name="could_not_load_notifications">Could not load notifications</string>
+    <string name="current_ride">Current ride</string>
+    <string name="no_active_ride">You have no active ride right now.</string>
+    <string name="stops">Stops</string>
+    <string name="start_ride">Start ride</string>
+    <string name="finish_ride">Finish ride</string>
+    <string name="refresh">Refresh</string>
 
     <string-array name="country_codes">
         <item>+381</item>
