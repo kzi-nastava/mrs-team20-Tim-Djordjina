@@ -128,6 +128,11 @@
     <string name="start_ride">Start ride</string>
     <string name="finish_ride">Finish ride</string>
     <string name="refresh">Refresh</string>
+    <string name="could_not_load_ride">Could not load your ride</string>
+    <string name="status_assigned">Assigned - head to the pickup point</string>
+    <string name="status_in_progress">In progress</string>
+    <string name="ride_started">Ride started</string>
+    <string name="ride_finished">Ride finished</string>
 
     <string-array name="country_codes">
         <item>+381</item>
