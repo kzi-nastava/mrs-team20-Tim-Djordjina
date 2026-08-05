@@ -77,7 +77,8 @@ public class DriverRideActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RideResponse> call, Throwable t) {
-
+                setLoading(false);
+                toast(getString(R.string.network_error));
             }
         });
     }
@@ -118,16 +119,16 @@ public class DriverRideActivity extends AppCompatActivity {
         String status = r.getStatus();
         if ("ASSIGNED".equals(status)) {
             binding.tvRideStatus.setText(R.string.status_assigned);
-            binding.btnStartRide.setText(View.VISIBLE);
-            binding.btnFinishRide.setText(View.GONE);
+            binding.btnStartRide.setVisibility(View.VISIBLE);
+            binding.btnFinishRide.setVisibility(View.GONE);
         } else if ("IN_PROGRESS".equals(status)) {
             binding.tvRideStatus.setText(R.string.status_in_progress);
-            binding.btnStartRide.setText(View.GONE);
-            binding.btnFinishRide.setText(View.VISIBLE);
+            binding.btnStartRide.setVisibility(View.GONE);
+            binding.btnFinishRide.setVisibility(View.VISIBLE);
         } else {
             binding.tvRideStatus.setText(status);
-            binding.btnStartRide.setText(View.GONE);
-            binding.btnFinishRide.setText(View.GONE);
+            binding.btnStartRide.setVisibility(View.GONE);
+            binding.btnFinishRide.setVisibility(View.GONE);
         }
     }
 
