@@ -90,4 +90,13 @@ public interface ApiService {
 
     @POST("api/notifications/{id}/read")
     Call<ApiResponse> markNotificationRead(@Path("id") Long id);
+
+    @GET("api/rides/current")
+    Call<RideResponse> getCurrentRide();
+
+    @POST("api/rides/{id}/start")
+    Call<RideResponse> startRide(@Path("id") Long id);
+
+    @POST("api/rides/{id}/finish")
+    Call<RideResponse> finishRide(@Path("id") Long id);
 }
