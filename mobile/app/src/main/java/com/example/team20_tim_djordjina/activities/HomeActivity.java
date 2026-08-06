@@ -50,6 +50,11 @@ public class HomeActivity extends AppCompatActivity {
         }
         if ("DRIVER".equals(tokenManager.getRole())) {
             binding.btnRequestRide.setVisibility(View.GONE);
+
+            binding.btnCurrentRide.setVisibility(View.VISIBLE);
+            binding.btnCurrentRide.setOnClickListener(v ->
+                    startActivity(new Intent(HomeActivity.this, DriverRideActivity.class)));
+
         }
 
         binding.btnHomeLogin.setOnClickListener(v ->

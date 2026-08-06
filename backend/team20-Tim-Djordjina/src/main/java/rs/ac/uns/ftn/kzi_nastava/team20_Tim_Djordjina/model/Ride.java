@@ -58,6 +58,10 @@ public class Ride {
 
     private LocalDateTime scheduledFor;
 
+    private LocalDateTime startedAt;
+
+    private LocalDateTime finishedAt;
+
     public void addStop(RideStop stop) {
         stop.setRide(this);
         this.stops.add(stop);

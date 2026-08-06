@@ -73,4 +73,18 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(ApiResponse.error(ex.getMessage()));
     }
+
+    @ExceptionHandler(RideStateException.class)
+    public ResponseEntity<ApiResponse> handleRideState(RideStateException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ForbiddenActionException.class)
+    public ResponseEntity<ApiResponse> handleForbiddenAction(ForbiddenActionException ex){
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
 }
