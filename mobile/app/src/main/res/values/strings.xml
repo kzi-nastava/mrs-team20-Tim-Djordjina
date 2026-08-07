@@ -133,6 +133,14 @@
     <string name="status_in_progress">In progress</string>
     <string name="ride_started">Ride started</string>
     <string name="ride_finished">Ride finished</string>
+    <string name="schedule_for_later">Schedule for later</string>
+    <string name="pick_date_time"><![CDATA[Pick date &amp; time]]></string>
+    <string name="no_time_selected">No time selected</string>
+    <string name="pick_a_time">Please pick a date and time</string>
+    <string name="time_must_be_future">Scheduled time must be in future</string>
+    <string name="max_5h_ahead">You can schedule at most 5 hours ahead</string>
+    <string name="ride_scheduled">Ride scheduled</string>
+    <string name="ride_scheduled_msg">Your ride is scheduled. A driver will be assigned closer to the time.</string>
 
     <string-array name="country_codes">
         <item>+381</item>

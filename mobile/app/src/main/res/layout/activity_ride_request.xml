@@ -140,6 +140,39 @@
                 android:layout_gravity="center_horizontal"
                 android:visibility="gone" />
 
+            <CheckBox
+                android:id="@+id/cbScheduleLater"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:buttonTint="@color/brand_navy"
+                android:text="@string/schedule_for_later"
+                android:textColor="@color/black" />
+            
+            <LinearLayout
+                android:id="@+id/scheduleRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                
+                <Button
+                    android:id="@+id/btnPickTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pick_date_time" />
+
+                <TextView
+                    android:id="@+id/tvScheduledTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/no_time_selected"
+                    android:textColor="#555555" />
+            </LinearLayout>
+            
             <Button
                 android:id="@+id/btnRequestRide"
                 style="@style/FormPrimaryButton"

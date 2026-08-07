@@ -1,6 +1,8 @@
 package com.example.team20_tim_djordjina.activities;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -31,7 +33,9 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +58,8 @@ public class RideRequestActivity extends AppCompatActivity {
     private Marker pickupMarker;
     private Marker destinationMarker;
     private final List<Marker> stopMarkers = new ArrayList<>();
+
+    private Calendar scheduledTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +93,14 @@ public class RideRequestActivity extends AppCompatActivity {
         binding.btnModeDestination.setOnClickListener(v -> setMode(Mode.DESTINATION));
         binding.btnModeAddStop.setOnClickListener(v -> setMode(Mode.STOP));
         binding.btnRequestRide.setOnClickListener(v -> requestRide());
+        binding.cbScheduleLater.setOnCheckedChangeListener((btn, checked) -> {
+            binding.scheduleRow.setVisibility(checked ? View.VISIBLE : View.GONE);
+            if (!checked) {
+                scheduledTime = null;
+                binding.tvScheduledTime.setText(R.string.no_time_selected);
+            }
+        });
+        binding.btnPickTime.setOnClickListener(v -> pickDateTime());
 
     }
 
@@ -189,13 +203,22 @@ public class RideRequestActivity extends AppCompatActivity {
             stops.add(new RideStopRequest(formatCoords(sp), sp.getLatitude(), sp.getLongitude(), i));
         }
 
+        String scheduledFor = null;
+        if (binding.cbScheduleLater.isChecked()) {
+            if (scheduledTime == null) { showError(getString(R.string.pick_a_time)); return;}
+            long diffMs = scheduledTime.getTimeInMillis() - System.currentTimeMillis();
+            if (diffMs <= 0) { showError(getString(R.string.time_must_be_future)); return;}
+            if (diffMs > 5 * 60 * 60 * 1000L) { showError(getString(R.string.max_5h_ahead)); return;}
+            scheduledFor = isoString(scheduledTime);
+        }
+
         RideRequest request = new RideRequest(
                 pickupAddress, pickupPoint.getLatitude(), pickupPoint.getLongitude(),
                 destinationAddress, destinationPoint.getLatitude(), destinationPoint.getLongitude(),
                 stops,
                 binding.spinnerRideVehicleType.getSelectedItem().toString(),
                 binding.cbBabyTransport.isChecked(),
-                binding.cbPetTransport.isChecked()
+                binding.cbPetTransport.isChecked(), scheduledFor
         );
 
         setLoading(true);
@@ -219,6 +242,17 @@ public class RideRequestActivity extends AppCompatActivity {
     }
 
     private void showResult(RideResponse r) {
+        if ("SCHEDULED".equals(r.getStatus())) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.ride_scheduled)
+                    .setMessage(r.getMessage() != null ? r.getMessage()
+                            : getString(R.string.ride_scheduled_msg))
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.ok, (d, w) -> finish())
+                    .show();
+            return;
+        }
+
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.fare_label, r.getFare())).append("\n");
         sb.append(getString(R.string.distance_label, r.getDistanceKm())).append("\n");
@@ -248,6 +282,36 @@ public class RideRequestActivity extends AppCompatActivity {
         if (response.code() == 409) return getString(R.string.no_drivers_available);
         if (response.code() == 403) return getString(R.string.cannot_order_ride);
         return getString(R.string.something_went_wrong);
+    }
+
+    private void pickDateTime() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dateDialog = new DatePickerDialog(this,
+                (view, year, month, day) -> {
+                    TimePickerDialog timeDialog = new TimePickerDialog(this,
+                            (tView, hour, minute) -> {
+                                Calendar chosen = Calendar.getInstance();
+                                chosen.set(year, month, day, hour, minute, 0);
+                                scheduledTime = chosen;
+                                binding.tvScheduledTime.setText(
+                                        String.format(Locale.US, "%04d-%02d-%02d %02d:%02d",
+                                                year, month + 1, day, hour, minute));
+                            },
+                            now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true);
+                    timeDialog.show();
+                },
+                now.get(Calendar.YEAR), now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH));
+        dateDialog.getDatePicker().setMinDate(now.getTimeInMillis());
+        dateDialog.show();
+    }
+
+    /** Builds an ISO-8601 LocalDateTime string that backend can parse */
+    private String isoString(Calendar c) {
+        return String.format(Locale.US, "%04d-%02d-%02dT%02d:%02d:00",
+                c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+                c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY),
+                c.get(Calendar.MINUTE));
     }
 
     // ---------- Helpers ----------
