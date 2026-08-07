@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.VehicleType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,4 +37,6 @@ public class RideRequestDTO {
 
     private boolean babyTransport;
     private boolean petTransport;
+
+    private LocalDateTime scheduledFor;
 }
