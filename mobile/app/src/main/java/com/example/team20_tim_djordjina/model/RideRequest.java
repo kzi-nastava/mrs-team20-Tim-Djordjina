@@ -19,10 +19,13 @@ public class RideRequest {
     private boolean babyTransport;
     private boolean petTransport;
 
+    private String scheduledFor;
+
     public RideRequest(String pickupAddress, double pickupLatitude, double pickupLongitude,
                        String destinationAddress, double destinationLatitude,
                        double destinationLongitude, List<RideStopRequest> stops,
-                       String vehicleType, boolean babyTransport, boolean petTransport) {
+                       String vehicleType, boolean babyTransport, boolean petTransport,
+                       String scheduledFor) {
         this.pickupAddress = pickupAddress;
         this.pickupLatitude = pickupLatitude;
         this.pickupLongitude = pickupLongitude;
@@ -33,5 +36,6 @@ public class RideRequest {
         this.vehicleType = vehicleType;
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
+        this.scheduledFor = scheduledFor;
     }
 }
