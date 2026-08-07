@@ -62,7 +62,7 @@ public class RideService {
         double fare = round2(fareCalculationService.calculateFare(dto.getVehicleType(), distanceKm));
 
         // Match the nearest eligible free driver
-        Driver driver = driverMatchingService.findNearestAvailableDriver(
+        Driver driver = driverMatchingService.findDriverForRide(
                 dto.getVehicleType(),
                 dto.isBabyTransport(),
                 dto.isPetTransport(),
