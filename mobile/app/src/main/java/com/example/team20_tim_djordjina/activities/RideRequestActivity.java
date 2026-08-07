@@ -271,13 +271,19 @@ public class RideRequestActivity extends AppCompatActivity {
     }
 
     private String parseError(Response<RideResponse> response) {
+        String bodyStr = "";
         try {
-            if (response.errorBody() != null) {
-                ApiResponse err = new Gson().fromJson(response.errorBody().string(), ApiResponse.class);
-                if (err != null && err.getMessage() != null && !err.getMessage().isEmpty()) {
-                    return err.getMessage();
-                }
+            if (response.errorBody() != null) { bodyStr = response.errorBody().string(); }
+        } catch (Exception ignored) {}
+        android.util.Log.e("RideRequest", "requestRide failed: HTTP "
+            + response.code() + " body=" + bodyStr);
+
+        try {
+            ApiResponse err = new Gson().fromJson(bodyStr, ApiResponse.class);
+            if (err != null && err.getMessage() != null && !err.getMessage().isEmpty()) {
+                return err.getMessage();
             }
+
         } catch (Exception ignored) {}
         if (response.code() == 409) return getString(R.string.no_drivers_available);
         if (response.code() == 403) return getString(R.string.cannot_order_ride);
@@ -309,7 +315,7 @@ public class RideRequestActivity extends AppCompatActivity {
     /** Builds an ISO-8601 LocalDateTime string that backend can parse */
     private String isoString(Calendar c) {
         return String.format(Locale.US, "%04d-%02d-%02dT%02d:%02d:00",
-                c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+                c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1,
                 c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY),
                 c.get(Calendar.MINUTE));
     }
