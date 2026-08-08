@@ -62,6 +62,8 @@ public class Ride {
 
     private LocalDateTime finishedAt;
 
+    private LocalDateTime lastReminderSentAt;
+
     public void addStop(RideStop stop) {
         stop.setRide(this);
         this.stops.add(stop);
