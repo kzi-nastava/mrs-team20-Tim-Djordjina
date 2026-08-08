@@ -16,6 +16,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.RideRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.VehicleRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -48,6 +49,10 @@ public class RideService {
                     ? rider.getBlockNote()
                     : "Your account is blocked and cannot order rides.";
             throw new UserBlockedException(note);
+        }
+
+        if (dto.getScheduledFor() != null) {
+            return scheduleRide(rider, dto);
         }
 
         if (rideRepository.existsByRiderIdAndStatusIn(
@@ -128,6 +133,56 @@ public class RideService {
 
         return toResponse(saved, "Ride request. A driver has been assigned.");
     }
+
+    private RideResponseDTO scheduleRide(User rider, RideRequestDTO dto) {
+        LocalDateTime when = dto.getScheduledFor();
+        LocalDateTime now = LocalDateTime.now();
+
+        if (!when.isAfter(now)) {
+            throw new IllegalArgumentException("Scheduled time must be in the future.");
+        }
+        if (when.isAfter(now.plusHours(5))) {
+            throw new IllegalArgumentException("A ride can be scheduled at most 5 hours in advance.");
+        }
+
+        double distanceKm = round2(distanceCalculator.totalDistanceKm(buildRoute(dto)));
+        double fare = round2(fareCalculationService.calculateFare(dto.getVehicleType(), distanceKm));
+
+        Ride ride = new Ride();
+        ride.setRider(rider);
+        // no driver yet
+        ride.setPickupAddress(dto.getPickupAddress());
+        ride.setPickupLatitude(dto.getPickupLatitude());
+        ride.setPickupLongitude(dto.getPickupLongitude());
+        ride.setDestinationAddress(dto.getDestinationAddress());
+        ride.setDestinationLatitude(dto.getDestinationLatitude());
+        ride.setDestinationLongitude(dto.getDestinationLongitude());
+        ride.setVehicleType(dto.getVehicleType());
+        ride.setBabyTransport(dto.isBabyTransport());
+        ride.setPetTransport(dto.isPetTransport());
+        ride.setDistanceKM(distanceKm);
+        ride.setFare(fare);
+        ride.setStatus(RideStatus.SCHEDULED);
+        ride.setScheduledFor(when);
+
+        for(RideStopDTO s : sortedStops(dto.getStops())) {
+            RideStop stop = new RideStop();
+            stop.setAddress(s.getAddress());
+            stop.setLatitude(s.getLatitude());
+            stop.setLongitude(s.getLongitude());
+            stop.setStopOrder(s.getStopOrder());
+            ride.addStop(stop);
+        }
+
+        Ride saved = rideRepository.save(ride);
+
+        notificationService.create(rider, NotificationType.RIDE_ACCEPTED,
+                "Your ride is scheduled for " + when + ". A driver will be assigned closer to the time.",
+                saved.getId());
+
+        return toResponse(saved, "Ride scheduled for " + when + ".");
+    }
+
 
     /** Ordered coordinate list: pickup -> stops (by order) -> destination */
     private List<double[]> buildRoute(RideRequestDTO dto) {
