@@ -141,6 +141,25 @@ public class EmailService {
 
     }
 
+    /**
+     * Send a plain-text notification email
+     * */
+    @Async
+    public void sendNotificationEmail(String toEmail, String subject, String body) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(toEmail);
+            message.setSubject(subject);
+            message.setText(body);
+
+            mailSender.send(message);
+            log.info("Notification email sent to: {}", toEmail);
+        } catch (Exception e) {
+            log.error("Failed to send notification email to: {}", toEmail, e);
+        }
+    }
+
     private String buildDriverWelcomeHtml(String firstName, String setPasswordLink) {
         return String.format("""
                 <!DOCTYPE html>
