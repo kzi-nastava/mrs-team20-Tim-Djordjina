@@ -27,7 +27,7 @@ public class RideReminderService {
     private long leadMinutes;
 
     @Value("${reminder.interval-minutes}")
-    private long intervalMiuntes;
+    private long intervalMinutes;
 
     @Scheduled(fixedRateString = "${reminder.check-interval-ms}")
     @Transactional
@@ -48,7 +48,7 @@ public class RideReminderService {
     /** First reminder as soon as it enters the window, the every intervalMiuntes. */
     private boolean shouldSend(Ride ride, LocalDateTime now) {
         if (ride.getLastReminderSentAt() == null) return true;
-        return Duration.between(ride.getLastReminderSentAt(), now).toMinutes() >= intervalMiuntes;
+        return Duration.between(ride.getLastReminderSentAt(), now).toMinutes() >= intervalMinutes;
     }
 
     private void sendReminder(Ride ride, LocalDateTime now) {
