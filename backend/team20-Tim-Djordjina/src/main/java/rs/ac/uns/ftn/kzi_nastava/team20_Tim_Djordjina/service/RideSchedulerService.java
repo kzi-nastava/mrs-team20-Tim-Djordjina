@@ -27,6 +27,7 @@ public class RideSchedulerService {
     private final DriverMatchingService driverMatchingService;
     private final DriverRepository driverRepository;
     private final NotificationService notificationService;
+    private final LinkedPassengerService linkedPassengerService;
 
     @Scheduled(fixedRateString = "${ride.scheduler.interval-ms}")
     @Transactional
@@ -66,6 +67,8 @@ public class RideSchedulerService {
                         + " to " + ride.getDestinationAddress() + ".", ride.getId());
         notificationService.create(ride.getRider(), NotificationType.RIDE_ACCEPTED,
                 "A driver has been assigned to your scheduled ride.", ride.getId());
+
+        linkedPassengerService.notifyAccepted(ride);
 
         log.info("Scheduler: activated scheduler ride {} -> driver {}", ride.getId(), driver.getId());
     }

@@ -37,6 +37,7 @@ public class RideService {
     private final FareCalculationService fareCalculationService;
     private final DriverMatchingService driverMatchingService;
     private final NotificationService notificationService;
+    private final LinkedPassengerService linkedPassengerService;
 
     @Transactional
     public RideResponseDTO requestRide(String riderEmail, RideRequestDTO dto) {
@@ -127,6 +128,9 @@ public class RideService {
                         + driver.getUser().getFirstName() + " " + driver.getUser().getLastName() + ".",
                 saved.getId());
 
+        linkedPassengerService.linkPassengers(saved, dto.getLinkedPassengerEmails());
+        linkedPassengerService.notifyAccepted(saved);
+
         log.info("Ride {} created for rider {} assigned to driver {}",
                 saved.getId(), riderEmail, driver.getId());
 
@@ -179,6 +183,8 @@ public class RideService {
         notificationService.create(rider, NotificationType.RIDE_ACCEPTED,
                 "Your ride is scheduled for " + when + ". A driver will be assigned closer to the time.",
                 saved.getId());
+
+        linkedPassengerService.linkPassengers(saved, dto.getLinkedPassengerEmails());
 
         return toResponse(saved, "Ride scheduled for " + when + ".");
     }

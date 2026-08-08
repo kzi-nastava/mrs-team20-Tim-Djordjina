@@ -39,4 +39,6 @@ public class RideRequestDTO {
     private boolean petTransport;
 
     private LocalDateTime scheduledFor;
+
+    private List<String> linkedPassengerEmails;
 }

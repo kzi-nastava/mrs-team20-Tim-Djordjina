@@ -29,6 +29,7 @@ public class RideExecutionService {
     private final DriverRepository driverRepository;
     private final NotificationService notificationService;
     private final UserRepository userRepository;
+    private final LinkedPassengerService linkedPassengerService;
 
     // ---------- Start ----------
 
@@ -76,6 +77,8 @@ public class RideExecutionService {
         // Notify the rider
         notificationService.create(ride.getRider(), NotificationType.RIDE_FINISHED,
                 "Your ride has finished. Thank you for riding with RideOn.", ride.getId());
+
+        linkedPassengerService.notifyFinished(ride);
 
         log.info("Ride {} finished by {}", rideId, driverEmail);
         return toResponse(ride, "Ride finished.");
