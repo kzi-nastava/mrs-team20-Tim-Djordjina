@@ -4,5 +4,6 @@ public enum NotificationType {
     NEW_RIDE,
     RIDE_ACCEPTED,
     RIDE_FAILED,
-    RIDE_FINISHED
+    RIDE_FINISHED,
+    RIDE_REMINDER
 }

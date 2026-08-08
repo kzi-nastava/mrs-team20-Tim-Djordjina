@@ -17,6 +17,8 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
 
     List<Ride> findByStatusAndScheduledForLessThanEqualOrderByScheduledForAsc(RideStatus status, LocalDateTime time);
 
+    List<Ride> findByStatusAndScheduledForBetween(RideStatus status, LocalDateTime start, LocalDateTime end);
+
     // Does this rider currently have a ride that isn't finished/canceled/rejected?
     boolean existsByRiderIdAndStatusIn(Long riderId, List<RideStatus> statuses);
 }
