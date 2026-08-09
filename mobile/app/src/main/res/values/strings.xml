@@ -141,6 +141,7 @@
     <string name="max_5h_ahead">You can schedule at most 5 hours ahead</string>
     <string name="ride_scheduled">Ride scheduled</string>
     <string name="ride_scheduled_msg">Your ride is scheduled. A driver will be assigned closer to the time.</string>
+    <string name="other_passengers_hint">Other passengers (emails, comma-separated)</string>
 
     <string-array name="country_codes">
         <item>+381</item>

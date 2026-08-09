@@ -221,6 +221,19 @@ public class RideRequestActivity extends AppCompatActivity {
                 binding.cbPetTransport.isChecked(), scheduledFor
         );
 
+        List<String> linkedEmails = new ArrayList<>();
+        String rawEmails = binding.etLinkedPassengers.getText() != null
+                ? binding.etLinkedPassengers.getText().toString().trim() : "";
+        if (!rawEmails.isEmpty()) {
+            for (String part : rawEmails.split(",")) {
+                String e = part.trim();
+                if (!e.isEmpty()) linkedEmails.add(e);
+            }
+        }
+        if (!linkedEmails.isEmpty()) {
+            request.setLinkedPassengerEmails(linkedEmails);
+        }
+
         setLoading(true);
         apiService.requestRide(request).enqueue(new Callback<RideResponse>() {
             @Override

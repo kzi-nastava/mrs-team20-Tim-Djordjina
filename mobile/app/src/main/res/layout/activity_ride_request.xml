@@ -172,6 +172,20 @@
                     android:text="@string/no_time_selected"
                     android:textColor="#555555" />
             </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/other_passengers_hint">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLinkedPassengers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
             
             <Button
                 android:id="@+id/btnRequestRide"
