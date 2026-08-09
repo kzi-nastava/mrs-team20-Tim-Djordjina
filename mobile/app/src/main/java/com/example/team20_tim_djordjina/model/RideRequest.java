@@ -21,6 +21,8 @@ public class RideRequest {
 
     private String scheduledFor;
 
+    private List<String> linkedPassengerEmails;
+
     public RideRequest(String pickupAddress, double pickupLatitude, double pickupLongitude,
                        String destinationAddress, double destinationLatitude,
                        double destinationLongitude, List<RideStopRequest> stops,
@@ -37,5 +39,9 @@ public class RideRequest {
         this.babyTransport = babyTransport;
         this.petTransport = petTransport;
         this.scheduledFor = scheduledFor;
+    }
+
+    public void setLinkedPassengerEmails(List<String> linkedPassengerEmails) {
+        this.linkedPassengerEmails = linkedPassengerEmails;
     }
 }
