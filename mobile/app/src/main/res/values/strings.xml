@@ -145,6 +145,8 @@
     <string name="linked_status">Status: %1$s</string>
     <string name="linked_driver">Driver: %1$s</string>
     <string name="linked_driver_none">Driver: not assigned yet</string>
+    <string name="shared_with_me">Shared with me</string>
+    <string name="no_linked_rides">No rides shared with you yet</string>
 
     <string-array name="country_codes">
         <item>+381</item>
