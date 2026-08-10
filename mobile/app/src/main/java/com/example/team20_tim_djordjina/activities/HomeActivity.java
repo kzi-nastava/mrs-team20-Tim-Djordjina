@@ -57,6 +57,14 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
+        if ("USER".equals(tokenManager.getRole())) {
+            binding.btnFavourites.setVisibility(View.VISIBLE);
+            binding.btnFavourites.setOnClickListener(v ->
+                    startActivity(new Intent(HomeActivity.this, FavouritesActivity.class)));
+        } else {
+            binding.btnFavourites.setVisibility(View.GONE);
+        }
+
         binding.btnHomeLogin.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
         binding.btnHomeSignup.setOnClickListener(v ->
