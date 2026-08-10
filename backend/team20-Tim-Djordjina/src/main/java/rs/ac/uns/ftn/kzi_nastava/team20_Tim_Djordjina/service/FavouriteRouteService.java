@@ -91,8 +91,7 @@ public class FavouriteRouteService {
         List<RideStopDTO> result = new ArrayList<>();
         if (stops != null) {
             result.addAll(stops);
-            result.sort(Comparator.comparingInt(s ->
-                    s.getStopOrder() != null ? s.getStopOrder() : 0));
+            result.sort(Comparator.comparingInt(RideStopDTO::getStopOrder));
         }
         return result;
     }
