@@ -413,7 +413,7 @@ public class RideRequestActivity extends AppCompatActivity {
 
         destinationPoint = new GeoPoint(f.getDestinationLatitude(), f.getDestinationLongitude());
         destinationMarker = placeMarker(destinationMarker, destinationPoint, getString(R.string.destination));
-        binding.etPickupAddress.setText(
+        binding.etDestinationAddress.setText(
                 f.getDestinationAddress() != null ? f.getDestinationAddress() : formatCoords(destinationPoint));
 
         for (Marker m : stopMarkers) {
