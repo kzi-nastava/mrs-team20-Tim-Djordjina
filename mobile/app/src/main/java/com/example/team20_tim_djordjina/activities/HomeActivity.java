@@ -67,5 +67,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, RideRequestActivity.class)));
         binding.btnNotifications.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, NotificationsActivity.class)));
+        binding.btnSharedWithMe.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, LinkedRidesActivity.class)));
     }
 }

@@ -99,4 +99,7 @@ public interface ApiService {
 
     @POST("api/rides/{id}/finish")
     Call<RideResponse> finishRide(@Path("id") Long id);
+
+    @GET("api/rides/linked")
+    Call<List<RideResponse>> getLinkedRides();
 }
