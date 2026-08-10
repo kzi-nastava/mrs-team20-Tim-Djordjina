@@ -196,6 +196,24 @@
                 android:text="@string/request_ride"
                 android:textColor="@color/white" />
 
+            <Button
+                android:id="@+id/btnSaveFavourite"
+                style="@style/FormPrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_background"
+                android:text="@string/save_as_favourite"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnUseFavourite"
+                style="@style/FormPrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_background"
+                android:text="@string/use_a_favourite"
+                android:textColor="@color/white" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

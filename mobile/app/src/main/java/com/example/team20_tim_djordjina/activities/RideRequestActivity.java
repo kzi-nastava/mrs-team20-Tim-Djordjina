@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import com.example.team20_tim_djordjina.api.ApiService;
 import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityRideRequestBinding;
 import com.example.team20_tim_djordjina.model.ApiResponse;
+import com.example.team20_tim_djordjina.model.FavouriteRoute;
 import com.example.team20_tim_djordjina.model.RideRequest;
 import com.example.team20_tim_djordjina.model.RideResponse;
 import com.example.team20_tim_djordjina.model.RideStopRequest;
@@ -101,6 +104,8 @@ public class RideRequestActivity extends AppCompatActivity {
             }
         });
         binding.btnPickTime.setOnClickListener(v -> pickDateTime());
+        binding.btnSaveFavourite.setOnClickListener(v -> saveCurrentAsFavourite());
+        binding.btnUseFavourite.setOnClickListener(v -> showFavouritePicker());
 
     }
 
@@ -333,6 +338,106 @@ public class RideRequestActivity extends AppCompatActivity {
                 c.get(Calendar.MINUTE));
     }
 
+    private void saveCurrentAsFavourite() {
+        if (pickupPoint == null || destinationPoint == null) {
+            showError(getString(R.string.set_pickup_destination_first));
+            return;
+        }
+        final EditText input = new EditText(this);
+        input.setHint(R.string.favourite_label_hint);
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.save_as_favourite)
+                .setView(input)
+                .setPositiveButton(R.string.save, (d, w) -> {
+                    List<RideStopRequest> stops = new ArrayList<>();
+                    for (int i = 0; i < stopPoints.size(); i++) {
+                        GeoPoint p = stopPoints.get(i);
+                        stops.add(new RideStopRequest("Stop " + (i + 1),
+                                p.getLatitude(), p.getLongitude(), i));
+                    }
+                    FavouriteRoute route = new FavouriteRoute(
+                            input.getText().toString().trim(),
+                            "Pickup", pickupPoint.getLatitude(), pickupPoint.getLongitude(),
+                            "Destination", destinationPoint.getLatitude(), destinationPoint.getLongitude(),
+                            stops);
+                    apiService.saveFavouriteRoute(route).enqueue(new Callback<FavouriteRoute>() {
+                        @Override
+                        public void onResponse(Call<FavouriteRoute> call, Response<FavouriteRoute> response) {
+                            toast(getString(response.isSuccessful() ? R.string.favourite_saved : R.string.something_went_wrong));
+                        }
+
+                        @Override
+                        public void onFailure(Call<FavouriteRoute> call, Throwable t) {
+                            toast(getString(R.string.network_error));
+                        }
+                    });
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void showFavouritePicker() {
+        apiService.getFavouriteRoutes().enqueue(new Callback<List<FavouriteRoute>>() {
+            @Override
+            public void onResponse(Call<List<FavouriteRoute>> call, Response<List<FavouriteRoute>> response) {
+                if (!response.isSuccessful() || response.body() == null || response.body().isEmpty()) {
+                    toast(getString(R.string.no_favourites));
+                    return;
+                }
+                List<FavouriteRoute> favs = response.body();
+                String[] labels = new String[favs.size()];
+                for (int i = 0; i < favs.size(); i++) {
+                    FavouriteRoute f = favs.get(i);
+                    labels[i] = (f.getLabel() != null && !f.getLabel().isEmpty())
+                            ? f.getLabel()
+                            : f.getPickupAddress() + " -> " + f.getDestinationAddress();
+                }
+                new androidx.appcompat.app.AlertDialog.Builder(RideRequestActivity.this)
+                        .setTitle(R.string.use_a_favourite)
+                        .setItems(labels, (d, which) -> applyFavourite(favs.get(which)))
+                        .show();
+            }
+
+            @Override
+            public void onFailure(Call<List<FavouriteRoute>> call, Throwable t) {
+                toast(getString(R.string.network_error));
+            }
+        });
+    }
+
+    private void applyFavourite(FavouriteRoute f) {
+        pickupPoint = new GeoPoint(f.getPickupLatitude(), f.getPickupLongitude());
+        pickupMarker = placeMarker(pickupMarker, pickupPoint, getString(R.string.pickup));
+        binding.etPickupAddress.setText(
+                f.getPickupAddress() != null ? f.getPickupAddress() : formatCoords(pickupPoint));
+
+        destinationPoint = new GeoPoint(f.getDestinationLatitude(), f.getDestinationLongitude());
+        destinationMarker = placeMarker(destinationMarker, destinationPoint, getString(R.string.destination));
+        binding.etPickupAddress.setText(
+                f.getDestinationAddress() != null ? f.getDestinationAddress() : formatCoords(destinationPoint));
+
+        for (Marker m : stopMarkers) {
+            binding.map.getOverlays().remove(m);
+        }
+        stopMarkers.clear();
+        stopPoints.clear();
+        if (f.getStops() != null) {
+            for (RideStopRequest s : f.getStops()) {
+                GeoPoint sp = new GeoPoint(s.getLatitude(), s.getLongitude());
+                stopPoints.add(sp);
+                Marker m = placeMarker(null, sp, getString(R.string.stop) + stopPoints.size());
+                stopMarkers.add(m);
+            }
+        }
+        binding.tvStopCount.setText(getString(R.string.stops_added, stopPoints.size()));
+
+        binding.map.getController().setCenter(pickupPoint);
+        binding.map.invalidate();
+        toast(getString(R.string.favourite_applied));
+    }
+
+
+
     // ---------- Helpers ----------
 
     private String formatCoords(GeoPoint p){
@@ -355,6 +460,10 @@ public class RideRequestActivity extends AppCompatActivity {
     private void hideError(){
         binding.tvRideError.setText("");
         binding.tvRideError.setVisibility(View.GONE);
+    }
+
+    private void toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

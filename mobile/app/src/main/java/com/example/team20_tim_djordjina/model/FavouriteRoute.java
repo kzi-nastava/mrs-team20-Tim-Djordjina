@@ -20,11 +20,10 @@ public class FavouriteRoute {
 
     public FavouriteRoute() {}
 
-    public FavouriteRoute(Long id, String label,
+    public FavouriteRoute(String label,
                           String pickupAddress, Double pickupLatitude, Double pickupLongitude,
                           String destinationAddress, Double destinationLatitude, Double destinationLongitude,
                           List<RideStopRequest> stops) {
-        this.id = id;
         this.label = label;
         this.pickupAddress = pickupAddress;
         this.pickupLatitude = pickupLatitude;
