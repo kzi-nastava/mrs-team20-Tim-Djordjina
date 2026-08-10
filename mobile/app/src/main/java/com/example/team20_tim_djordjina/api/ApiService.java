@@ -4,6 +4,7 @@ import com.example.team20_tim_djordjina.model.ApiResponse;
 import com.example.team20_tim_djordjina.model.BlockUserRequest;
 import com.example.team20_tim_djordjina.model.ChangePasswordRequest;
 import com.example.team20_tim_djordjina.model.DriverRegistrationRequest;
+import com.example.team20_tim_djordjina.model.FavouriteRoute;
 import com.example.team20_tim_djordjina.model.LoginRequest;
 import com.example.team20_tim_djordjina.model.LoginResponse;
 import com.example.team20_tim_djordjina.model.NotificationItem;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -102,4 +104,14 @@ public interface ApiService {
 
     @GET("api/rides/linked")
     Call<List<RideResponse>> getLinkedRides();
+
+    @GET("api/favourite-routes")
+    Call<List<FavouriteRoute>> getFavouriteRoutes();
+
+    @POST("api/favourite-routes")
+    Call<FavouriteRoute> saveFavouriteRoute(@Body FavouriteRoute route);
+
+    @DELETE("api/favourite-routes/{id}")
+    Call<ApiResponse> deleteFavouriteRoute(@Path("id") Long id);
+
 }
