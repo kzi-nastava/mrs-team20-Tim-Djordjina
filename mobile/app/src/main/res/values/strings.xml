@@ -148,6 +148,7 @@
     <string name="shared_with_me">Shared with me</string>
     <string name="no_linked_rides">No rides shared with you yet</string>
     <string name="could_not_load_linked_rides">Could not load shared rides</string>
+    <string name="remove">Remove</string>
 
     <string-array name="country_codes">
         <item>+381</item>
