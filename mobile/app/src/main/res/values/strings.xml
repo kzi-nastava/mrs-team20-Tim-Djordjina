@@ -149,6 +149,11 @@
     <string name="no_linked_rides">No rides shared with you yet</string>
     <string name="could_not_load_linked_rides">Could not load shared rides</string>
     <string name="remove">Remove</string>
+    <string name="no_favourites">No favourite routes yet</string>
+    <string name="favourite_routes">Favourite routes</string>
+    <string name="could_not_load_favourites">Could not load favourites</string>
+    <string name="remove_favourite">Remove favourite</string>
+    <string name="remove_favourite_confirm">Remove this favourite route?</string>
 
     <string-array name="country_codes">
         <item>+381</item>
