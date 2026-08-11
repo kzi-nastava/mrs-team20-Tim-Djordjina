@@ -48,6 +48,7 @@
                     android:paddingTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/button_background"
+                    android:visibility="gone"
                     />
 
                 <Button
@@ -59,7 +60,8 @@
                     android:textColor="@color/white"
                     android:textAlignment="center"
                     android:paddingTop="8dp"
-                    android:background="@drawable/button_background" />
+                    android:background="@drawable/button_background"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -100,7 +102,6 @@
             style="@style/FormPrimaryButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/button_background"
             android:text="@string/manage_users_title"
             android:textAlignment="center"
@@ -118,7 +119,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:paddingBottom="10dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnAdminProfileChanges"
@@ -142,7 +143,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:paddingBottom="10dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnNotifications"
@@ -154,7 +155,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:paddingBottom="10dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnCurrentRide"
@@ -178,6 +179,18 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:paddingBottom="10dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnFavourites"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="@string/favourite_routes"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:paddingBottom="10dp"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>

@@ -148,6 +148,18 @@
     <string name="shared_with_me">Shared with me</string>
     <string name="no_linked_rides">No rides shared with you yet</string>
     <string name="could_not_load_linked_rides">Could not load shared rides</string>
+    <string name="remove">Remove</string>
+    <string name="no_favourites">No favourite routes yet</string>
+    <string name="favourite_routes">Favourite routes</string>
+    <string name="could_not_load_favourites">Could not load favourites</string>
+    <string name="remove_favourite">Remove favourite</string>
+    <string name="remove_favourite_confirm">Remove this favourite route?</string>
+    <string name="save_as_favourite">Save as favourite</string>
+    <string name="use_a_favourite">Use a favourite</string>
+    <string name="set_pickup_destination_first">Set pickup and destination first</string>
+    <string name="favourite_label_hint">Name (e.g. Home → Work)</string>
+    <string name="favourite_saved">Route saved to favourites</string>
+    <string name="favourite_applied">Route filled from favourite</string>
 
     <string-array name="country_codes">
         <item>+381</item>

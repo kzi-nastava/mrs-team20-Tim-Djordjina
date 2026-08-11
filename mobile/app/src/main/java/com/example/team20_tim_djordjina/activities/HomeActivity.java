@@ -24,18 +24,22 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_home);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.home_root), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
+        });*/
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         tokenManager = new TokenManager(this);
 
+        setupVisibility();
+        setupClickListeners();
+
+        /*
         if ("ADMIN".equals(tokenManager.getRole())){
             binding.btnAdminRegisterDriver.setVisibility(View.VISIBLE);
             binding.btnAdminRegisterDriver.setOnClickListener(v ->
@@ -57,6 +61,14 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
+        if ("USER".equals(tokenManager.getRole())) {
+            binding.btnFavourites.setVisibility(View.VISIBLE);
+            binding.btnFavourites.setOnClickListener(v ->
+                    startActivity(new Intent(HomeActivity.this, FavouritesActivity.class)));
+        } else {
+            binding.btnFavourites.setVisibility(View.GONE);
+        }
+
         binding.btnHomeLogin.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
         binding.btnHomeSignup.setOnClickListener(v ->
@@ -69,5 +81,70 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, NotificationsActivity.class)));
         binding.btnSharedWithMe.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, LinkedRidesActivity.class)));
+        */
     }
+
+    private void setupVisibility() {
+        String role = tokenManager.getRole();
+        boolean loggedIn = role != null && !role.isEmpty();
+        boolean isUser = "USER".equals(role);
+        boolean isDriver = "DRIVER".equals(role);
+        boolean isAdmin = "ADMIN".equals(role);
+
+        // Landing (logged-out) controls
+        show(binding.btnHomeLogin, !loggedIn);
+        show(binding.btnHomeSignup, !loggedIn);
+
+        // Everyone who is logged in
+        show(binding.btnProfile, loggedIn);
+        show(binding.btnNotifications, loggedIn);
+        show(binding.btnSharedWithMe, loggedIn);
+
+        // Passenger only
+        show(binding.btnRequestRide, isUser);
+        show(binding.btnFavourites, isUser);
+
+        // Driver only
+        show(binding.btnCurrentRide, isDriver);
+
+        // Admin only
+        show(binding.btnAdminRegisterDriver, isAdmin);
+        show(binding.btnAdminManageUsers, isAdmin);
+        show(binding.btnAdminProfileChanges, isAdmin);
+
+    }
+
+    private void setupClickListeners() {
+        binding.btnHomeLogin.setOnClickListener(v -> open(LoginActivity.class));
+        binding.btnHomeSignup.setOnClickListener(v -> open(RegisterActivity.class));
+
+        binding.btnProfile.setOnClickListener(v -> open(ProfileActivity.class));
+        binding.btnNotifications.setOnClickListener(v -> open(NotificationsActivity.class));
+        binding.btnSharedWithMe.setOnClickListener(v -> open(LinkedRidesActivity.class));
+
+        binding.btnRequestRide.setOnClickListener(v -> open(RideRequestActivity.class));
+        binding.btnFavourites.setOnClickListener(v -> open(FavouritesActivity.class));
+
+        binding.btnCurrentRide.setOnClickListener(v -> open(DriverRideActivity.class));
+
+        binding.btnAdminRegisterDriver.setOnClickListener(v -> open(AdminDriverRegistrationActivity.class));
+        binding.btnAdminManageUsers.setOnClickListener(v -> open(AdminUserListActivity.class));
+        binding.btnAdminProfileChanges.setOnClickListener(v -> open(AdminProfileChangesActivity.class));
+
+    }
+
+    private void open(Class<?> target) {
+        startActivity(new Intent(this, target));
+    }
+
+    private void show(View v, boolean visible) {
+        v.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
+
 }
