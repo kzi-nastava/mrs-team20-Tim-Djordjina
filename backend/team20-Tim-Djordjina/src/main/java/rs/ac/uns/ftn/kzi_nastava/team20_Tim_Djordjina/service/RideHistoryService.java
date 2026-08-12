@@ -93,7 +93,7 @@ public class RideHistoryService {
         if (ride.getRider() != null) {
             User r = ride.getRider();
             dto.setRider(new RideHistoryDTO.PartyInfo(
-                    ride.getId(), r.getFirstName(), r.getLastName()));
+                    r.getId(), r.getFirstName(), r.getLastName()));
         }
         return dto;
 
