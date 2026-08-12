@@ -164,6 +164,10 @@
     <string name="ride_history">Ride history</string>
     <string name="no_history">No past rides yet</string>
     <string name="could_not_load_history">Could not load ride history</string>
+    <string name="history_driver">Driver: %1$s</string>
+    <string name="history_rider">Passenger: %1$s</string>
+    <string name="history_started">Started: %1$s</string>
+    <string name="history_finished">Finished: %1$s</string>
 
     <string-array name="country_codes">
         <item>+381</item>
