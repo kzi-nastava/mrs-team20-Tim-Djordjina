@@ -81,7 +81,7 @@ public class RideHistoryActivity extends AppCompatActivity
 
     @Override
     public void onRideClick(RideHistoryItem item) {
-        Intent i = new Intent(this, ActivityRideHistoryDetailBinding.class);
+        Intent i = new Intent(this, RideHistoryDetailActivity.class);
         i.putExtra(EXTRA_RIDE_ID, item.getId());
         startActivity(i);
     }
