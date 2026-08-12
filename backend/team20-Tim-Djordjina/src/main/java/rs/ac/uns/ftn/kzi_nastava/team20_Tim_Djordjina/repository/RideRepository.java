@@ -19,6 +19,10 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
 
     List<Ride> findByStatusAndScheduledForBetween(RideStatus status, LocalDateTime start, LocalDateTime end);
 
+    List<Ride> findByRiderIdAndStatusOrderByFinishedAtDesc(Long riderId, RideStatus status);
+
+    List<Ride> findByDriverIdAndStatusOrderByFinishedAtDesc(Long driverId, RideStatus status);
+
     // Does this rider currently have a ride that isn't finished/canceled/rejected?
     boolean existsByRiderIdAndStatusIn(Long riderId, List<RideStatus> statuses);
 }

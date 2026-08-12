@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
         show(binding.btnProfile, loggedIn);
         show(binding.btnNotifications, loggedIn);
         show(binding.btnSharedWithMe, loggedIn);
+        show(binding.btnRideHistory, loggedIn);
 
         // Passenger only
         show(binding.btnRequestRide, isUser);
@@ -121,6 +122,7 @@ public class HomeActivity extends AppCompatActivity {
         binding.btnProfile.setOnClickListener(v -> open(ProfileActivity.class));
         binding.btnNotifications.setOnClickListener(v -> open(NotificationsActivity.class));
         binding.btnSharedWithMe.setOnClickListener(v -> open(LinkedRidesActivity.class));
+        binding.btnRideHistory.setOnClickListener(v -> open(RideHistoryActivity.class));
 
         binding.btnRequestRide.setOnClickListener(v -> open(RideRequestActivity.class));
         binding.btnFavourites.setOnClickListener(v -> open(FavouritesActivity.class));

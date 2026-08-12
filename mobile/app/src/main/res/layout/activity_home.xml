@@ -192,5 +192,17 @@
             android:textColor="@color/white"
             android:paddingBottom="10dp"
             android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnRideHistory"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="@string/ride_history"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:paddingBottom="10dp"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>
