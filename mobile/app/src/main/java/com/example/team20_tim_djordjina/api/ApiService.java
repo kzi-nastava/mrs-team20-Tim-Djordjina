@@ -13,6 +13,7 @@ import com.example.team20_tim_djordjina.model.PasswordResetSubmit;
 import com.example.team20_tim_djordjina.model.ProfileChangeRequestItem;
 import com.example.team20_tim_djordjina.model.ProfileResponse;
 import com.example.team20_tim_djordjina.model.RegistrationRequest;
+import com.example.team20_tim_djordjina.model.RideHistoryItem;
 import com.example.team20_tim_djordjina.model.RideRequest;
 import com.example.team20_tim_djordjina.model.RideResponse;
 import com.example.team20_tim_djordjina.model.UpdateProfileRequest;
@@ -114,4 +115,10 @@ public interface ApiService {
     @DELETE("api/favourite-routes/{id}")
     Call<ApiResponse> deleteFavouriteRoute(@Path("id") Long id);
 
+
+    @GET("api/rides/history")
+    Call<List<RideHistoryItem>> getRideHistory();
+
+    @GET("api/rides/history/{id}")
+    Call<RideHistoryItem> getRideHistoryDetail(@Path("id") Long id);
 }
