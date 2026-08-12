@@ -160,6 +160,7 @@
     <string name="favourite_label_hint">Name (e.g. Home → Work)</string>
     <string name="favourite_saved">Route saved to favourites</string>
     <string name="favourite_applied">Route filled from favourite</string>
+    <string name="ride_details">Ride details</string>
 
     <string-array name="country_codes">
         <item>+381</item>

@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Team20TimDjordjina">
         <activity
+            android:name=".activities.RideHistoryDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.FavouritesActivity"
             android:exported="false" />
         <activity
