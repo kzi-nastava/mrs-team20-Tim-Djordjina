@@ -12,6 +12,7 @@ import com.example.team20_tim_djordjina.model.PasswordResetRequest;
 import com.example.team20_tim_djordjina.model.PasswordResetSubmit;
 import com.example.team20_tim_djordjina.model.ProfileChangeRequestItem;
 import com.example.team20_tim_djordjina.model.ProfileResponse;
+import com.example.team20_tim_djordjina.model.Rating;
 import com.example.team20_tim_djordjina.model.RegistrationRequest;
 import com.example.team20_tim_djordjina.model.RideHistoryItem;
 import com.example.team20_tim_djordjina.model.RideRequest;
@@ -121,4 +122,7 @@ public interface ApiService {
 
     @GET("api/rides/history/{id}")
     Call<RideHistoryItem> getRideHistoryDetail(@Path("id") Long id);
+
+    @POST("api/rides/{id}/rating")
+    Call<Rating> rateRide(@Path("id") Long id, @Body Rating rating);
 }
