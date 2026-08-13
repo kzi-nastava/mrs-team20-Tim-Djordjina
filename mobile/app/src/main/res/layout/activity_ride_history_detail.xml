@@ -105,6 +105,18 @@
             android:layout_height="wrap_content"
             android:textColor="#555555"
             android:textSize="14sp" />
+        
+        <Button
+            android:id="@+id/btnRateRide"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_background"
+            android:text="@string/ride_this_ride"
+            android:textColor="@color/white"
+            android:paddingBottom="16dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

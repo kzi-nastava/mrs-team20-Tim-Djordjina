@@ -177,6 +177,7 @@
     <string name="rating_not_your_ride">You can only rate your own ride</string>
     <string name="rating_not_allowed">This ride can\\\'t be rated (already rated or the window has passed)</string>
     <string name="rating_invalid">Please give a valid rating</string>
+    <string name="ride_this_ride">Rate this ride</string>
 
     <string-array name="country_codes">
         <item>+381</item>

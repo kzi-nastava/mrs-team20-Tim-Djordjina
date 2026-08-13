@@ -1,5 +1,6 @@
 package com.example.team20_tim_djordjina.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityRideHistoryDetailBinding;
 import com.example.team20_tim_djordjina.model.RideHistoryItem;
 import com.example.team20_tim_djordjina.model.RideStopRequest;
+import com.example.team20_tim_djordjina.util.TokenManager;
 
 import java.util.Locale;
 
@@ -93,6 +95,18 @@ public class RideHistoryDetailActivity extends AppCompatActivity {
                 r.getStartedAt() != null ? r.getStartedAt().replace('T', ' ') : "-"));
         binding.tvDetailFinished.setText(getString(R.string.history_finished,
                 r.getFinishedAt() != null ? r.getFinishedAt().replace('T', ' ') : "-"));
+
+        String role = new TokenManager(this).getRole();
+        if ("FINISHED".equals(r.getStatus()) && "USER".equals(role)) {
+            binding.btnRateRide.setVisibility(View.VISIBLE);
+            binding.btnRateRide.setOnClickListener(v -> {
+                Intent i = new Intent(this, RateRideActivity.class);
+                i.putExtra(RateRideActivity.EXTRA_RIDE_ID, r.getId());
+                startActivity(i);
+            });
+        } else {
+            binding.btnRateRide.setVisibility(View.GONE);
+        }
 
     }
 
