@@ -168,6 +168,15 @@
     <string name="history_rider">Passenger: %1$s</string>
     <string name="history_started">Started: %1$s</string>
     <string name="history_finished">Finished: %1$s</string>
+    <string name="rate_your_ride">Rate your ride</string>
+    <string name="rate_driver">Driver</string>
+    <string name="rate_vehicle">Vehicle</string>
+    <string name="comment_optional">Comment (optional)</string>
+    <string name="submit_rating">Submit rating</string>
+    <string name="rating_thanks">Thanks for your rating!</string>
+    <string name="rating_not_your_ride">You can only rate your own ride</string>
+    <string name="rating_not_allowed">This ride can\\\'t be rated (already rated or the window has passed)</string>
+    <string name="rating_invalid">Please give a valid rating</string>
 
     <string-array name="country_codes">
         <item>+381</item>
