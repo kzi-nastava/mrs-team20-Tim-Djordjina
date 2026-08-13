@@ -115,7 +115,6 @@
             android:background="@drawable/button_background"
             android:text="@string/ride_this_ride"
             android:textColor="@color/white"
-            android:paddingBottom="16dp"
             android:visibility="gone" />
 
     </LinearLayout>

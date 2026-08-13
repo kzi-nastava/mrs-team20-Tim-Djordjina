@@ -94,7 +94,6 @@
             android:text="@string/register_driver"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -106,7 +105,6 @@
             android:text="@string/manage_users_title"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -118,7 +116,6 @@
             android:text="@string/profile"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -130,7 +127,6 @@
             android:text="@string/profile_changes"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -142,7 +138,6 @@
             android:text="@string/request_ride"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -154,7 +149,6 @@
             android:text="@string/notifications"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -166,7 +160,6 @@
             android:text="@string/current_ride"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -178,7 +171,6 @@
             android:text="@string/shared_with_me"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -190,7 +182,6 @@
             android:text="@string/favourite_routes"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
 
         <Button
@@ -202,7 +193,6 @@
             android:text="@string/ride_history"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:paddingBottom="10dp"
             android:visibility="gone" />
     </LinearLayout>
 </ScrollView>
