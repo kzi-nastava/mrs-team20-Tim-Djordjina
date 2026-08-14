@@ -185,6 +185,16 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="logout_blocked_active_ride">You can\'t log out during an active ride</string>
+    <string name="admin_pricing">Pricing</string>
+    <string name="standard_price">Standard base price</string>
+    <string name="luxury_price">Luxury base price</string>
+    <string name="van_price">Van base price</string>
+    <string name="price_per_km">Price per km</string>
+    <string name="save_pricing">Save pricing</string>
+    <string name="enter_valid_prices">Enter valid prices</string>
+    <string name="prices_non_negative">Prices can\'t be negative</string>
+    <string name="pricing_saved">Pricing updated</string>
+    <string name="not_authorized">You are not authorized to do that</string>
 
     <string-array name="country_codes">
         <item>+381</item>
