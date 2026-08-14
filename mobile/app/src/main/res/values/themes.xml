@@ -78,6 +78,7 @@
         <item name="android:background">@drawable/button_background_lite</item>
 
         <item name="android:paddingTop">@dimen/btn_top_padding</item>
+        <item name="android:paddingBottom">@dimen/btn_bottom_padding</item>
         <item name="android:layout_marginBottom">@dimen/space_md</item>
     </style>
 
