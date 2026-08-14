@@ -39,49 +39,6 @@ public class HomeActivity extends AppCompatActivity {
         setupVisibility();
         setupClickListeners();
 
-        /*
-        if ("ADMIN".equals(tokenManager.getRole())){
-            binding.btnAdminRegisterDriver.setVisibility(View.VISIBLE);
-            binding.btnAdminRegisterDriver.setOnClickListener(v ->
-                    startActivity(new Intent(HomeActivity.this, AdminDriverRegistrationActivity.class)));
-            binding.btnAdminManageUsers.setVisibility(View.VISIBLE);
-            binding.btnAdminManageUsers.setOnClickListener(v ->
-                    startActivity(new Intent(HomeActivity.this, AdminUserListActivity.class)));
-            binding.btnAdminProfileChanges.setVisibility(View.VISIBLE);
-            binding.btnAdminProfileChanges.setOnClickListener(v ->
-                    startActivity(new Intent(HomeActivity.this, AdminProfileChangesActivity.class)));
-
-        }
-        if ("DRIVER".equals(tokenManager.getRole())) {
-            binding.btnRequestRide.setVisibility(View.GONE);
-
-            binding.btnCurrentRide.setVisibility(View.VISIBLE);
-            binding.btnCurrentRide.setOnClickListener(v ->
-                    startActivity(new Intent(HomeActivity.this, DriverRideActivity.class)));
-
-        }
-
-        if ("USER".equals(tokenManager.getRole())) {
-            binding.btnFavourites.setVisibility(View.VISIBLE);
-            binding.btnFavourites.setOnClickListener(v ->
-                    startActivity(new Intent(HomeActivity.this, FavouritesActivity.class)));
-        } else {
-            binding.btnFavourites.setVisibility(View.GONE);
-        }
-
-        binding.btnHomeLogin.setOnClickListener(v ->
-                startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
-        binding.btnHomeSignup.setOnClickListener(v ->
-                startActivity(new Intent(HomeActivity.this, RegisterActivity.class)));
-        binding.btnProfile.setOnClickListener(v ->
-                startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
-        binding.btnRequestRide.setOnClickListener(v ->
-                startActivity(new Intent(HomeActivity.this, RideRequestActivity.class)));
-        binding.btnNotifications.setOnClickListener(v ->
-                startActivity(new Intent(HomeActivity.this, NotificationsActivity.class)));
-        binding.btnSharedWithMe.setOnClickListener(v ->
-                startActivity(new Intent(HomeActivity.this, LinkedRidesActivity.class)));
-        */
     }
 
     private void setupVisibility() {
@@ -113,6 +70,7 @@ public class HomeActivity extends AppCompatActivity {
         show(binding.btnAdminRegisterDriver, isAdmin);
         show(binding.btnAdminManageUsers, isAdmin);
         show(binding.btnAdminProfileChanges, isAdmin);
+        show(binding.btnAdminPricing, isAdmin);
 
     }
 
@@ -139,6 +97,7 @@ public class HomeActivity extends AppCompatActivity {
         binding.btnAdminRegisterDriver.setOnClickListener(v -> open(AdminDriverRegistrationActivity.class));
         binding.btnAdminManageUsers.setOnClickListener(v -> open(AdminUserListActivity.class));
         binding.btnAdminProfileChanges.setOnClickListener(v -> open(AdminProfileChangesActivity.class));
+        binding.btnAdminPricing.setOnClickListener(v -> open(AdminPricingActivity.class));
 
     }
 
