@@ -3,7 +3,9 @@ package com.example.team20_tim_djordjina.api;
 import com.example.team20_tim_djordjina.model.ApiResponse;
 import com.example.team20_tim_djordjina.model.BlockUserRequest;
 import com.example.team20_tim_djordjina.model.ChangePasswordRequest;
+import com.example.team20_tim_djordjina.model.DriverActiveRequest;
 import com.example.team20_tim_djordjina.model.DriverRegistrationRequest;
+import com.example.team20_tim_djordjina.model.DriverState;
 import com.example.team20_tim_djordjina.model.FavouriteRoute;
 import com.example.team20_tim_djordjina.model.LoginRequest;
 import com.example.team20_tim_djordjina.model.LoginResponse;
@@ -125,4 +127,13 @@ public interface ApiService {
 
     @POST("api/rides/{id}/rating")
     Call<Rating> rateRide(@Path("id") Long id, @Body Rating rating);
+
+    @GET("api/drivers/me/state")
+    Call<DriverState> getDriverState();
+
+    @POST("api/drivers/me/active")
+    Call<DriverState> setDriverActive(@Body DriverActiveRequest request);
+
+    @POST("api/drivers/me/logout")
+    Call<ApiResponse> driverLogout();
 }
