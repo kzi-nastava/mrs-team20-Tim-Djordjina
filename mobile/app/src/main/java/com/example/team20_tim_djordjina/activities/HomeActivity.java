@@ -107,6 +107,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Driver only
         show(binding.btnCurrentRide, isDriver);
+        show(binding.btnDriverStatus, isDriver);
 
         // Admin only
         show(binding.btnAdminRegisterDriver, isAdmin);
@@ -116,19 +117,25 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
+        // Landing (logged-out) controls
         binding.btnHomeLogin.setOnClickListener(v -> open(LoginActivity.class));
         binding.btnHomeSignup.setOnClickListener(v -> open(RegisterActivity.class));
 
+        // Everyone who is logged in
         binding.btnProfile.setOnClickListener(v -> open(ProfileActivity.class));
         binding.btnNotifications.setOnClickListener(v -> open(NotificationsActivity.class));
         binding.btnSharedWithMe.setOnClickListener(v -> open(LinkedRidesActivity.class));
         binding.btnRideHistory.setOnClickListener(v -> open(RideHistoryActivity.class));
 
+        // Passenger only
         binding.btnRequestRide.setOnClickListener(v -> open(RideRequestActivity.class));
         binding.btnFavourites.setOnClickListener(v -> open(FavouritesActivity.class));
 
+        // Driver only
         binding.btnCurrentRide.setOnClickListener(v -> open(DriverRideActivity.class));
+        binding.btnDriverStatus.setOnClickListener(v -> open(DriverStatusActivity.class));
 
+        // Admin only
         binding.btnAdminRegisterDriver.setOnClickListener(v -> open(AdminDriverRegistrationActivity.class));
         binding.btnAdminManageUsers.setOnClickListener(v -> open(AdminUserListActivity.class));
         binding.btnAdminProfileChanges.setOnClickListener(v -> open(AdminProfileChangesActivity.class));

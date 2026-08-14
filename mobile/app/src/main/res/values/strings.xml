@@ -178,6 +178,13 @@
     <string name="rating_not_allowed">This ride can\\\'t be rated (already rated or the window has passed)</string>
     <string name="rating_invalid">Please give a valid rating</string>
     <string name="ride_this_ride">Rate this ride</string>
+    <string name="driver_status">Driver status</string>
+    <string name="on_duty">On duty</string>
+    <string name="off_duty">On duty</string>
+    <string name="driver_status_info">Available: %1$s · Worked today: %2$d min</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_blocked_active_ride">You can\'t log out during an active ride</string>
 
     <string-array name="country_codes">
         <item>+381</item>
