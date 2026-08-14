@@ -194,5 +194,16 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnDriverStatus"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="@string/driver_status"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>
