@@ -12,6 +12,7 @@ import com.example.team20_tim_djordjina.model.LoginResponse;
 import com.example.team20_tim_djordjina.model.NotificationItem;
 import com.example.team20_tim_djordjina.model.PasswordResetRequest;
 import com.example.team20_tim_djordjina.model.PasswordResetSubmit;
+import com.example.team20_tim_djordjina.model.PricingConfig;
 import com.example.team20_tim_djordjina.model.ProfileChangeRequestItem;
 import com.example.team20_tim_djordjina.model.ProfileResponse;
 import com.example.team20_tim_djordjina.model.Rating;
@@ -136,4 +137,10 @@ public interface ApiService {
 
     @POST("api/drivers/me/logout")
     Call<ApiResponse> driverLogout();
+
+    @GET("api/admin/pricing")
+    Call<PricingConfig> getPricing();
+
+    @PUT("api/admin/pricing")
+    Call<PricingConfig> updatePricing(@Body PricingConfig pricing);
 }
