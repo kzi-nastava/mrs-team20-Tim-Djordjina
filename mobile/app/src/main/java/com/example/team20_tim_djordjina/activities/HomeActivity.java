@@ -71,6 +71,7 @@ public class HomeActivity extends AppCompatActivity {
         show(binding.btnAdminManageUsers, isAdmin);
         show(binding.btnAdminProfileChanges, isAdmin);
         show(binding.btnAdminPricing, isAdmin);
+        show(binding.btnAdminRides, isAdmin);
 
     }
 
@@ -98,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
         binding.btnAdminManageUsers.setOnClickListener(v -> open(AdminUserListActivity.class));
         binding.btnAdminProfileChanges.setOnClickListener(v -> open(AdminProfileChangesActivity.class));
         binding.btnAdminPricing.setOnClickListener(v -> open(AdminPricingActivity.class));
+        binding.btnAdminRides.setOnClickListener(v -> open(AdminRideActivity.class));
 
     }
 
