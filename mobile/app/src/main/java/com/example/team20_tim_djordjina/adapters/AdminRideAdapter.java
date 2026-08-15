@@ -32,7 +32,7 @@ public class AdminRideAdapter
     public void setItems(List<RideHistoryItem> newItems){
         items.clear();
         if (newItems != null) items.addAll(newItems);
-
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -64,7 +64,8 @@ public class AdminRideAdapter
         }
 
         void bind(RideHistoryItem item, OnRideClickListener listener) {
-            tvRoute.setText(item.getPickupAddress() + " -> " + item.getDestinationAddress());
+            tvRoute.setText("#" + item.getId() + "  " +
+                    item.getPickupAddress() + " → " + item.getDestinationAddress());
             tvStatus.setText(item.getStatus());
             tvFare.setText(String.format(Locale.US, "%.2f RSD", item.getFare()));
             itemView.setOnClickListener(v -> listener.onRideClick(item));

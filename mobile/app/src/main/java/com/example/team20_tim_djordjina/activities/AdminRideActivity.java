@@ -22,6 +22,7 @@ import com.example.team20_tim_djordjina.databinding.ActivityAdminRideBinding;
 import com.example.team20_tim_djordjina.model.RideHistoryItem;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +39,7 @@ public class AdminRideActivity extends AppCompatActivity
     private ActivityAdminRideBinding binding;
     private ApiService apiService;
     private AdminRideAdapter adapter;
+    private String currentStatus = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class AdminRideActivity extends AppCompatActivity
         binding.rvAdminRides.setAdapter(adapter);
 
         setupStatusFilter();
-        loadRides(null);
+        //loadRides(null);
     }
 
     private void setupStatusFilter() {
@@ -80,10 +82,12 @@ public class AdminRideActivity extends AppCompatActivity
     }
 
     private void loadRides(String status) {
+        currentStatus = status;
         setLoading(true);
         apiService.getAdminRides(status).enqueue(new Callback<List<RideHistoryItem>>() {
             @Override
             public void onResponse(Call<List<RideHistoryItem>> call, Response<List<RideHistoryItem>> response) {
+                if (!Objects.equals(status, currentStatus)) return;
                 setLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
                     List<RideHistoryItem> rides = response.body();
@@ -96,6 +100,7 @@ public class AdminRideActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<List<RideHistoryItem>> call, Throwable t) {
+                if (!Objects.equals(status, currentStatus)) return;
                 setLoading(false);
                 toast(getString(R.string.network_error));
             }
