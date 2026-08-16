@@ -205,6 +205,8 @@
     <string name="panic_sent">Panic alert sent</string>
     <string name="panic_not_participant">You\'re not part of this ride</string>
     <string name="panic_not_active">Panic is only available during an active ride</string>
+    <string name="panic_alerts">Panic alerts</string>
+    <string name="no_panics">No panic alerts</string>
 
     <string-array name="country_codes">
         <item>+381</item>
