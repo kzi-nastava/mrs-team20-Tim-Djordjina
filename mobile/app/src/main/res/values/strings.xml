@@ -195,6 +195,9 @@
     <string name="prices_non_negative">Prices can\'t be negative</string>
     <string name="pricing_saved">Pricing updated</string>
     <string name="not_authorized">You are not authorized to do that</string>
+    <string name="admin_all_rides">All rides</string>
+    <string name="filter_by_status">Filter by status</string>
+    <string name="no_rides">No rides</string>
 
     <string-array name="country_codes">
         <item>+381</item>

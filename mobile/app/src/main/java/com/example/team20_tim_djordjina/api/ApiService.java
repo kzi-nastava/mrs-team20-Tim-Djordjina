@@ -143,4 +143,10 @@ public interface ApiService {
 
     @PUT("api/admin/pricing")
     Call<PricingConfig> updatePricing(@Body PricingConfig pricing);
+
+    @GET("api/admin/rides")
+    Call<List<RideHistoryItem>> getAdminRides(@Query("status") String status);
+
+    @GET("api/admin/rides/{id}")
+    Call<RideHistoryItem> getAdminRide(@Path("id") Long id);
 }

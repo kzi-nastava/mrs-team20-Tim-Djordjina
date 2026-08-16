@@ -23,6 +23,10 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
 
     List<Ride> findByDriverIdAndStatusOrderByFinishedAtDesc(Long driverId, RideStatus status);
 
+    List<Ride> findAllByOrderByCreatedAtDesc();
+
+    List<Ride> findByStatusOrderByCreatedAtDesc(RideStatus status);
+
     // Does this rider currently have a ride that isn't finished/canceled/rejected?
     boolean existsByRiderIdAndStatusIn(Long riderId, List<RideStatus> statuses);
 }

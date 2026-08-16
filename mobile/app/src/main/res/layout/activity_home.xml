@@ -216,5 +216,16 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnAdminRides"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="@string/admin_all_rides"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>

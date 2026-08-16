@@ -19,6 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Team20TimDjordjina">
         <activity
+            android:name=".activities.AdminRideDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AdminRideActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AdminPricingActivity"
             android:exported="false" />
         <activity
