@@ -10,6 +10,8 @@ import com.example.team20_tim_djordjina.model.FavouriteRoute;
 import com.example.team20_tim_djordjina.model.LoginRequest;
 import com.example.team20_tim_djordjina.model.LoginResponse;
 import com.example.team20_tim_djordjina.model.NotificationItem;
+import com.example.team20_tim_djordjina.model.PanicItem;
+import com.example.team20_tim_djordjina.model.PanicRequest;
 import com.example.team20_tim_djordjina.model.PasswordResetRequest;
 import com.example.team20_tim_djordjina.model.PasswordResetSubmit;
 import com.example.team20_tim_djordjina.model.PricingConfig;
@@ -149,4 +151,11 @@ public interface ApiService {
 
     @GET("api/admin/rides/{id}")
     Call<RideHistoryItem> getAdminRide(@Path("id") Long id);
+
+    @POST("api/rides/{id}/panic")
+    Call<PanicItem> triggerPanic(@Path("id") Long id, @Body PanicRequest request);
+
+    @GET("api/admin/panics")
+    Call<List<PanicItem>> getPanics();
+
 }
