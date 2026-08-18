@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -14,6 +15,8 @@ import com.example.team20_tim_djordjina.R;
 import com.example.team20_tim_djordjina.api.ApiService;
 import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityDriverRideBinding;
+import com.example.team20_tim_djordjina.model.PanicItem;
+import com.example.team20_tim_djordjina.model.PanicRequest;
 import com.example.team20_tim_djordjina.model.RideResponse;
 import com.example.team20_tim_djordjina.model.RideStopRequest;
 
@@ -49,6 +52,33 @@ public class DriverRideActivity extends AppCompatActivity {
         binding.btnRefreshRide.setOnClickListener(v -> loadCurrentRide());
 
         loadCurrentRide();
+    }
+
+    private void showPanicConfirm(long rideId) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.panic_title)
+                .setMessage(R.string.panic_confirm)
+                .setPositiveButton(R.string.panic_send, (d, w) -> triggerPanic(rideId))
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void triggerPanic(long rideId) {
+        apiService.triggerPanic(rideId, new PanicRequest(null))
+                .enqueue(new Callback<PanicItem>() {
+                    @Override
+                    public void onResponse(Call<PanicItem> call, Response<PanicItem> response) {
+                        if (response.isSuccessful()) toast(getString(R.string.panic_sent));
+                        else if (response.code() == 403) toast(getString(R.string.panic_not_participant));
+                        else if (response.code() == 409) toast(getString(R.string.panic_not_active));
+                        else toast(getString(R.string.something_went_wrong));
+                    }
+
+                    @Override
+                    public void onFailure(Call<PanicItem> call, Throwable t) {
+                        toast(getString(R.string.network_error));
+                    }
+                });
     }
 
     @Override
@@ -88,11 +118,14 @@ public class DriverRideActivity extends AppCompatActivity {
         binding.rideDetails.setVisibility(View.GONE);
         binding.btnStartRide.setVisibility(View.GONE);
         binding.btnFinishRide.setVisibility(View.GONE);
+        binding.btnPanic.setVisibility(View.GONE);
         binding.tvNoActiveRide.setVisibility(View.VISIBLE);
     }
 
     private void bindRide(RideResponse r) {
         currentRideId = r.getId();
+
+        binding.btnPanic.setOnClickListener(v -> showPanicConfirm(r.getId()));
 
         binding.tvNoActiveRide.setVisibility(View.GONE);
         binding.rideDetails.setVisibility(View.VISIBLE);
@@ -121,14 +154,17 @@ public class DriverRideActivity extends AppCompatActivity {
             binding.tvRideStatus.setText(R.string.status_assigned);
             binding.btnStartRide.setVisibility(View.VISIBLE);
             binding.btnFinishRide.setVisibility(View.GONE);
+            binding.btnPanic.setVisibility(View.VISIBLE);
         } else if ("IN_PROGRESS".equals(status)) {
             binding.tvRideStatus.setText(R.string.status_in_progress);
             binding.btnStartRide.setVisibility(View.GONE);
             binding.btnFinishRide.setVisibility(View.VISIBLE);
+            binding.btnPanic.setVisibility(View.VISIBLE);
         } else {
             binding.tvRideStatus.setText(status);
             binding.btnStartRide.setVisibility(View.GONE);
             binding.btnFinishRide.setVisibility(View.GONE);
+            binding.btnPanic.setVisibility(View.GONE);
         }
     }
 

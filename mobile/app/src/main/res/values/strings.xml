@@ -198,6 +198,15 @@
     <string name="admin_all_rides">All rides</string>
     <string name="filter_by_status">Filter by status</string>
     <string name="no_rides">No rides</string>
+    <string name="panic_button">PANIC</string>
+    <string name="panic_title">Send panic alert?</string>
+    <string name="panic_confirm">This will alert the administrators about this ride.</string>
+    <string name="panic_send">Send alert</string>
+    <string name="panic_sent">Panic alert sent</string>
+    <string name="panic_not_participant">You\'re not part of this ride</string>
+    <string name="panic_not_active">Panic is only available during an active ride</string>
+    <string name="panic_alerts">Panic alerts</string>
+    <string name="no_panics">No panic alerts</string>
 
     <string-array name="country_codes">
         <item>+381</item>
