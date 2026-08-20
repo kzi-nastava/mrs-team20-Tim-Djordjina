@@ -204,13 +204,17 @@ public class AdminUserHistoryActivity extends AppCompatActivity
     }
 
     @Override
+    public void onClick(AdminRideHistoryItem item) {
+        Intent intent = new Intent(this, AdminUserHistoryDetailActivity.class);
+        intent.putExtra(EXTRA_RIDE_ID, item.getRide().getId());
+        startActivity(intent);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
     }
 
-    @Override
-    public void onClick(AdminRideHistoryItem item) {
-        // TODO
-    }
+
 }

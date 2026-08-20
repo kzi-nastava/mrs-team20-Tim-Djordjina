@@ -109,6 +109,10 @@
             android:name=".activities.AdminUserHistoryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.AdminUserHistoryDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
