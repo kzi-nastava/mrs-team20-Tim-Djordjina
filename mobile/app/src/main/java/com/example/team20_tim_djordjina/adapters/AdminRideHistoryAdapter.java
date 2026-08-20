@@ -31,7 +31,7 @@ public class AdminRideHistoryAdapter
     public void setItems(List<AdminRideHistoryItem> newItems) {
         items.clear();
         if (newItems != null) items.addAll(newItems);
-        // TODO notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public List<AdminRideHistoryItem> getItems() {
