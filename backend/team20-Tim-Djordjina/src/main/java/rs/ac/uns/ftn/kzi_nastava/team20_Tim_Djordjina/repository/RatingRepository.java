@@ -5,11 +5,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Rating;
 
+import java.util.Optional;
+
 public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     long countByRide_Driver_Id(Long driverId);
 
     boolean existsByRideId(Long rideId);
+
+    Optional<Rating> findByRideId(Long rideId);
 
     @Query("SELECT AVG(r.driverRating) FROM Rating r WHERE r.ride.driver.id = :driverId")
     Double averageDriverRating(@Param("driverId") Long driverId);
