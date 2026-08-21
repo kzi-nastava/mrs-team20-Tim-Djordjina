@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PanicRepository extends JpaRepository<Panic, Long> {
     List<Panic> findAllByOrderByCreatedAtDesc();
+
+    boolean existsByRideId(Long rideId);
 }

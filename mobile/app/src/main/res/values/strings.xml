@@ -207,6 +207,14 @@
     <string name="panic_not_active">Panic is only available during an active ride</string>
     <string name="panic_alerts">Panic alerts</string>
     <string name="no_panics">No panic alerts</string>
+    <string name="user_history">User history</string>
+    <string name="date_from">From</string>
+    <string name="date_to">To</string>
+    <string name="clear">Clear</string>
+    <string name="inconsistency_reports">Inconsistency reports</string>
+    <string name="history_panic">PANIC triggered: %1$s</string>
+    <string name="history_cancelled">Cancelled by %1$s — %2$s</string>
+
 
     <string-array name="country_codes">
         <item>+381</item>

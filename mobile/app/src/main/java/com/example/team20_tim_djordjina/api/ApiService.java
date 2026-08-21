@@ -1,5 +1,7 @@
 package com.example.team20_tim_djordjina.api;
 
+import com.example.team20_tim_djordjina.model.AdminRideHistoryItem;
+import com.example.team20_tim_djordjina.model.AdminUserItem;
 import com.example.team20_tim_djordjina.model.ApiResponse;
 import com.example.team20_tim_djordjina.model.BlockUserRequest;
 import com.example.team20_tim_djordjina.model.ChangePasswordRequest;
@@ -157,5 +159,17 @@ public interface ApiService {
 
     @GET("api/admin/panics")
     Call<List<PanicItem>> getPanics();
+
+    @GET("api/admin/users/{userId}/history")
+    Call<List<AdminRideHistoryItem>> getAdminUserHistory(
+            @Path("userId") Long userId,
+            @Query("from") String from,
+            @Query("to") String to);
+
+    @GET("api/admin/rides/{rideId}/full")
+    Call<AdminRideHistoryItem> getAdminRideFull(@Path("rideId") Long rideId);
+
+    @GET("api/admin/users")
+    Call<List<AdminUserItem>> getUsers();
 
 }
