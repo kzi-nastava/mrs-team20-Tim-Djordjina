@@ -3,8 +3,10 @@ package com.example.team20_tim_djordjina.activities;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -90,11 +92,54 @@ public class DriverRideActivity extends AppCompatActivity {
                 });
     }
 
+    private void requestStopLocation() {
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        try {
+            // 0) Location must be on at all
+            boolean gpsOn = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean netOn = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (!gpsOn && !netOn) {
+                toast(getString(R.string.stop_no_location));
+                return;
+            }
+
+            // 1) Try the cache first
+            Location cached = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (cached == null) cached = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (cached != null) {
+                sendStop(cached.getLatitude(), cached.getLongitude());
+                return;
+            }
+            // 2) No cache -> request a single fresh fix
+            setLoading(true);
+            String provider  = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    ? LocationManager.GPS_PROVIDER
+                    : LocationManager.NETWORK_PROVIDER;
+
+            lm.requestSingleUpdate(provider, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    setLoading(false);
+                    sendStop(location.getLatitude(), location.getLongitude());
+                }
+                @Override public void onProviderDisabled(@NonNull String p) {}
+                @Override public void onProviderEnabled(@NonNull String p) {}
+                @Override public void onStatusChanged(String p, int s, Bundle b) {}
+            }, getMainLooper());
+        } catch (SecurityException e) {
+            setLoading(false);
+            toast(getString(R.string.stop_no_location));
+        }
+    }
+
     private void showStopConfirm() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.stop_here)
                 .setMessage(R.string.stop_confirm)
-                .setPositiveButton(R.string.stop_here, (d, w) -> doStop())
+                .setPositiveButton(R.string.stop_here, (d, w) -> {
+                    doStop();
+                })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
@@ -112,14 +157,7 @@ public class DriverRideActivity extends AppCompatActivity {
                     }, REQ_LOCATION);
             return;
         }
-
-        Location loc = getLastKnownLocation();
-        if (loc != null) {
-            toast(getString(R.string.stop_no_location));
-            return;
-        }
-
-        sendStop(loc.getLatitude(), loc.getLongitude());
+        requestStopLocation();
     }
 
     private Location getLastKnownLocation() {
