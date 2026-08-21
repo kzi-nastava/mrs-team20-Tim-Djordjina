@@ -16,6 +16,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /** Ride execution (US#2.6.1, US#2.7): start and finish a ride,
@@ -30,6 +31,8 @@ public class RideExecutionService {
     private final NotificationService notificationService;
     private final UserRepository userRepository;
     private final LinkedPassengerService linkedPassengerService;
+    private final FareCalculationService fareCalculationService;
+    private final DistanceCalculator distanceCalculator;
 
     // ---------- Start ----------
 
@@ -82,6 +85,36 @@ public class RideExecutionService {
 
         log.info("Ride {} finished by {}", rideId, driverEmail);
         return toResponse(ride, "Ride finished.");
+    }
+
+    @Transactional
+    public RideResponseDTO stopRide(Long rideId, String email, double stopLat, double stopLng) {
+        Driver driver = driverRepository.findByUserEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found"));
+        Ride ride = rideRepository.findById(rideId)
+                .orElseThrow(() -> new IllegalArgumentException("Ride not found"));
+
+        // Assigned driver, in_progress ride
+        if (ride.getDriver() == null || ride.getDriver().getId() != driver.getId()) {
+            throw new ForbiddenActionException("This is not your ride.");
+        }
+        if (ride.getStatus() != RideStatus.IN_PROGRESS) {
+            throw new RideStateException("You can only stop a ride that is in progress.");
+        }
+
+        double newDistance = distanceCalculator.distanceKm(
+                ride.getPickupLatitude(), ride.getPickupLongitude(), stopLat, stopLng);
+        double newFare = fareCalculationService.calculateFare(ride.getVehicleType(), newDistance);
+
+        // Destination becomes the stop point
+        ride.setDestinationLatitude(stopLat);
+        ride.setDestinationLongitude(stopLng);
+        ride.setDestinationAddress(String.format(Locale.US, "Stopped at %.5f, %.5f", stopLat, stopLng));
+        ride.setDistanceKM(newDistance);
+        ride.setFare(newFare);
+        rideRepository.save(ride);
+
+        return finishRide(rideId, email);
     }
 
     // ---------- Current ride (for driver screen) ----------
