@@ -64,6 +64,11 @@ public class Ride {
 
     private LocalDateTime lastReminderSentAt;
 
+    @Column(length = 500)
+    private String cancelReason;
+
+    private String cancelledBy;
+
     public void addStop(RideStop stop) {
         stop.setRide(this);
         this.stops.add(stop);
