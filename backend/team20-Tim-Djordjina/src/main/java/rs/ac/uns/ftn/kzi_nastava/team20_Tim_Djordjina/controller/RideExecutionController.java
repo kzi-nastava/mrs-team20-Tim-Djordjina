@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RideResponseDTO;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.StopRideRequestDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.service.RideExecutionService;
 
 /** Ride execution endpoints (US#2.6.1, US#2.7) */
@@ -31,5 +32,13 @@ public class RideExecutionController {
     @PostMapping("/{id}/finish")
     public ResponseEntity<RideResponseDTO> finish(Authentication authentication, @PathVariable Long id) {
         return ResponseEntity.ok(rideExecutionService.finishRide(id, authentication.getName()));
+    }
+
+    @PostMapping("/{id}/stop")
+    public ResponseEntity<RideResponseDTO> stop(Authentication authentication,
+                                                @PathVariable Long id,
+                                                @RequestBody StopRideRequestDTO body) {
+        return ResponseEntity.ok(rideExecutionService.stopRide(
+                id, authentication.getName(), body.getLatitude(), body.getLongitude()));
     }
 }

@@ -214,6 +214,11 @@
     <string name="inconsistency_reports">Inconsistency reports</string>
     <string name="history_panic">PANIC triggered: %1$s</string>
     <string name="history_cancelled">Cancelled by %1$s — %2$s</string>
+    <string name="stop_here">Stop here</string>
+    <string name="stop_confirm">Stop the ride at your current location? The fare will be recalculated.</string>
+    <string name="ride_stopped">Ride stopped</string>
+    <string name="stop_no_location">Couldn\'t get your current location</string>
+    <string name="stop_needs_location">Location permission is needed to stop the ride</string>
 
 
     <string-array name="country_codes">

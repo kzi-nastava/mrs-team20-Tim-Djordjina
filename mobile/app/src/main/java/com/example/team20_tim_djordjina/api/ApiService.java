@@ -24,6 +24,7 @@ import com.example.team20_tim_djordjina.model.RegistrationRequest;
 import com.example.team20_tim_djordjina.model.RideHistoryItem;
 import com.example.team20_tim_djordjina.model.RideRequest;
 import com.example.team20_tim_djordjina.model.RideResponse;
+import com.example.team20_tim_djordjina.model.StopRideRequest;
 import com.example.team20_tim_djordjina.model.UpdateProfileRequest;
 import com.example.team20_tim_djordjina.model.UserListItem;
 
@@ -171,5 +172,8 @@ public interface ApiService {
 
     @GET("api/admin/users")
     Call<List<AdminUserItem>> getUsers();
+
+    @POST("api/rides/{id}/stop")
+    Call<RideResponse> stopRide(@Path("id") Long id, @Body StopRideRequest request);
 
 }

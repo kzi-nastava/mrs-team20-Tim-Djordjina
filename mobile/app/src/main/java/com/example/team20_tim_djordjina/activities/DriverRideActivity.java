@@ -1,12 +1,21 @@
 package com.example.team20_tim_djordjina.activities;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,6 +28,7 @@ import com.example.team20_tim_djordjina.model.PanicItem;
 import com.example.team20_tim_djordjina.model.PanicRequest;
 import com.example.team20_tim_djordjina.model.RideResponse;
 import com.example.team20_tim_djordjina.model.RideStopRequest;
+import com.example.team20_tim_djordjina.model.StopRideRequest;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +36,7 @@ import retrofit2.Response;
 
 public class DriverRideActivity extends AppCompatActivity {
 
+    private static final int REQ_LOCATION = 401;
     private ActivityDriverRideBinding binding;
     private ApiService apiService;
     private Long currentRideId;
@@ -81,6 +92,133 @@ public class DriverRideActivity extends AppCompatActivity {
                 });
     }
 
+    private void requestStopLocation() {
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        try {
+            // 0) Location must be on at all
+            boolean gpsOn = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean netOn = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (!gpsOn && !netOn) {
+                toast(getString(R.string.stop_no_location));
+                return;
+            }
+
+            // 1) Try the cache first
+            Location cached = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (cached == null) cached = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (cached != null) {
+                sendStop(cached.getLatitude(), cached.getLongitude());
+                return;
+            }
+            // 2) No cache -> request a single fresh fix
+            setLoading(true);
+            String provider  = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    ? LocationManager.GPS_PROVIDER
+                    : LocationManager.NETWORK_PROVIDER;
+
+            lm.requestSingleUpdate(provider, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    setLoading(false);
+                    sendStop(location.getLatitude(), location.getLongitude());
+                }
+                @Override public void onProviderDisabled(@NonNull String p) {}
+                @Override public void onProviderEnabled(@NonNull String p) {}
+                @Override public void onStatusChanged(String p, int s, Bundle b) {}
+            }, getMainLooper());
+        } catch (SecurityException e) {
+            setLoading(false);
+            toast(getString(R.string.stop_no_location));
+        }
+    }
+
+    private void showStopConfirm() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.stop_here)
+                .setMessage(R.string.stop_confirm)
+                .setPositiveButton(R.string.stop_here, (d, w) -> {
+                    doStop();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void doStop() {
+        boolean fine = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        boolean coarse = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (!fine && !coarse) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    }, REQ_LOCATION);
+            return;
+        }
+        requestStopLocation();
+    }
+
+    private Location getLastKnownLocation() {
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        try {
+            Location gps = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (gps != null) return gps;
+            return lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        } catch (SecurityException e) {
+            return null;
+        }
+    }
+
+    private void sendStop(double lat, double lng) {
+        if (currentRideId == null) return;
+        setLoading(true);
+        apiService.stopRide(currentRideId, new StopRideRequest(lat, lng))
+                .enqueue(new Callback<RideResponse>() {
+                    @Override
+                    public void onResponse(Call<RideResponse> call, Response<RideResponse> response) {
+                        setLoading(false);
+                        if (response.isSuccessful()) {
+                            toast(getString(R.string.ride_stopped));
+                            loadCurrentRide();
+                        } else if (response.code() == 403) {
+                            toast(getString(R.string.panic_not_participant));
+                        } else if (response.code() == 409) {
+                            toast(getString(R.string.panic_not_active));
+                        } else {
+                            toast(getString(R.string.something_went_wrong));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RideResponse> call, Throwable t) {
+                        setLoading(false);
+                        toast(getString(R.string.network_error));
+                    }
+                });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_LOCATION) {
+            boolean granted = false;
+            for (int result : grantResults) {
+                if (result == PackageManager.PERMISSION_GRANTED) {
+                    granted = true;
+                    break;
+                }
+            }
+            if (granted) {
+                doStop();
+            } else {
+                toast(getString(R.string.stop_needs_location));
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -119,6 +257,7 @@ public class DriverRideActivity extends AppCompatActivity {
         binding.btnStartRide.setVisibility(View.GONE);
         binding.btnFinishRide.setVisibility(View.GONE);
         binding.btnPanic.setVisibility(View.GONE);
+        binding.btnStopRide.setVisibility(View.GONE);
         binding.tvNoActiveRide.setVisibility(View.VISIBLE);
     }
 
@@ -155,16 +294,20 @@ public class DriverRideActivity extends AppCompatActivity {
             binding.btnStartRide.setVisibility(View.VISIBLE);
             binding.btnFinishRide.setVisibility(View.GONE);
             binding.btnPanic.setVisibility(View.VISIBLE);
+            binding.btnStopRide.setVisibility(View.GONE);
         } else if ("IN_PROGRESS".equals(status)) {
             binding.tvRideStatus.setText(R.string.status_in_progress);
             binding.btnStartRide.setVisibility(View.GONE);
             binding.btnFinishRide.setVisibility(View.VISIBLE);
             binding.btnPanic.setVisibility(View.VISIBLE);
+            binding.btnStopRide.setVisibility(View.VISIBLE);
+            binding.btnStopRide.setOnClickListener(v -> showStopConfirm());
         } else {
             binding.tvRideStatus.setText(status);
             binding.btnStartRide.setVisibility(View.GONE);
             binding.btnFinishRide.setVisibility(View.GONE);
             binding.btnPanic.setVisibility(View.GONE);
+            binding.btnStopRide.setVisibility(View.GONE);
         }
     }
 
