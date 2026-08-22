@@ -4,6 +4,7 @@ import com.example.team20_tim_djordjina.model.AdminRideHistoryItem;
 import com.example.team20_tim_djordjina.model.AdminUserItem;
 import com.example.team20_tim_djordjina.model.ApiResponse;
 import com.example.team20_tim_djordjina.model.BlockUserRequest;
+import com.example.team20_tim_djordjina.model.CancelRideRequest;
 import com.example.team20_tim_djordjina.model.ChangePasswordRequest;
 import com.example.team20_tim_djordjina.model.DriverActiveRequest;
 import com.example.team20_tim_djordjina.model.DriverRegistrationRequest;
@@ -175,5 +176,10 @@ public interface ApiService {
 
     @POST("api/rides/{id}/stop")
     Call<RideResponse> stopRide(@Path("id") Long id, @Body StopRideRequest request);
+
+    @POST("api/rides/{id}/cancel")
+    Call<Void> cancelRide(@Path("id") Long id, @Body CancelRideRequest request);
+
+
 
 }
