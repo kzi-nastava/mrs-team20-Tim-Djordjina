@@ -71,7 +71,7 @@ public class AdminUserHistoryService {
         }
 
         // cancelledBy, cancelReason, inconsistentReports -> pending
-        return new AdminRideHistoryDTO(base, cancelled, null, null, panic,
+        return new AdminRideHistoryDTO(base, cancelled, ride.getCancelledBy(), ride.getCancelReason(), panic,
                 driverRating, vehicleRating, new ArrayList<>());
     }
 
