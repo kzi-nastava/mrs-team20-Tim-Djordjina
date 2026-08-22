@@ -219,6 +219,13 @@
     <string name="ride_stopped">Ride stopped</string>
     <string name="stop_no_location">Couldn\'t get your current location</string>
     <string name="stop_needs_location">Location permission is needed to stop the ride</string>
+    <string name="cancel_ride">Cancel ride</string>
+    <string name="cancel_reason_hint">Reason (required)</string>
+    <string name="cancel_reason_prompt">Why are you cancelling this ride?</string>
+    <string name="cancel_ride_confirm">Cancel ride</string>
+    <string name="cancel_reason_required">A reason is required to cancel</string>
+    <string name="ride_cancelled">Ride cancelled</string>
+    <string name="cancel_too_late">This ride can no longer be cancelled</string>
 
 
     <string-array name="country_codes">

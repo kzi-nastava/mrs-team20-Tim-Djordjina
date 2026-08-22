@@ -8,6 +8,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,6 +26,7 @@ import com.example.team20_tim_djordjina.R;
 import com.example.team20_tim_djordjina.api.ApiService;
 import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityDriverRideBinding;
+import com.example.team20_tim_djordjina.model.CancelRideRequest;
 import com.example.team20_tim_djordjina.model.PanicItem;
 import com.example.team20_tim_djordjina.model.PanicRequest;
 import com.example.team20_tim_djordjina.model.RideResponse;
@@ -258,6 +261,7 @@ public class DriverRideActivity extends AppCompatActivity {
         binding.btnFinishRide.setVisibility(View.GONE);
         binding.btnPanic.setVisibility(View.GONE);
         binding.btnStopRide.setVisibility(View.GONE);
+        binding.btnCancelRide.setVisibility(View.GONE);
         binding.tvNoActiveRide.setVisibility(View.VISIBLE);
     }
 
@@ -295,6 +299,8 @@ public class DriverRideActivity extends AppCompatActivity {
             binding.btnFinishRide.setVisibility(View.GONE);
             binding.btnPanic.setVisibility(View.VISIBLE);
             binding.btnStopRide.setVisibility(View.GONE);
+            binding.btnCancelRide.setVisibility(View.VISIBLE);
+            binding.btnCancelRide.setOnClickListener(v -> showCancelDialog(r.getId()));
         } else if ("IN_PROGRESS".equals(status)) {
             binding.tvRideStatus.setText(R.string.status_in_progress);
             binding.btnStartRide.setVisibility(View.GONE);
@@ -302,12 +308,14 @@ public class DriverRideActivity extends AppCompatActivity {
             binding.btnPanic.setVisibility(View.VISIBLE);
             binding.btnStopRide.setVisibility(View.VISIBLE);
             binding.btnStopRide.setOnClickListener(v -> showStopConfirm());
+            binding.btnCancelRide.setVisibility(View.GONE);
         } else {
             binding.tvRideStatus.setText(status);
             binding.btnStartRide.setVisibility(View.GONE);
             binding.btnFinishRide.setVisibility(View.GONE);
             binding.btnPanic.setVisibility(View.GONE);
             binding.btnStopRide.setVisibility(View.GONE);
+            binding.btnCancelRide.setVisibility(View.GONE);
         }
     }
 
@@ -355,6 +363,63 @@ public class DriverRideActivity extends AppCompatActivity {
                 toast(getString(R.string.network_error));
             }
         });
+    }
+
+    private void showCancelDialog(long rideId) {
+        final EditText input = new EditText(this);
+        input.setHint(R.string.cancel_reason_hint);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.cancel_ride)
+                .setMessage(R.string.cancel_reason_prompt)
+                .setView(input)
+                .setPositiveButton(R.string.cancel_ride_confirm, null)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        // Override positive button so an empty reason doesn't dismiss the dialog
+        dialog.setOnShowListener(d -> {
+            Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            positive.setOnClickListener(v -> {
+                String reason = input.getText().toString().trim();
+                if (reason.isEmpty()) {
+                    input.setError(getString(R.string.cancel_reason_required));
+                    return; // keep the dialog open
+                }
+                cancelRide(rideId, reason);
+                dialog.dismiss();
+            });
+        });
+        dialog.show();
+    }
+
+    private void cancelRide(long rideId, String reason) {
+        setLoading(true);
+        apiService.cancelRide(rideId, new CancelRideRequest(reason))
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        setLoading(false);
+                        if (response.isSuccessful()) {
+                            toast(getString(R.string.ride_cancelled));
+                            loadCurrentRide();
+                        } else if (response.code() == 400) {
+                            toast(getString(R.string.cancel_reason_required));
+                        } else if (response.code() == 403) {
+                            toast(getString(R.string.panic_not_participant));
+                        } else if (response.code() == 409) {
+                            toast(getString(R.string.cancel_too_late));
+                        } else {
+                            toast(getString(R.string.something_went_wrong));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        setLoading(false);
+                        toast(getString(R.string.network_error));
+                    }
+                });
     }
 
     private void setLoading(boolean loading) {
