@@ -9,6 +9,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.*;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.InconsistencyReportRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.RideRepository;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.VehicleRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class RideTrackingService {
     private final RideRepository rideRepository;
     private final DistanceCalculator distanceCalculator;
     private final InconsistencyReportRepository inconsistencyReportRepository;
+    private final VehicleRepository vehicleRepository;
 
     @Transactional(readOnly = true)
     public TrackingDTO getTracking(Long rideId, String email) {
@@ -31,15 +33,17 @@ public class RideTrackingService {
 
         Double vLat = null, vLng = null;
         String driverName = null, vehicleModel = null, plate = null;
-        if (ride.getDriver() != null && ride.getDriver().getVehicle() != null) {
-            Vehicle v = ride.getDriver().getVehicle();
-            vLat = v.getCurrentLatitude();
-            vLng = v.getCurrentLongitude();
-            vehicleModel = v.getModel();
-            plate = v.getLicensePlate();
-            if (ride.getDriver().getUser() != null) {
-                driverName = ride.getDriver().getUser().getFirstName() + " "
-                        + ride.getDriver().getUser().getLastName();
+        if (ride.getDriver() != null) {
+            Driver d = ride.getDriver();
+            if (d.getUser() != null) {
+                driverName = d.getUser().getFirstName() + " " + d.getUser().getLastName();
+            }
+            Vehicle v = vehicleRepository.findByDriverId(d.getId()).orElse(null);
+            if (v != null) {
+                vLat = v.getCurrentLatitude();
+                vLng = v.getCurrentLongitude();
+                vehicleModel = v.getModel();
+                plate = v.getLicensePlate();
             }
         }
 

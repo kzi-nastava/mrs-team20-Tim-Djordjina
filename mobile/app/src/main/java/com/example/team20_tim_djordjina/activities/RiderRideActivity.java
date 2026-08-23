@@ -119,6 +119,11 @@ public class RiderRideActivity extends AppCompatActivity {
     }
 
     private void updateUi(Tracking t) {
+        android.util.Log.d("RiderTrack",
+                "veh=" + t.getVehicleLatitude() + "," + t.getVehicleLongitude()
+                        + " pickup=" + t.getPickupLatitude() + "," + t.getPickupLongitude()
+                        + " eta=" + t.getEtaMinutes() + " status=" + t.getStatus());
+
         currentStatus = t.getStatus();
 
         binding.tvRiderStatus.setText(t.getStatus());
@@ -130,10 +135,12 @@ public class RiderRideActivity extends AppCompatActivity {
 
         // Static pickup/destination markers (once)
         if (!staticMarkersAdded) {
-            pickupMarker = addMarker(new GeoPoint(t.getPickupLatitude(), t.getPickupLongitude()),
-                    getString(R.string.pickup));
-            destinationMarker = addMarker(new GeoPoint(t.getDestinationLatitude(), t.getDestinationLongitude()),
-                    getString(R.string.destination));
+            GeoPoint pickup = new GeoPoint(t.getPickupLatitude(), t.getPickupLongitude());
+            GeoPoint destination = new GeoPoint(t.getDestinationLatitude(), t.getDestinationLongitude());
+            pickupMarker = addMarker(pickup, getString(R.string.pickup));
+            destinationMarker = addMarker(destination, getString(R.string.destination));
+            map.getController().setCenter(pickup);
+            map.getController().setZoom(14.0);
             staticMarkersAdded = true;
         }
 
