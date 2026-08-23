@@ -10,6 +10,7 @@ import com.example.team20_tim_djordjina.model.DriverActiveRequest;
 import com.example.team20_tim_djordjina.model.DriverRegistrationRequest;
 import com.example.team20_tim_djordjina.model.DriverState;
 import com.example.team20_tim_djordjina.model.FavouriteRoute;
+import com.example.team20_tim_djordjina.model.InconsistencyRequest;
 import com.example.team20_tim_djordjina.model.LoginRequest;
 import com.example.team20_tim_djordjina.model.LoginResponse;
 import com.example.team20_tim_djordjina.model.NotificationItem;
@@ -26,6 +27,7 @@ import com.example.team20_tim_djordjina.model.RideHistoryItem;
 import com.example.team20_tim_djordjina.model.RideRequest;
 import com.example.team20_tim_djordjina.model.RideResponse;
 import com.example.team20_tim_djordjina.model.StopRideRequest;
+import com.example.team20_tim_djordjina.model.Tracking;
 import com.example.team20_tim_djordjina.model.UpdateProfileRequest;
 import com.example.team20_tim_djordjina.model.UserListItem;
 
@@ -180,6 +182,9 @@ public interface ApiService {
     @POST("api/rides/{id}/cancel")
     Call<Void> cancelRide(@Path("id") Long id, @Body CancelRideRequest request);
 
+    @GET("api/rides/{id}/tracking")
+    Call<Tracking> getTracking(@Path("id") Long id);
 
-
+    @POST("api/rides/{id}/inconsistency")
+    Call<Void> reportInconsistency(@Path("id") Long id, @Body InconsistencyRequest request);
 }
