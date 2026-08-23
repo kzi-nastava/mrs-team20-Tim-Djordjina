@@ -146,7 +146,7 @@ public class RideService {
         Ride ride = rideRepository
                 .findFirstByRiderIdAndStatusInOrderByCreatedAtDesc(
                         user.getId(),
-                        List.of(RideStatus.ASSIGNED, RideStatus.IN_PROGRESS, RideStatus.SCHEDULED)
+                        List.of(RideStatus.ASSIGNED, RideStatus.IN_PROGRESS)
                 ).orElse(null);
         return ride == null ? null : toResponse(ride, null);
     }
