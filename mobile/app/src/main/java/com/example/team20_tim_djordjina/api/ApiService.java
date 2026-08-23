@@ -187,4 +187,7 @@ public interface ApiService {
 
     @POST("api/rides/{id}/inconsistency")
     Call<Void> reportInconsistency(@Path("id") Long id, @Body InconsistencyRequest request);
+
+    @GET("api/rides/current/rider")
+    Call<RideResponse> getRiderCurrentRide();
 }

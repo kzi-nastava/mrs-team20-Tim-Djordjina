@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,12 +13,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.team20_tim_djordjina.R;
+import com.example.team20_tim_djordjina.api.ApiService;
+import com.example.team20_tim_djordjina.api.RetrofitClient;
 import com.example.team20_tim_djordjina.databinding.ActivityHomeBinding;
+import com.example.team20_tim_djordjina.model.RideResponse;
 import com.example.team20_tim_djordjina.util.TokenManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
+    private ApiService apiService;
 
     private TokenManager tokenManager;
 
@@ -33,6 +42,8 @@ public class HomeActivity extends AppCompatActivity {
         });*/
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        apiService = RetrofitClient.getInstance(this).getApiService();
 
         tokenManager = new TokenManager(this);
 
@@ -61,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
         // Passenger only
         show(binding.btnRequestRide, isUser);
         show(binding.btnFavourites, isUser);
+        show(binding.btnRiderCurrentRide, isUser);
 
         // Driver only
         show(binding.btnCurrentRide, isDriver);
@@ -91,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
         // Passenger only
         binding.btnRequestRide.setOnClickListener(v -> open(RideRequestActivity.class));
         binding.btnFavourites.setOnClickListener(v -> open(FavouritesActivity.class));
+        binding.btnRiderCurrentRide.setOnClickListener(v -> openRiderCurrentRide());
 
         // Driver only
         binding.btnCurrentRide.setOnClickListener(v -> open(DriverRideActivity.class));
@@ -105,6 +118,28 @@ public class HomeActivity extends AppCompatActivity {
         binding.btnAdminPanics.setOnClickListener(v -> open(AdminPanicActivity.class));
         binding.btnAdminUserHistory.setOnClickListener(v -> open(AdminUserHistoryActivity.class));
 
+    }
+
+    private void openRiderCurrentRide() {
+        apiService.getRiderCurrentRide().enqueue(new Callback<RideResponse>() {
+            @Override
+            public void onResponse(Call<RideResponse> call, Response<RideResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Intent intent = new Intent(HomeActivity.this, RiderRideActivity.class);
+                    intent.putExtra(RiderRideActivity.EXTRA_RIDE_ID, response.body().getId());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(HomeActivity.this, getString(R.string.no_active_ride),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RideResponse> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, getString(R.string.network_error),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void open(Class<?> target) {
