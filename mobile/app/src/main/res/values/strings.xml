@@ -226,6 +226,7 @@
     <string name="cancel_reason_required">A reason is required to cancel</string>
     <string name="ride_cancelled">Ride cancelled</string>
     <string name="cancel_too_late">This ride can no longer be cancelled</string>
+    <string name="report_inconsistency">Report inconsistent route</string>
 
 
     <string-array name="country_codes">
