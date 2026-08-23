@@ -138,6 +138,19 @@ public class RideService {
         return toResponse(saved, "Ride request. A driver has been assigned.");
     }
 
+    @Transactional(readOnly = true)
+    public RideResponseDTO getRiderCurrentRide(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Ride ride = rideRepository
+                .findFirstByRiderIdAndStatusInOrderByCreatedAtDesc(
+                        user.getId(),
+                        List.of(RideStatus.ASSIGNED, RideStatus.IN_PROGRESS, RideStatus.SCHEDULED)
+                ).orElse(null);
+        return ride == null ? null : toResponse(ride, null);
+    }
+
     private RideResponseDTO scheduleRide(User rider, RideRequestDTO dto) {
         LocalDateTime when = dto.getScheduledFor();
         LocalDateTime now = LocalDateTime.now();
