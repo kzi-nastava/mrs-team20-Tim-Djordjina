@@ -22,6 +22,7 @@ public class AdminUserHistoryService {
     private final RideHistoryMapper mapper;
     private final PanicRepository panicRepository;
     private final RatingRepository ratingRepository;
+    private final InconsistencyReportRepository inconsistencyReportRepository;
 
     @Transactional(readOnly = true)
     public List<AdminRideHistoryDTO> getUserHistory(Long userId, LocalDateTime from, LocalDateTime to) {
@@ -70,9 +71,11 @@ public class AdminUserHistoryService {
             vehicleRating = rating.get().getVehicleRating();
         }
 
-        // cancelledBy, cancelReason, inconsistentReports -> pending
+        List<String> reports = inconsistencyReportRepository.findByRideId(ride.getId())
+                .stream().map(InconsistencyReport::getText).toList();
+
         return new AdminRideHistoryDTO(base, cancelled, ride.getCancelledBy(), ride.getCancelReason(), panic,
-                driverRating, vehicleRating, new ArrayList<>());
+                driverRating, vehicleRating, reports);
     }
 
 

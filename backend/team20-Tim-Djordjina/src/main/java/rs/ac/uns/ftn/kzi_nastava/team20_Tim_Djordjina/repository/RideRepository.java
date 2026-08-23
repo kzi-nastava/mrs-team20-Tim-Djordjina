@@ -6,6 +6,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.RideStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface RideRepository extends JpaRepository<Ride, Long> {
 
@@ -26,6 +27,8 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
     List<Ride> findAllByOrderByCreatedAtDesc();
 
     List<Ride> findByStatusOrderByCreatedAtDesc(RideStatus status);
+
+    Optional<Ride> findFirstByRiderIdAndStatusInOrderByCreatedAtDesc(Long riderId, List<RideStatus> statuses);
 
     // Does this rider currently have a ride that isn't finished/canceled/rejected?
     boolean existsByRiderIdAndStatusIn(Long riderId, List<RideStatus> statuses);

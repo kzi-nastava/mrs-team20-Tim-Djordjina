@@ -141,6 +141,17 @@
             android:visibility="gone" />
 
         <Button
+            android:id="@+id/btnRiderCurrentRide"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="@string/current_ride"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <Button
             android:id="@+id/btnNotifications"
             style="@style/FormPrimaryButton"
             android:layout_width="match_parent"

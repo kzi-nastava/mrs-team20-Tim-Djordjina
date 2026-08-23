@@ -226,6 +226,16 @@
     <string name="cancel_reason_required">A reason is required to cancel</string>
     <string name="ride_cancelled">Ride cancelled</string>
     <string name="cancel_too_late">This ride can no longer be cancelled</string>
+    <string name="report_inconsistency">Report inconsistent route</string>
+    <string name="eta_minutes">ETA: %1$d min</string>
+    <string name="vehicle">Vehicle</string>
+    <string name="ride_ended">Ride ended</string>
+    <string name="rider_cancel_confirm">Cancel this ride?</string>
+    <string name="inconsistency_hint">What happened?</string>
+    <string name="inconsistency_prompt">Describe what seems wrong with the route:</string>
+    <string name="submit">Submit</string>
+    <string name="inconsistency_required">Please describe the issue</string>
+    <string name="inconsistency_submitted">Report submitted</string>
 
 
     <string-array name="country_codes">

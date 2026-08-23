@@ -3,6 +3,7 @@ package com.example.team20_tim_djordjina.activities;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -271,21 +272,11 @@ public class RideRequestActivity extends AppCompatActivity {
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(getString(R.string.fare_label, r.getFare())).append("\n");
-        sb.append(getString(R.string.distance_label, r.getDistanceKm())).append("\n");
-        if (r.getDriver() != null) {
-            sb.append(getString(R.string.driver_label, r.getDriver().getFullName())).append("\n");
-            sb.append(getString(R.string.vehicle_label,
-                    r.getDriver().getVehicleModel(), r.getDriver().getLicensePlate()));
-        }
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.ride_assigned)
-                .setMessage(sb.toString())
-                .setCancelable(false)
-                .setPositiveButton(android.R.string.ok, (d, w) -> finish())
-                .show();
+        // For assigned/immediate ride -> go to the live tracking screen
+        Intent intent = new Intent(this, RiderRideActivity.class);
+        intent.putExtra(RiderRideActivity.EXTRA_RIDE_ID, r.getId());
+        startActivity(intent);
+        finish();
     }
 
     private String parseError(Response<RideResponse> response) {
