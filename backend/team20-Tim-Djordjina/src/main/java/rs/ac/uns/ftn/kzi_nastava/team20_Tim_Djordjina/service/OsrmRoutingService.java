@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,17 +14,30 @@ import java.util.Locale;
 import java.util.StringJoiner;
 
 @Service
-@RequiredArgsConstructor
 public class OsrmRoutingService {
 
-    private static final String BASE_URL =
+    private static final String DEFAULT_BASE_URL =
             "https://router.project-osmr.org/route/v1/driving/";
     private static final double FALLBACK_SPEED_KMH = 40.0;
 
     private static final Logger log = LoggerFactory.getLogger(OsrmRoutingService.class);
 
-    private final RestTemplate restTemplate = buildRestTemplate();
+    private final RestTemplate restTemplate;
     private final DistanceCalculator distanceCalculator;
+    private final String baseUrl;
+
+    /** Production constructor */
+    @Autowired
+    public OsrmRoutingService(DistanceCalculator distanceCalculator) {
+        this(distanceCalculator, buildRestTemplate(), DEFAULT_BASE_URL);
+    }
+
+    /** Test seam - inject a mock RestTemplate + base URL */
+    OsrmRoutingService(DistanceCalculator distanceCalculator, RestTemplate restTemplate, String baseUrl) {
+        this.distanceCalculator = distanceCalculator;
+        this.restTemplate = restTemplate;
+        this.baseUrl = baseUrl;
+    }
 
     private static RestTemplate buildRestTemplate() {
         SimpleClientHttpRequestFactory f = new SimpleClientHttpRequestFactory();
@@ -63,7 +77,7 @@ public class OsrmRoutingService {
     private RouteResult tryRoute(List<double[]> orderedPoints) {
         if (orderedPoints == null || orderedPoints.size() < 2) return null;
         try {
-            String url = BASE_URL + coordinates(orderedPoints) + "?overview=false";
+            String url = baseUrl + coordinates(orderedPoints) + "?overview=false";
             OsrmResponse resp = restTemplate.getForObject(url, OsrmResponse.class);
             if (resp != null && "Ok".equals(resp.code)
                     && resp.routes != null && !resp.routes.isEmpty()) {
