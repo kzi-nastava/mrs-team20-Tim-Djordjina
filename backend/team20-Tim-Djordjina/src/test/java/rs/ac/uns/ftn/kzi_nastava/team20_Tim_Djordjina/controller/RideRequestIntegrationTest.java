@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RideRequestDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.dto.RideStopDTO;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.*;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.DriverRepository;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.RideRepository;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.UserRepository;
-import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.VehicleRepository;
+import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.repository.*;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.security.JwtTokenProvider;
 
 import java.util.List;
@@ -32,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Transactional
 @DisplayName("Ride Request - Integration Tests")
 public class RideRequestIntegrationTest {
 
@@ -68,6 +65,8 @@ public class RideRequestIntegrationTest {
     private VehicleRepository vehicleRepository;
     @Autowired
     private RideRepository rideRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
 
     @BeforeEach
@@ -103,6 +102,15 @@ public class RideRequestIntegrationTest {
         vehicle.setCurrentLatitude(45.2660);
         vehicle.setCurrentLongitude(19.8340);
         vehicle = vehicleRepository.save(vehicle);
+    }
+
+    @AfterEach
+    void tearDown() {
+        notificationRepository.deleteAll();
+        rideRepository.deleteAll();
+        vehicleRepository.deleteAll();
+        driverRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
