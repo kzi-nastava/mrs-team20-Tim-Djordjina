@@ -38,6 +38,7 @@ public class RideService {
     private final DriverMatchingService driverMatchingService;
     private final NotificationService notificationService;
     private final LinkedPassengerService linkedPassengerService;
+    private final OsrmRoutingService osrmRoutingService;
 
     @Transactional
     public RideResponseDTO requestRide(String riderEmail, RideRequestDTO dto) {
@@ -63,7 +64,7 @@ public class RideService {
         }
 
         // Distance over pickup -> ordered stops -> destination
-        double distanceKm = round2(distanceCalculator.totalDistanceKm(buildRoute(dto)));
+        double distanceKm = round2(osrmRoutingService.roadDistanceKm(buildRoute(dto)));
 
         double fare = round2(fareCalculationService.calculateFare(dto.getVehicleType(), distanceKm));
 
@@ -162,7 +163,7 @@ public class RideService {
             throw new IllegalArgumentException("A ride can be scheduled at most 5 hours in advance.");
         }
 
-        double distanceKm = round2(distanceCalculator.totalDistanceKm(buildRoute(dto)));
+        double distanceKm = round2(osrmRoutingService.roadDistanceKm(buildRoute(dto)));
         double fare = round2(fareCalculationService.calculateFare(dto.getVehicleType(), distanceKm));
 
         Ride ride = new Ride();
