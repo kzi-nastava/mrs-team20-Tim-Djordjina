@@ -62,7 +62,7 @@ public class AuthServiceRegisterTest {
             user.setId(1L);
             return user;
         });
-        doNothing().when(emailService).sendActivationEmail(anyString(), anyString(), anyString());
+        //doNothing().when(emailService).sendActivationEmailHtml(anyString(), anyString(), anyString());
 
         // Act
         User result = authService.registerUser(validRegistrationDTO);
@@ -79,7 +79,7 @@ public class AuthServiceRegisterTest {
         verify(userRepository).existsByEmail("john.doe@example.com");
         verify(passwordEncoder).encode("password123");
         verify(userRepository).save(any(User.class));
-        verify(emailService).sendActivationEmail(anyString(), eq("John"), anyString());
+        verify(emailService).sendActivationEmailHtml(anyString(), eq("John"), anyString());
     }
 
     @Test

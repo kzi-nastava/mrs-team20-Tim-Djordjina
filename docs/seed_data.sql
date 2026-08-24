@@ -4,14 +4,17 @@
 -- Run AFTER the backend has started once (so the schema exists):
 --     psql -d ride_on_db -f seed_data.sql
 --
--- DEMO LOGINS (all use password:  password )
+-- DEMO LOGINS 
+-- Note: admin uses password: adminadmin
+--       rider1 uses password: rider1rider1
+--       driver1 uses password: driver1driver1 (etc.)
 --   rideonacc123+admin@gmail.com     ADMIN
 --   rideonacc123+rider1@gmail.com    USER    (Marko Markovic)
 --   rideonacc123+rider2@gmail.com    USER    (Jovana Jovanovic)
 --   rideonacc123+driver1@gmail.com   DRIVER  (Nikola Nikolic  — NS-001-AA, STANDARD)
 --   rideonacc123+driver2@gmail.com   DRIVER  (Ana Anic        — NS-002-BB, LUXURY)
 --
--- Password hash below is BCrypt for the text "password".
+-- Password hashes below are BCrypt
 -- =====================================================================
 
 -- ---------------------------------------------------------------------
@@ -56,18 +59,18 @@ SELECT setval(pg_get_serial_sequence('vehicles', 'id'), 1, false);
 --    'rideonacc123+driver2@gmail.com');
 
 -- ---------------------------------------------------------------------
--- 1) USERS   (password = "password")
+-- 1) USERS   (Passwords -> admin = "adminadmin", rider1 = "rider1rider1", driver1 = "driver1driver1")
 --    Required: first_name,last_name,email,password_hash,phone_number,
 --              address,role,is_activated,is_blocked,created_at,updated_at
 -- ---------------------------------------------------------------------
 INSERT INTO users
   (first_name, last_name, email, password_hash, phone_number, address, role, is_activated, is_blocked, created_at, updated_at)
 VALUES
- ('Admin','User','rideonacc123+admin@gmail.com','$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy','+381600000000','Novi Sad','ADMIN',  true,false, NOW(), NOW()),
- ('Marko','Markovic','rideonacc123+rider1@gmail.com','$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy','+381600000001','Novi Sad','USER',  true,false, NOW(), NOW()),
- ('Jovana','Jovanovic','rideonacc123+rider2@gmail.com','$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy','+381600000002','Novi Sad','USER', true,false, NOW(), NOW()),
- ('Nikola','Nikolic','rideonacc123+driver1@gmail.com','$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy','+381600000003','Novi Sad','DRIVER',true,false, NOW(), NOW()),
- ('Ana','Anic','rideonacc123+driver2@gmail.com','$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy','+381600000004','Novi Sad','DRIVER',true,false, NOW(), NOW());
+ ('Admin','User','rideonacc123+admin@gmail.com','$2a$10$pWSLFVOxTBJqvA1goKQkfe8CTvUq/9w4Q502X7vY3FU8Hi5sNvWYe','+381600000000','Novi Sad','ADMIN',  true,false, NOW(), NOW()),
+ ('Marko','Markovic','rideonacc123+rider1@gmail.com','$2a$10$c0LQ6zb7CMEZ2CprM6TQweDfaYNTue6OzZd0xNRFsgWoCt7nYnsI.','+381600000001','Novi Sad','USER',  true,false, NOW(), NOW()),
+ ('Jovana','Jovanovic','rideonacc123+rider2@gmail.com','$2a$10$LCC0X.PrBDNsQsKPdChegOkyHJLgF.ImR8OH4LsPfDpLh9Rd.a3g2','+381600000002','Novi Sad','USER', true,false, NOW(), NOW()),
+ ('Nikola','Nikolic','rideonacc123+driver1@gmail.com','$2a$10$zfARf/KckRNDX.BQBJXl2OlD9j3.HO25TNC1jRMRfBktVERCsdWTm','+381600000003','Novi Sad','DRIVER',true,false, NOW(), NOW()),
+ ('Ana','Anic','rideonacc123+driver2@gmail.com','$2a$10$qUszTplZMJdhDvGjKJWo7.3V1Q2ypTEjxTUHlzdqYdyrInsF/vsBG','+381600000004','Novi Sad','DRIVER',true,false, NOW(), NOW());
 
 -- ---------------------------------------------------------------------
 -- 2) DRIVERS
