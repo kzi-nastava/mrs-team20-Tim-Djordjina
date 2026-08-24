@@ -21,6 +21,7 @@ public class RideTrackingService {
     private final DistanceCalculator distanceCalculator;
     private final InconsistencyReportRepository inconsistencyReportRepository;
     private final VehicleRepository vehicleRepository;
+    private final OsrmRoutingService osrmRoutingService;
 
     @Transactional(readOnly = true)
     public TrackingDTO getTracking(Long rideId, String email) {
@@ -57,8 +58,7 @@ public class RideTrackingService {
                 targetLat = ride.getPickupLatitude();
                 targetLng = ride.getPickupLongitude();
             }
-            double distKm = distanceCalculator.distanceKm(vLat, vLng, targetLat, targetLng);
-            etaMinutes = Math.round((distKm / AVG_SPEED_KMH) * 60.0);
+            etaMinutes = Math.round(osrmRoutingService.estimateMinutes(vLat, vLng, targetLat, targetLng));
         }
 
         return new TrackingDTO(vLat, vLng, etaMinutes, ride.getStatus().name(),
