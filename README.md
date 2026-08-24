@@ -172,7 +172,7 @@ Location permission is requested at runtime the first time it's needed.
 For a populated database to demo against (admin, riders, drivers with vehicles, finished rides, ratings), see **`seed_data.sql`** in the repo and load it after the schema exists (i.e. after the backend has started once):
 
 ```bash
-psql -d ride_on_db -f seed_data.sql
+psql -d ride_on_db -f docs/seed_data.sql
 ```
 
 > **Important:** drivers' vehicles must have `current_latitude`/`current_longitude` set, or they won't appear on maps and rider ETA can't be computed. The seed script sets these.
@@ -207,7 +207,7 @@ cd backend
 ./mvnw spring-boot:run              # http://localhost:8080
 
 # 3. (optional) seed data
-psql -d ride_on_db -f ../seed_data.sql
+psql -d ride_on_db -f ../docs/seed_data.sql
 
 # 4. Android
 # open mobile/ in Android Studio
