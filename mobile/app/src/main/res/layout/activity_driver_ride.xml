@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/driver_ride_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/current_ride"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRideStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/brand_navy"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/progressDriverRide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvNoActiveRide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/no_active_ride"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:visibility="gone" />
+
+        <!-- Ride details -->
+        <LinearLayout
+            android:id="@+id/rideDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView style="@style/RideFieldLabel" android:text="@string/pickup" />
+            <TextView android:id="@+id/tvPickupValue" style="@style/RideFieldValue" />
+
+            <TextView style="@style/RideFieldLabel" android:text="@string/destination" />
+            <TextView android:id="@+id/tvDestinationValue" style="@style/RideFieldValue" />
+            
+            <LinearLayout
+                android:id="@+id/stopsSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView style="@style/RideFieldLabel" android:text="@string/stops" />
+                <TextView android:id="@+id/tvStopsValue" style="@style/RideFieldValue" />
+            </LinearLayout>
+
+            <TextView style="@style/RideFieldLabel" android:text="@string/vehicle_type" />
+            <TextView android:id="@+id/tvVehicleTypeValue" style="@style/RideFieldValue" />
+
+            <TextView
+                android:id="@+id/tvFareValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvDistanceValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textColor="#555555"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnStartRide"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background"
+            android:text="@string/start_ride"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnFinishRide"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background"
+            android:text="@string/finish_ride"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnStopRide"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/brand_navy"
+            android:text="@string/stop_here"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnCancelRide"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#616161"
+            android:text="@string/cancel_ride"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnPanic"
+            style="@style/FormPrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#C62828"
+            android:text="@string/panic_button"
+            android:textColor="@color/white"
+             />
+
+        <Button
+            android:id="@+id/btnRefreshRide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:text="@string/refresh"/>
+
+    </LinearLayout>
+</ScrollView>

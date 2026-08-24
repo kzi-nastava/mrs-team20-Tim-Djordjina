@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="logo_size">120dp</dimen>
+
+    <dimen name="title_height">50dp</dimen>
+    <dimen name="title_width">220dp</dimen>
+
+    <dimen name="subtitle_height">50dp</dimen>
+    <dimen name="subtitle_width">140dp</dimen>
+
+    <!-- Button sizes -->
+    <dimen name="btn_height">56dp</dimen>
+    <dimen name="btn_text_size">16sp</dimen>
+    <dimen name="btn_top_padding">14dp</dimen>
+    <dimen name="btn_bottom_padding">14dp</dimen>
+
+    <!-- Input sizes -->
+    <dimen name="input_height">56dp</dimen>
+    <dimen name="input_padding">16dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">24dp</dimen>
+    <dimen name="space_xl">40dp</dimen>
+
+    <!-- Radius -->
+    <dimen name="radius_sm">6dp</dimen>
+    <dimen name="radius_md">8dp</dimen>
+    <dimen name="radius_lg">10dp</dimen>
+
+</resources>
