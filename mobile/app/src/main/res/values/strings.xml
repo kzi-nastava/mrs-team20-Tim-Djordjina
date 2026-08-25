@@ -236,6 +236,8 @@
     <string name="submit">Submit</string>
     <string name="inconsistency_required">Please describe the issue</string>
     <string name="inconsistency_submitted">Report submitted</string>
+    <string name="busy">Busy</string>
+    <string name="free">Free</string>
 
 
     <string-array name="country_codes">
