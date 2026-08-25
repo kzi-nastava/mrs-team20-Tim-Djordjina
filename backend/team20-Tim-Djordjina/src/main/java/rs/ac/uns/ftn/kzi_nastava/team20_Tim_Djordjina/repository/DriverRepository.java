@@ -38,4 +38,7 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     * Find drivers with pending profile changes (for admin approval)
     */
     List<Driver> findByHasPendingProfileChangesTrue();
+
+    @Query("SELECT d FROM Driver d WHERE d.isLoggedIn = true AND d.isActive = true")
+    List<Driver> findActiveOnDutyDrivers();
 }
