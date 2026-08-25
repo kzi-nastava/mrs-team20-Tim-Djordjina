@@ -33,6 +33,7 @@ public class RideExecutionService {
     private final LinkedPassengerService linkedPassengerService;
     private final FareCalculationService fareCalculationService;
     private final DistanceCalculator distanceCalculator;
+    private final OsrmRoutingService osrmRoutingService;
 
     // ---------- Start ----------
 
@@ -102,7 +103,7 @@ public class RideExecutionService {
             throw new RideStateException("You can only stop a ride that is in progress.");
         }
 
-        double newDistance = distanceCalculator.distanceKm(
+        double newDistance = osrmRoutingService.roadDistanceKm(
                 ride.getPickupLatitude(), ride.getPickupLongitude(), stopLat, stopLng);
         double newFare = fareCalculationService.calculateFare(ride.getVehicleType(), newDistance);
 

@@ -1,5 +1,6 @@
 package com.example.team20_tim_djordjina.api;
 
+import com.example.team20_tim_djordjina.model.ActiveVehicle;
 import com.example.team20_tim_djordjina.model.AdminRideHistoryItem;
 import com.example.team20_tim_djordjina.model.AdminUserItem;
 import com.example.team20_tim_djordjina.model.ApiResponse;
@@ -190,4 +191,7 @@ public interface ApiService {
 
     @GET("api/rides/current/rider")
     Call<RideResponse> getRiderCurrentRide();
+
+    @GET("api/vehicles/active")
+    Call<List<ActiveVehicle>> getActiveVehicles();
 }

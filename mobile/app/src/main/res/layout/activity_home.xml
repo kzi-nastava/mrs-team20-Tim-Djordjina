@@ -66,6 +66,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!--
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="536dp"
@@ -83,6 +84,13 @@
                 android:src="@drawable/openstreet_map_placeholder" />
 
         </com.google.android.material.card.MaterialCardView>
+        -->
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapHome"
+            android:layout_width="match_parent"
+            android:layout_height="536dp"
+            android:layout_marginBottom="16dp" />
 
         <Button
             android:id="@+id/btnAdminRegisterDriver"
