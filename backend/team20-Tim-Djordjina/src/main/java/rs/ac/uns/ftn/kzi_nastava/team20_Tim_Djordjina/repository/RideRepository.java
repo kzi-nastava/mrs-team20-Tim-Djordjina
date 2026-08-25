@@ -5,6 +5,7 @@ import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.Ride;
 import rs.ac.uns.ftn.kzi_nastava.team20_Tim_Djordjina.model.RideStatus;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,8 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
     List<Ride> findAllByOrderByCreatedAtDesc();
 
     List<Ride> findByStatusOrderByCreatedAtDesc(RideStatus status);
+
+    List<Ride> findByStatusIn(Collection<RideStatus> statuses);
 
     Optional<Ride> findFirstByRiderIdAndStatusInOrderByCreatedAtDesc(Long riderId, List<RideStatus> statuses);
 
