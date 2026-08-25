@@ -90,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textColor="#555555"
+                android:textColor="@color/davys_grey"
                 android:textSize="14sp"/>
         </LinearLayout>
 
@@ -131,7 +131,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:backgroundTint="#616161"
+            android:backgroundTint="@color/storm_dust"
             android:text="@string/cancel_ride"
             android:textColor="@color/white"
             android:visibility="gone" />
@@ -141,7 +141,7 @@
             style="@style/FormPrimaryButton"
             android:layout_width="match_parent"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#C62828"
+            android:backgroundTint="@color/red"
             android:text="@string/panic_button"
             android:textColor="@color/white"
              />

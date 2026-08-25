@@ -34,7 +34,7 @@
             android:id="@+id/tvAdminRideFare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#555555"
+            android:textColor="@color/davys_grey"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>
