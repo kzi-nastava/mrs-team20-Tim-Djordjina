@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -47,6 +50,10 @@ import retrofit2.Response;
 
 /** Ride request screen, using OpenStreetMap */
 public class RideRequestActivity extends AppCompatActivity {
+
+    public static final int COLOR_ORANGE = 0xFFEF6C00;
+    public static final int COLOR_BLUE = 0xFF1565C0;
+    public static final int COLOR_PURPLE = 0xFF6A1B9A;
 
     private enum Mode {PICKUP, DESTINATION, STOP}
 
@@ -159,21 +166,21 @@ public class RideRequestActivity extends AppCompatActivity {
         switch (mode) {
             case PICKUP:
                 pickupPoint = p;
-                pickupMarker = placeMarker(pickupMarker, p, getString(R.string.pickup));
+                pickupMarker = placeMarker(pickupMarker, p, getString(R.string.pickup), COLOR_ORANGE);
                 if (TextUtils.isEmpty(text(binding.etPickupAddress.getText()))) {
                     binding.etPickupAddress.setText(formatCoords(p));
                 }
                 break;
             case DESTINATION:
                 destinationPoint = p;
-                destinationMarker = placeMarker(destinationMarker, p, getString(R.string.destination));
+                destinationMarker = placeMarker(destinationMarker, p, getString(R.string.destination), COLOR_BLUE);
                 if (TextUtils.isEmpty(text(binding.etDestinationAddress.getText()))) {
                     binding.etDestinationAddress.setText(formatCoords(p));
                 }
                 break;
             case STOP:
                 stopPoints.add(p);
-                Marker m = placeMarker(null, p, getString(R.string.stop) + stopPoints.size());
+                Marker m = placeMarker(null, p, getString(R.string.stop) + stopPoints.size(), COLOR_PURPLE);
                 stopMarkers.add(m);
                 binding.tvStopCount.setText(getString(R.string.stops_added, stopPoints.size()));
                 break;
@@ -182,7 +189,7 @@ public class RideRequestActivity extends AppCompatActivity {
     }
 
     /** Adds or moves a marker; returns the new marker */
-    private Marker placeMarker(Marker existing, GeoPoint p, String title) {
+    private Marker placeMarker(Marker existing, GeoPoint p, String title, int color) {
         if (existing != null) {
             binding.map.getOverlays().remove(existing);
         }
@@ -190,6 +197,14 @@ public class RideRequestActivity extends AppCompatActivity {
         marker.setPosition(p);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setTitle(title);
+
+        Drawable icon = ContextCompat.getDrawable(this, org.osmdroid.library.R.drawable.marker_default);
+        if (icon != null) {
+            icon = icon.mutate();
+            icon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            marker.setIcon(icon);
+        }
+
         binding.map.getOverlays().add(marker);
         return marker;
     }
@@ -398,12 +413,12 @@ public class RideRequestActivity extends AppCompatActivity {
 
     private void applyFavourite(FavouriteRoute f) {
         pickupPoint = new GeoPoint(f.getPickupLatitude(), f.getPickupLongitude());
-        pickupMarker = placeMarker(pickupMarker, pickupPoint, getString(R.string.pickup));
+        pickupMarker = placeMarker(pickupMarker, pickupPoint, getString(R.string.pickup), COLOR_ORANGE);
         binding.etPickupAddress.setText(
                 f.getPickupAddress() != null ? f.getPickupAddress() : formatCoords(pickupPoint));
 
         destinationPoint = new GeoPoint(f.getDestinationLatitude(), f.getDestinationLongitude());
-        destinationMarker = placeMarker(destinationMarker, destinationPoint, getString(R.string.destination));
+        destinationMarker = placeMarker(destinationMarker, destinationPoint, getString(R.string.destination), COLOR_BLUE);
         binding.etDestinationAddress.setText(
                 f.getDestinationAddress() != null ? f.getDestinationAddress() : formatCoords(destinationPoint));
 
@@ -416,7 +431,7 @@ public class RideRequestActivity extends AppCompatActivity {
             for (RideStopRequest s : f.getStops()) {
                 GeoPoint sp = new GeoPoint(s.getLatitude(), s.getLongitude());
                 stopPoints.add(sp);
-                Marker m = placeMarker(null, sp, getString(R.string.stop) + stopPoints.size());
+                Marker m = placeMarker(null, sp, getString(R.string.stop) + stopPoints.size(), COLOR_PURPLE);
                 stopMarkers.add(m);
             }
         }

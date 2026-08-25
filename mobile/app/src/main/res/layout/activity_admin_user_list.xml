@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/filter_all"/>
+            android:text="@string/filter_all"
+            android:backgroundTint="@color/green"/>
         <Button
             android:id="@+id/btnFilterPassengers"
             android:layout_width="0dp"
@@ -39,14 +40,16 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/filter_passengers"/>
+            android:text="@string/filter_passengers"
+            android:backgroundTint="@color/yellow"/>
         <Button
             android:id="@+id/btnFilterDrivers"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:text="@string/filter_drivers"/>
+            android:text="@string/filter_drivers"
+            android:backgroundTint="@color/red"/>
     </LinearLayout>
     
     <ProgressBar

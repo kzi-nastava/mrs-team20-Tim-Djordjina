@@ -73,7 +73,7 @@
             android:id="@+id/tvDetailDistance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#555555"
+            android:textColor="@color/davys_grey"
             android:textSize="14sp" />
 
         <TextView
@@ -96,14 +96,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:textColor="#555555"
+            android:textColor="@color/davys_grey"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvDetailFinished"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#555555"
+            android:textColor="@color/davys_grey"
             android:textSize="14sp" />
         
         <Button

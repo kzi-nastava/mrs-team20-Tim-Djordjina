@@ -11,10 +11,22 @@
     <color name="subtitle">#999999</color>
     <color name="secondary">#999999</color>
     <color name="error">#FF4D4D</color>
+    <color name="danger">#D32F2F</color>
     <color name="brand_orange">#FF6F00</color>
     <color name="grey">#757575</color>
     <color name="light_grey">#E0E0E0</color>
     <color name="brand_navy">#0A1233</color>
     <color name="sonic_silver">#757575</color>
+    <color name="storm_dust">#616161</color>
+    <color name="davys_grey">#555555</color>
+    <color name="red">#C62828</color>
+    <color name="yellow">#FFFF22</color>
+    <color name="green">#2E7D32</color>
+    <color name="orange">#EF6C00</color>
+    <color name="blue">#1565C0</color>
+    <color name="purple">#6A1B9A</color>
+    <color name="barley_white">#FFF3CD</color>
+    <color name="aligator">#856404</color>
+
 
 </resources>

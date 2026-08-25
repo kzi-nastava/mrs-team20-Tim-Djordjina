@@ -42,10 +42,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:background="#FFF3CD"
+            android:background="@color/barley_white"
             android:padding="12dp"
             android:text="@string/changes_pending_approval"
-            android:textColor="#856404"
+            android:textColor="@color/aligator"
             android:visibility="gone" />
 
         <!-- Email (read-only) -->
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            android:textColor="#757575"
+            android:textColor="@color/grey"
             android:textSize="12sp" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -133,7 +133,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="12dp"
-                android:background="#E0E0E0" />
+                android:background="@color/light_grey" />
             
             <TextView
                 android:layout_width="match_parent"
@@ -176,7 +176,7 @@
             android:id="@+id/btnChangePassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/yellow"
             android:text="@string/change_password" />
         
         <Button
@@ -184,6 +184,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:backgroundTint="@color/red"
             android:text="@string/logout" />
 
     </LinearLayout>
