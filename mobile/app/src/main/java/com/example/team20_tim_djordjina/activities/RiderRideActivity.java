@@ -1,6 +1,8 @@
 package com.example.team20_tim_djordjina.activities;
 
 import android.app.AlertDialog;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -40,6 +43,9 @@ public class RiderRideActivity extends AppCompatActivity {
 
     public static final String EXTRA_RIDE_ID = "ride_id";
     private static final long POLL_MS = 10_000L;
+    public static final int COLOR_RED = 0xFFC62828;
+    public static final int COLOR_ORANGE = 0xFFEF6C00;
+    public static final int COLOR_BLUE = 0xFF1565C0;
     private ActivityRiderRideBinding binding;
     private ApiService apiService;
     private long rideId;
@@ -137,8 +143,8 @@ public class RiderRideActivity extends AppCompatActivity {
         if (!staticMarkersAdded) {
             GeoPoint pickup = new GeoPoint(t.getPickupLatitude(), t.getPickupLongitude());
             GeoPoint destination = new GeoPoint(t.getDestinationLatitude(), t.getDestinationLongitude());
-            pickupMarker = addMarker(pickup, getString(R.string.pickup));
-            destinationMarker = addMarker(destination, getString(R.string.destination));
+            pickupMarker = addMarker(pickup, getString(R.string.pickup), COLOR_ORANGE);
+            destinationMarker = addMarker(destination, getString(R.string.destination), COLOR_BLUE);
             map.getController().setCenter(pickup);
             map.getController().setZoom(14.0);
             staticMarkersAdded = true;
@@ -148,7 +154,7 @@ public class RiderRideActivity extends AppCompatActivity {
         if (t.getVehicleLatitude() != null && t.getVehicleLongitude() != null) {
             GeoPoint vp = new GeoPoint(t.getVehicleLatitude(), t.getVehicleLongitude());
             if (vehicleMarker == null) {
-                vehicleMarker = addMarker(vp, getString(R.string.vehicle));
+                vehicleMarker = addMarker(vp, getString(R.string.vehicle), COLOR_RED);
                 map.getController().animateTo(vp);
             } else {
                 vehicleMarker.setPosition(vp);
@@ -175,11 +181,19 @@ public class RiderRideActivity extends AppCompatActivity {
     }
 
 
-    private Marker addMarker(GeoPoint point, String title) {
+    private Marker addMarker(GeoPoint point, String title, int color) {
         Marker m = new Marker(map);
         m.setPosition(point);
         m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         m.setTitle(title);
+
+        Drawable icon = ContextCompat.getDrawable(this, org.osmdroid.library.R.drawable.marker_default);
+        if (icon != null) {
+            icon = icon.mutate();
+            icon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            m.setIcon(icon);
+        }
+
         map.getOverlays().add(m);
         map.invalidate();
         return m;
